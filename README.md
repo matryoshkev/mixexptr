@@ -1,33 +1,37 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mixexptr
+# mixexptr - Analyze microbial mix experiments in R
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-mixexptr is an R package for analyzing microbial interactions in mix
-experiments.
+A common experimental design when studying microbial interactions is to
+mix together two different microbes (different genotypes, for example)
+then measure how their fitness and behavior depends on mix frequency.
+How do they behave differently together compared to on their own?
 
-A common experimental design is to mix together two different microbes
-(different genotypes, for example) at several frequencies then measure
-how their fitness depends on how common each microbe is. How do they
-perform together compared to performing separately? mixexptr provides
-tools to calculate and visualize fitness measures that help researchers
-get the most out of their data and allow quantitative comparisons across
-systems.
+mixexptr is an R package for analyzing microbial mix experiments.
+mixexptr provides tools to calculate and visualize fitness measures that
+help researchers get the most out of their data and quantitatively
+compare results across systems.
 
+## Further reading
+
+-   smith j and Inglis RF (2021) Evaluating kin and group selection as
+    tools for quantitative analysis of microbial data. Proceedings B
+    288:20201657. <https://doi.org/10.1098/rspb.2020.1657>
+
+<!--
 ## Installation
 
-You can install the development version of mixexptr from
-[GitHub](https://github.com/) with:
+You can install the development version of mixexptr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
 pak::pak("matryoshkev/mixexptr")
 ```
 
-<!--
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
