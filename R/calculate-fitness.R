@@ -1,27 +1,26 @@
 #' Calculate fitness measures
 #'
-#' `calculate_mix_fitness()` calculates several measures of microbial fitness
-#' given a data frame with the observed abundances of two microbes before and
-#' after the experiment.
+#' Calculates several measures of microbial fitness given a data frame with the
+#' observed abundances of two microbes before and after the experiment.
 #'
-#' Describe Wrightian fitness. Describe fitness outcomes.
-#' Brief motivation for Wrightian: robust across species and types of
-#' interaction.
-#' Include explicit math if possible.
+#' Describe Wrightian fitness. Describe fitness outcomes. Brief motivation for
+#' Wrightian: robust across species and types of interaction. Include explicit
+#' math if possible.
 #'
-#' `population_vars` requires ...
+#' `population_vars` requires ... Possible input combos
 #'
 #' @param data Data frame or data frame extension (e.g. tibble)
-#' @param population_vars Named character vector or list of columns in `data`
+#' @param population_vars Named character vector of columns in `data`
 #'   that describe microbe abundance before and after experiment. See Details.
-#' @param strain_names Character vector of names for microbes in experiment
-#' @param keep Optional character vector of columns in `data` to keep
-#'   in output (e.g. treatment variables, experimental block)
+#' @param strain_names Character vector of names for microbes in
+#'   experiment
+#' @param keep Optional character vector of columns in `data` to keep in output
+#'   (e.g. treatment variables, experimental block)
 #'
 #' @return Object of same type as `data` with the following columns:
 #' @export
 #'
-calculate_mix_fitness <- function(
+calculate_fitness <- function(
 	data,
 	population_vars,
 	strain_names,
@@ -46,6 +45,12 @@ calculate_mix_fitness <- function(
 	output[sapply(output, is.nan)] <- NA
 
 	# Warn about fitness zeroes
+	if (any(c(output$fitness_A == 0, output$fitness_B == 0), na.rm = TRUE)) {
+		warning(
+			"Some fitness values equal to zero. Undefined on log scale.",
+			call. = FALSE
+		)
+	}
 
 	# Label which is A and which is B
 	output$name_A <- strain_names[[1]]
@@ -63,16 +68,8 @@ calculate_mix_fitness <- function(
 
 # Calculate initial population state
 #   Using separate data, output to avoid column name conflicts
-#   Possible input combos:
-#     number_A,     number_B
-#     number_total, fraction_A
-#     number_total, fraction_B
-#     number_total, number_A
-#     number_total, number_B
 set_initial_population <- function(output, data, vars) {
 	vars <- as.list(vars)
-
-	# TODO: Warn if invalid data
 
 	if (
 		# Data are number A & number B
@@ -86,26 +83,67 @@ set_initial_population <- function(output, data, vars) {
 			initial_fraction_A <- initial_number_A / initial_number_total
 			initial_ratio_A_B <- initial_number_A / initial_number_B
 		})
-	# } else if () {
+	} else if (
+		# Data are number total & fraction A
+		!is.null(vars$initial_number_total) &
+		!is.null(vars$initial_fraction_A)
+	) {
+		output$initial_number_total <- data[[vars$initial_number_total]]
+		output$initial_fraction_A <- data[[vars$initial_fraction_A]]
+		output <- within(output, {
+			initial_number_A <- initial_number_total * initial_fraction_A
+			initial_number_B <- initial_number_total * (1-initial_fraction_A)
+			initial_ratio_A_B <- initial_fraction_A / (1-initial_fraction_A)
+		})
+	} else if (
+		# Data are number total & fraction B
+		!is.null(vars$initial_number_total) &
+		!is.null(vars$initial_fraction_B)
+	) {
+		output$initial_number_total <- data[[vars$initial_number_total]]
+		output$initial_fraction_B <- data[[vars$initial_fraction_B]]
+		output <- within(output, {
+			initial_number_A <- initial_number_total * (1-initial_fraction_B)
+			initial_number_B <- initial_number_total * initial_fraction_B
+			initial_ratio_A_B <- initial_number_A / initial_number_B
+		})
+	} else if (
+		# Data are number total & number A
+		!is.null(vars$initial_number_total) &
+		!is.null(vars$initial_number_A)
+	) {
+		output$initial_number_total <- data[[vars$initial_number_total]]
+		output$initial_number_A <- data[[vars$initial_number_A]]
+		output <- within(output, {
+			initial_number_B <- initial_number_total - initial_number_A
+			initial_fraction_A <- initial_number_A / initial_number_total
+			initial_ratio_A_B <- initial_number_A / initial_number_B
+		})
+	} else if (
+		# Data are number total & number B
+		!is.null(vars$initial_number_total) &
+		!is.null(vars$initial_number_B)
+	) {
+		output$initial_number_total <- data[[vars$initial_number_total]]
+		output$initial_number_B <- data[[vars$initial_number_B]]
+		output <- within(output, {
+			initial_number_A <- initial_number_total - initial_number_B
+			initial_fraction_A <- initial_number_A / initial_number_total
+			initial_ratio_A_B <- initial_number_A / initial_number_B
+		})
 	} else {
 		stop("Cannot calculate initial population from data")
 	}
+
+	# TODO: Warn if invalid population state
 
 	output
 }
 
 # Calculate final population state
 #   Using separate data, output to avoid column name conflicts
-#   Possible input combos:
-#     number_A,     number_B
-#     number_total, fraction_A
-#     number_total, fraction_B
-#     number_total, number_A
-#     number_total, number_B
 set_final_population <- function(output, data, vars) {
 	vars <- as.list(vars)
-
-	# TODO: Warn if invalid data
 
 	if (
 		# Data are number A & number B
@@ -117,15 +155,56 @@ set_final_population <- function(output, data, vars) {
 		output <- within(output, {
 			final_number_total <- final_number_A + final_number_B
 		})
-	# } else if () {
+	} else if (
+		# Data are number total & fraction A
+		!is.null(vars$final_number_total) &
+		!is.null(vars$final_fraction_A)
+	) {
+		output$final_number_total <- data[[vars$final_number_total]]
+		output <- within(output, {
+			final_number_A <- final_number_total * final_fraction_A
+			final_number_B <- final_number_total * (1-final_fraction_A)
+		})
+	} else if (
+		# Data are number total & fraction B
+		!is.null(vars$final_number_total) &
+		!is.null(vars$final_fraction_B)
+	) {
+		output$final_number_total <- data[[vars$final_number_total]]
+		output <- within(output, {
+			final_number_A <- final_number_total * (1-final_fraction_B)
+			final_number_B <- final_number_total * final_fraction_B
+		})
+	} else if (
+		# Data are number total & number A
+		!is.null(vars$final_number_total) &
+		!is.null(vars$final_number_A)
+	) {
+		output$final_number_total <- data[[vars$final_number_total]]
+		output$final_number_A <- data[[vars$final_number_A]]
+		output <- within(output, {
+			final_number_B <- final_number_total - final_number_A
+		})
+	} else if (
+		# Data are number total & number B
+		!is.null(vars$final_number_total) &
+		!is.null(vars$final_number_B)
+	) {
+		output$final_number_total <- data[[vars$final_number_total]]
+		output$final_number_B <- data[[vars$final_number_B]]
+		output <- within(output, {
+			final_number_A <- final_number_total - final_number_B
+		})
 	} else {
 		stop("Cannot calculate final population from data")
 	}
 
+	# TODO: Warn if invalid population state
+
 	output
 }
 
-# Set strain names
+# TODO: Set strain names
 #   Can be character vector e.g. c("Strain A", "Strain B")
 #   Or can be columns in data (useful if data compares different strains)
 # set_strain_names <- function(data, strain_names) {}

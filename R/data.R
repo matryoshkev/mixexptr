@@ -1,4 +1,4 @@
-#' Data from smith _et al._ 2010
+#' Data from smith, Van Dyken, and Zee (2010)
 #'
 #' Sporulation success of _Myxococcus xanthus_ bacteria in mixed-genotype
 #' fruiting bodies. GVB206.3 is an experimentally evolved genotype. GJV10 is an
