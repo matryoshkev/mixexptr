@@ -1,0 +1,49 @@
+# Title: Social exploitation among evolved and ancestral Myxococcus bacteria
+# Data source: smith j, Van Dyken JD, and Zee PC (2010) A generalization of Hamilton's rule for the evolution of microbial cooperation. Science 328:1700. https://doi.org/10.1126/science.1189675
+# Data authors: jeff smith, J. David Van Dyken, Peter C. Zee
+# File author: jeff smith
+# Date last modified: 2025-01
+# Description: Sporulation success of Myxococcus xanthus in mixed-genotype fruiting bodies. GVB206.3 is an experimentally evolved genotype resistant to rifampicin. GJV10 is an ancestral genotoype resistant to kanamycin. 
+# 
+# exptl_block: Experimental replicate (start date in lab notebook)
+# initial_cells_evolved: Initial number of GVB206.3 cells (colony-forming units per plate). Part of experimental treatment. 
+# initial_cells_ancestral: Initial number of GJV10 cells (colony-forming units per plate). Part of experimental treatment. 
+# colonies_rif_1: Colony count on plates containing rifampicin
+# dilution_rif_1: Dilution used for colonies_rif_1
+# colonies_rif_2: Colony count on plates containing rifampicin (second measurement)
+# dilution_rif_2: Dilution used for colonies_rif_2
+# colonies_kan_1: Colony count on plates containing kanamycin
+# dilution_kan_1: Dilution used for colonies_kan_1
+# colonies_kan_2: Colony count on plates containing kanamycin (second measurement)
+# dilution_kan_2: Dilution used for colonies_kan_2
+# 
+# Note: Final spore count per strain = colonies * dilution
+exptl_block	initial_cells_evolved	initial_cells_ancestral	colonies_rif_1	dilution_rif_1	colonies_rif_2	dilution_rif_2	colonies_kan_1	dilution_kan_1	colonies_kan_2	dilution_kan_2
+2009-04-29	5.00E+08	0.00E+00	6	1.0E+01	9	1.0E+01	0	1.0E+01	NA	NA
+2009-04-29	4.50E+08	5.00E+06	7	1.0E+01	NA	NA	2	1.0E+01	NA	NA
+2009-04-29	4.50E+08	5.00E+07	117	1.0E+01	NA	NA	24	1.0E+01	NA	NA
+2009-04-29	2.50E+08	2.50E+08	107	1.0E+03	NA	NA	390	1.0E+03	NA	NA
+2009-04-29	5.00E+07	4.50E+08	210	1.0E+04	NA	NA	63	1.0E+05	NA	NA
+2009-04-29	5.00E+06	4.50E+08	421	1.0E+04	NA	NA	103	1.0E+05	NA	NA
+2009-04-29	0.00E+00	5.00E+08	0	1.0E+01	NA	NA	176	1.0E+05	154	1.0E+05
+2009-05-01	5.00E+08	0.00E+00	7	1.0E+01	17	1.0E+01	0	1.0E+01	NA	NA
+2009-05-01	4.50E+08	5.00E+06	3	1.0E+01	NA	NA	1	1.0E+01	NA	NA
+2009-05-01	4.50E+08	5.00E+07	88	1.0E+01	NA	NA	44	1.0E+01	NA	NA
+2009-05-01	2.50E+08	2.50E+08	361	1.0E+03	NA	NA	286	1.0E+03	NA	NA
+2009-05-01	5.00E+07	4.50E+08	54	1.0E+05	NA	NA	88	1.0E+05	NA	NA
+2009-05-01	5.00E+06	4.50E+08	71	1.0E+05	NA	NA	129	1.0E+05	NA	NA
+2009-05-01	0.00E+00	5.00E+08	0	1.0E+01	NA	NA	159	1.0E+05	194	1.0E+05
+2009-05-02	5.00E+08	0.00E+00	15	1.0E+01	19	1.0E+01	0	1.0E+01	NA	NA
+2009-05-02	4.50E+08	5.00E+06	61	1.0E+01	NA	NA	4	1.0E+01	NA	NA
+2009-05-02	4.50E+08	5.00E+07	102	1.0E+01	NA	NA	24	1.0E+01	NA	NA
+2009-05-02	2.50E+08	2.50E+08	47	1.0E+04	43	1.0E+04	89	1.0E+03	NA	NA
+2009-05-02	5.00E+07	4.50E+08	446	1.0E+04	NA	NA	92	1.0E+05	NA	NA
+2009-05-02	5.00E+06	4.50E+08	68	1.0E+05	NA	NA	115	1.0E+05	NA	NA
+2009-05-02	0.00E+00	5.00E+08	0	1.0E+01	NA	NA	164	1.0E+05	146	1.0E+05
+2009-05-05	5.00E+08	0.00E+00	8	1.0E+01	NA	NA	0	1.0E+01	NA	NA
+2009-05-05	4.50E+08	5.00E+06	13	1.0E+01	NA	NA	1	1.0E+01	NA	NA
+2009-05-05	4.50E+08	5.00E+07	9	1.0E+01	NA	NA	3	1.0E+01	NA	NA
+2009-05-05	2.50E+08	2.50E+08	118	1.0E+03	NA	NA	250	1.0E+03	NA	NA
+2009-05-05	5.00E+07	4.50E+08	546	1.0E+04	NA	NA	61	1.0E+05	NA	NA
+2009-05-05	5.00E+06	4.50E+08	79	1.0E+05	NA	NA	114	1.0E+05	NA	NA
+2009-05-05	0.00E+00	5.00E+08	0	1.0E+01	NA	NA	165	1.0E+05	NA	NA

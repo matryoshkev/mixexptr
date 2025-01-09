@@ -13,7 +13,6 @@
 #' @return Object of same type as `data`.
 #' @export
 #'
-#' @examples
 calculate_mix_fitness <- function(
 	data,
 	population_vars,
