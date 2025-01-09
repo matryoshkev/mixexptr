@@ -9,26 +9,80 @@ calculate_fitness(data, population_vars, strain_names, keep = NULL)
 \arguments{
 \item{data}{Data frame or data frame extension (e.g. tibble)}
 
-\item{population_vars}{Named character vector of columns in \code{data}
-that describe microbe abundance before and after experiment. See Details.}
+\item{population_vars}{Named character vector of columns in \code{data} that
+describe initial and final abundances. See Details.}
 
-\item{strain_names}{Character vector of names for microbes in
-experiment}
+\item{strain_names}{Character vector of microbe names. Strain A first, strain
+B second.}
 
 \item{keep}{Optional character vector of columns in \code{data} to keep in output
 (e.g. treatment variables, experimental block)}
 }
 \value{
-Object of same type as \code{data} with the following columns:
+Data frame of same type as \code{data} with the following columns:
+\item{\code{name_A}}{Name of strain A}
+
+\item{\code{name_B}}{Name of strain B}
+
+\item{...}{Other columns specified by \code{keep}}
+
+\item{\code{initial_fraction_A}}{Initial frequency of strain A. Fraction of all
+cells or virions.}
+
+\item{\code{initial_ratio_A_B}}{Initial ratio of strain A to strain B
+frequencies}
+
+\item{\code{fitness_A}}{Fitness of strain A}
+
+\item{\code{fitness_B}}{Fitness of strain B}
+
+\item{\code{fitness_total}}{Total group fitness}
+
+\item{\code{fitness_ratio_A_B}}{Within-group relative fitness measured as
+\code{fitness_A} / \code{fitness_B}}
+
+All \code{fitness} values are unscaled Wrightian fitness measured over the entire
+time period between the initial and final abundances. If \eqn{n_i} and
+\eqn{n'_i} are the initial and final abundances of microbe \eqn{i}, then
+Wrightian fitness is \deqn{w_i = n'_i / n_i} If the absolute abundance of a
+microbe increases 100-fold, its fitness will be \eqn{w = 100}. If it
+decreases in absolute abundance to 10\% of its initial value, its fitness
+will be \eqn{w = 0.1}. These fitness measures are robust across microbial
+species and types of interaction, make fitness effects quantitatively
+comparable across systems, and can be meaningfully incorporated into
+theoretical models of microbial social evolution. They are best visualized
+and analyzed over \eqn{\log_{10}} scales.
 }
 \description{
 Calculates several measures of microbial fitness given a data frame with the
 initial and final abundances of two microbes.
 }
 \details{
-Describe Wrightian fitness. Describe fitness outcomes. Brief motivation for
-Wrightian: robust across species and types of interaction. Include explicit
-math if possible.
+\code{data} columns named in \code{population_vars} must be sufficient to identify
+initial and final abundance of both strains. For initial abundance, vector
+names should be two of \code{initial_number_A}, \code{initial_number_B},
+\code{initial_number_total}, \code{initial_fraction_A}, and \code{initial_fraction_B.} For
+final abundance, vector names should be two of \code{final_number_A},
+\code{final_number_B}, \code{final_number_total}, \code{final_fraction_A}, and
+\code{final_fraction_B}.
+}
+\examples{
+# Sporulation of Myxococcus bacteria in mixed-genotype fruiting bodies
+data_smith_2010 |>
+  calculate_fitness(
+    population_vars = c(
+      initial_number_A = "initial_cells_evolved",
+      initial_number_B = "initial_cells_ancestral",
+      final_number_A   = "final_spores_evolved",
+      final_number_B   = "final_spores_ancestral"
+    ),
+    strain_names = c("GVB206.3", "GJV10"),
+    keep = "exptl_block"
+  )
 
-\code{population_vars} requires ... Possible input combos
+}
+\references{
+smith j and Inglis RF (2021) Evaluating kin and group selection as tools for
+quantitative analysis of microbial data. Proceedings B 288:20201657.
+\url{https://doi.org/10.1098/rspb.2020.1657}
 }

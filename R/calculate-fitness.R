@@ -1,24 +1,79 @@
-#' Calculate fitness measures
+#'Calculate fitness measures
 #'
-#' Calculates several measures of microbial fitness given a data frame with the
-#' initial and final abundances of two microbes.
+#'Calculates several measures of microbial fitness given a data frame with the
+#'initial and final abundances of two microbes.
 #'
-#' Describe Wrightian fitness. Describe fitness outcomes. Brief motivation for
-#' Wrightian: robust across species and types of interaction. Include explicit
-#' math if possible.
+#'`data` columns named in `population_vars` must be sufficient to identify
+#'initial and final abundance of both strains. For initial abundance, vector
+#'names should be two of `initial_number_A`, `initial_number_B`,
+#'`initial_number_total`, `initial_fraction_A`, and `initial_fraction_B.` For
+#'final abundance, vector names should be two of `final_number_A`,
+#'`final_number_B`, `final_number_total`, `final_fraction_A`, and
+#'`final_fraction_B`.
 #'
-#' `population_vars` requires ... Possible input combos
+#'@param data Data frame or data frame extension (e.g. tibble)
+#'@param population_vars Named character vector of columns in `data` that
+#'  describe initial and final abundances. See Details.
+#'@param strain_names Character vector of microbe names. Strain A first, strain
+#'  B second.
+#'@param keep Optional character vector of columns in `data` to keep in output
+#'  (e.g. treatment variables, experimental block)
 #'
-#' @param data Data frame or data frame extension (e.g. tibble)
-#' @param population_vars Named character vector of columns in `data`
-#'   that describe microbe abundance before and after experiment. See Details.
-#' @param strain_names Character vector of names for microbes in
-#'   experiment
-#' @param keep Optional character vector of columns in `data` to keep in output
-#'   (e.g. treatment variables, experimental block)
+#'@return Data frame of same type as `data` with the following columns:
+#'  \item{`name_A`}{Name of strain A}
 #'
-#' @return Object of same type as `data` with the following columns:
-#' @export
+#'  \item{`name_B`}{Name of strain B}
+#'
+#'  \item{...}{Other columns specified by `keep`}
+#'
+#'  \item{`initial_fraction_A`}{Initial frequency of strain A. Fraction of all
+#'  cells or virions.}
+#'
+#'  \item{`initial_ratio_A_B`}{Initial ratio of strain A to strain B
+#'  frequencies}
+#'
+#'  \item{`fitness_A`}{Fitness of strain A}
+#'
+#'  \item{`fitness_B`}{Fitness of strain B}
+#'
+#'  \item{`fitness_total`}{Total group fitness}
+#'
+#'  \item{`fitness_ratio_A_B`}{Within-group relative fitness measured as
+#'  `fitness_A` / `fitness_B`}
+#'
+#'  All `fitness` values are unscaled Wrightian fitness measured over the entire
+#'  time period between the initial and final abundances. If \eqn{n_i} and
+#'  \eqn{n'_i} are the initial and final abundances of microbe \eqn{i}, then
+#'  Wrightian fitness is \deqn{w_i = n'_i / n_i} If the absolute abundance of a
+#'  microbe increases 100-fold, its fitness will be \eqn{w = 100}. If it
+#'  decreases in absolute abundance to 10% of its initial value, its fitness
+#'  will be \eqn{w = 0.1}. These fitness measures are robust across microbial
+#'  species and types of interaction, make fitness effects quantitatively
+#'  comparable across systems, and can be meaningfully incorporated into
+#'  theoretical models of microbial social evolution. They are best visualized
+#'  and analyzed over \eqn{\log_{10}} scales.
+#'
+#'@references
+#'
+#'smith j and Inglis RF (2021) Evaluating kin and group selection as tools for
+#'quantitative analysis of microbial data. Proceedings B 288:20201657.
+#'<https://doi.org/10.1098/rspb.2020.1657>
+#'
+#'@examples
+#' # Sporulation of Myxococcus bacteria in mixed-genotype fruiting bodies
+#' data_smith_2010 |>
+#'   calculate_fitness(
+#'     population_vars = c(
+#'       initial_number_A = "initial_cells_evolved",
+#'       initial_number_B = "initial_cells_ancestral",
+#'       final_number_A   = "final_spores_evolved",
+#'       final_number_B   = "final_spores_ancestral"
+#'     ),
+#'     strain_names = c("GVB206.3", "GJV10"),
+#'     keep = "exptl_block"
+#'   )
+#'
+#'@export
 #'
 calculate_fitness <- function(
 	data,
@@ -70,6 +125,8 @@ calculate_fitness <- function(
 #   Using separate data, output to avoid column name conflicts
 set_initial_population <- function(output, data, vars) {
 	vars <- as.list(vars)
+
+	# TODO: Warn if nonbiological input
 
 	if (
 		# Data are number A & number B
@@ -144,6 +201,7 @@ set_initial_population <- function(output, data, vars) {
 			)
 		}
 	}
+	# TODO: Replace with warning if nonbiological input
 
 	output
 }
@@ -152,6 +210,8 @@ set_initial_population <- function(output, data, vars) {
 #   Using separate data, output to avoid column name conflicts
 set_final_population <- function(output, data, vars) {
 	vars <- as.list(vars)
+
+	# TODO: Warn if nonbiological input
 
 	if (
 		# Data are number A & number B
@@ -216,6 +276,7 @@ set_final_population <- function(output, data, vars) {
 			)
 		}
 	}
+	# TODO: Replace with warning if nonbiological input
 
 	output
 }
