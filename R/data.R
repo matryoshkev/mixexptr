@@ -15,4 +15,4 @@
 #' @source smith j, Van Dyken JD, and Zee PC (2010) A generalization of
 #'   Hamilton's rule for the evolution of microbial cooperation. Science
 #'   328:1700-1703. <https://doi.org/10.1126/science.1189675>
-"data_smith2010"
+"data_smith_2010"

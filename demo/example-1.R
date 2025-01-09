@@ -1,10 +1,11 @@
 # Example usage of mixexptr
 
-# library(dplyr)
+library(dplyr)
 
-names(data_smith2010)
+names(data_smith_2010)
 
-data_smith2010 |>
+data_smith_2010 |>
+	tibble() |>
 	calculate_mix_fitness(
 		population_vars = c(
 			initial_number_A = "initial_cells_evolved",
