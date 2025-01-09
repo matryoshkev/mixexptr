@@ -3,7 +3,7 @@
 \docType{data}
 \name{data_smith2010}
 \alias{data_smith2010}
-\title{Data from smith et al. 2010}
+\title{Data from smith \emph{et al.} 2010}
 \format{
 A data frame with 28 rows and 5 columns:
 \describe{
@@ -16,8 +16,8 @@ A data frame with 28 rows and 5 columns:
 }
 \source{
 smith j, Van Dyken JD, and Zee PC (2010) A generalization of
-Hamilton's rule for the evolution of microbial cooperation. \emph{Science}
-328:1700. \url{https://doi.org/10.1126/science.1189675}
+Hamilton's rule for the evolution of microbial cooperation. Science
+328:1700-1703. \url{https://doi.org/10.1126/science.1189675}
 }
 \usage{
 data_smith2010

@@ -1,4 +1,4 @@
-#' Data from smith et al. 2010
+#' Data from smith _et al._ 2010
 #'
 #' Sporulation success of _Myxococcus xanthus_ bacteria in mixed-genotype
 #' fruiting bodies. GVB206.3 is an experimentally evolved genotype. GJV10 is an
@@ -13,6 +13,6 @@
 #'   \item{final_spores_ancestral}{Final number of GJV10 spores (colony-forming units per plate)}
 #' }
 #' @source smith j, Van Dyken JD, and Zee PC (2010) A generalization of
-#'   Hamilton's rule for the evolution of microbial cooperation. _Science_
-#'   328:1700. <https://doi.org/10.1126/science.1189675>
+#'   Hamilton's rule for the evolution of microbial cooperation. Science
+#'   328:1700-1703. <https://doi.org/10.1126/science.1189675>
 "data_smith2010"

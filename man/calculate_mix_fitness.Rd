@@ -2,25 +2,34 @@
 % Please edit documentation in R/calculate-fitness.R
 \name{calculate_mix_fitness}
 \alias{calculate_mix_fitness}
-\title{Calculate microbial fitness}
+\title{Calculate fitness measures}
 \usage{
 calculate_mix_fitness(data, population_vars, strain_names, keep = NULL)
 }
 \arguments{
 \item{data}{Data frame or data frame extension (e.g. tibble)}
 
-\item{population_vars}{Named vector or list.}
+\item{population_vars}{Named character vector or list of columns in \code{data}
+that describe microbe abundance before and after experiment. See Details.}
 
-\item{strain_names}{Named vector or list.}
+\item{strain_names}{Character vector of names for microbes in experiment}
 
-\item{keep}{Optional named vector or list of column names in \code{data} to keep
-in output frame (e.g. treatment variables).}
+\item{keep}{Optional character vector of columns in \code{data} to keep
+in output (e.g. treatment variables, experimental block)}
 }
 \value{
-Object of same type as \code{data}.
+Object of same type as \code{data} with the following columns:
 }
 \description{
 \code{calculate_mix_fitness()} calculates several measures of microbial fitness
 given a data frame with the observed abundances of two microbes before and
 after the experiment.
+}
+\details{
+Describe Wrightian fitness. Describe fitness outcomes.
+Brief motivation for Wrightian: robust across species and types of
+interaction.
+Include explicit math if possible.
+
+\code{population_vars} requires ...
 }
