@@ -23,7 +23,7 @@ Object of same type as \code{data} with the following columns:
 }
 \description{
 Calculates several measures of microbial fitness given a data frame with the
-observed abundances of two microbes before and after the experiment.
+initial and final abundances of two microbes.
 }
 \details{
 Describe Wrightian fitness. Describe fitness outcomes. Brief motivation for

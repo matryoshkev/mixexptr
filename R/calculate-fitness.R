@@ -1,7 +1,7 @@
 #' Calculate fitness measures
 #'
 #' Calculates several measures of microbial fitness given a data frame with the
-#' observed abundances of two microbes before and after the experiment.
+#' initial and final abundances of two microbes.
 #'
 #' Describe Wrightian fitness. Describe fitness outcomes. Brief motivation for
 #' Wrightian: robust across species and types of interaction. Include explicit
@@ -47,7 +47,7 @@ calculate_fitness <- function(
 	# Warn about fitness zeroes
 	if (any(c(output$fitness_A == 0, output$fitness_B == 0), na.rm = TRUE)) {
 		warning(
-			"Some fitness values equal to zero. Undefined on log scale.",
+			"Some fitness values are zero. Undefined on log scale.",
 			call. = FALSE
 		)
 	}
@@ -135,7 +135,15 @@ set_initial_population <- function(output, data, vars) {
 		stop("Cannot calculate initial population from data")
 	}
 
-	# TODO: Warn if invalid population state
+	# Warn if nonbiological population state
+	for (var_name in c("initial_number_A", "initial_number_B")) {
+		if (any(output[[var_name]] < 0, na.rm = TRUE)) {
+			warning(
+				"Some ", var_name, " values < 0: Not biologically meaningful",
+				call. = FALSE
+			)
+		}
+	}
 
 	output
 }
@@ -199,7 +207,15 @@ set_final_population <- function(output, data, vars) {
 		stop("Cannot calculate final population from data")
 	}
 
-	# TODO: Warn if invalid population state
+	# Warn if nonbiological population state
+	for (var_name in c("final_number_A", "final_number_B")) {
+		if (any(output[[var_name]] < 0, na.rm = TRUE)) {
+			warning(
+				"Some ", var_name, " values < 0: Not biologically meaningful",
+				call. = FALSE
+			)
+		}
+	}
 
 	output
 }
