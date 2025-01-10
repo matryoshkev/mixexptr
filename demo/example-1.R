@@ -18,11 +18,23 @@ fitness_smith_2010 <-
 	)
 fitness_smith_2010
 
+fitness_smith_2010 %>% format_to_plot_fitness()
+
 
 # data_Yurtsev_2013 ------------------------------------------------------------
 
-data_Yurtsev_2013 %>%
+fitness_Yurstev_2013 <-
+	data_Yurtsev_2013 %>%
 	tibble() %>%
+	subset(
+		# Drop rows with nonbiological values
+		!is.na(fraction_resistant_initial) &
+		!is.na(fraction_resistant_final) &
+		fraction_resistant_initial > 0 &
+		fraction_resistant_final > 0 &
+		fraction_resistant_initial < 1 &
+		fraction_resistant_final < 1
+	) %>%
 	calculate_fitness(
 		population_vars = c(
 			initial_number_total = "OD_initial",
@@ -33,3 +45,6 @@ data_Yurtsev_2013 %>%
 		strain_names = c("AmpR", "AmpS"),
 		keep = c("ampicillin", "dilution", "replicate")
 	)
+fitness_Yurstev_2013
+
+fitness_Yurstev_2013 %>% format_to_plot_fitness()

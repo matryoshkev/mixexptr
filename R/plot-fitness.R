@@ -1,0 +1,59 @@
+plot_fitness <- function() {}
+
+
+# Helper functions =============================================================
+
+# Plot strain and total-group fitness
+#
+plot_fitness_strain_group <- function() {}
+
+# Reshape data to strain and/or total-group fitness
+#
+format_to_plot_fitness <- function(
+	data,
+	var_names = c(
+		name_A = "name_A",
+		name_B = "name_B",
+		initial_fraction_A = "initial_fraction_A",
+		initial_ratio_A_B = "initial_ratio_A_B",
+		fitness_A = "fitness_A",
+		fitness_B = "fitness_B",
+		fitness_total = "fitness_total",
+		fitness_ratio_A_B = "fitness_ratio_A_B"
+	)
+) {
+	var_names <- as.list(var_names)
+	name_A <- data[[var_names$name_A]][[1]]
+	name_B <- data[[var_names$name_B]][[1]]
+	name_total <- "Total group"
+
+	output <- as.data.frame(data)  # So reshape() doesn't choke on tibbles
+	output$initial_fraction_A <- output[[var_names$initial_fraction_A]]
+	output$initial_ratio_A    <- output[[var_names$initial_ratio_A]]
+	output$fitness_A          <- output[[var_names$fitness_A]]
+	output$fitness_B          <- output[[var_names$fitness_B]]
+	output$fitness_total      <- output[[var_names$fitness_total]]
+	output <- subset(
+		output,
+		select = c(
+			"initial_fraction_A", "initial_ratio_A",
+			"fitness_A", "fitness_B", "fitness_total"
+		)
+	)
+	output <- stats::reshape(
+		output,
+		direction = "long",
+		varying = c("fitness_A", "fitness_B", "fitness_total"),
+		v.names = c("fitness"),
+		times = c(name_A, name_A, name_total),
+		timevar = "strain"
+	)
+	output <- subset(output, !is.na(fitness))
+	output$strain <- factor(
+		output$strain,
+		levels = c(name_A, name_B, name_total)
+	)
+	output$my_facet <- output$strain == name_total
+
+	output
+}
