@@ -2,8 +2,8 @@
 
 library(dplyr)
 
-data_smith_2010 |>
-	tibble() |>
+data_smith_2010 %>%
+	# tibble() %>%
 	calculate_fitness(
 		population_vars = c(
 			initial_number_A = "initial_cells_evolved",
@@ -15,8 +15,8 @@ data_smith_2010 |>
 		keep = "exptl_block"
 	)
 
-data_Yurtsev_2013 |>
-	tibble() |>
+data_Yurtsev_2013 %>%
+	# tibble() %>%
 	calculate_fitness(
 		population_vars = c(
 			initial_number_total = "OD_initial",

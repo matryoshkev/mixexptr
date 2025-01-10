@@ -101,9 +101,8 @@ calculate_fitness <- function(
 	output <- data
 
 	# Calculate initial and final population states
-	output <- output |>
-		set_initial_population(data, population_vars) |>
-		set_final_population(data, population_vars)
+	output <- set_initial_population(output, data, population_vars)
+	output <- set_final_population(output, data, population_vars)
 
 	# Calculate fitness measures
 	output <- within(output, {
