@@ -75,10 +75,11 @@ plot_within_group_fitness <- function(
 		fitness_total = "fitness_total",
 		fitness_ratio_A_B = "fitness_ratio_A_B"
 	),
-	mix_scale = "initial_proportion_A"
+	mix_scale = "fraction"
 ) {
 	var_names <- as.list(var_names)
 	name_A <- data[[var_names$name_A]][[1]]
+	name_B <- data[[var_names$name_B]][[1]]
 
 	# Format to plot fitness ratio
 	data_for_plot <- as.data.frame(data)
@@ -87,13 +88,11 @@ plot_within_group_fitness <- function(
 	data_for_plot$fitness_ratio_A_B <- data[[var_names$fitness_ratio_A_B]]
 	data_for_plot <- subset(data_for_plot, !is.na(fitness_ratio_A_B))
 
-	# Construct ggplot object
-	fig_output <-
-		ggplot2::ggplot(data_for_plot) +
-		ggplot2::aes(y = .data$fitness_ratio_A_B) +
-		ggplot2::scale_y_log10() +
-		ggplot2::geom_point(shape = 1)
-	fig_output <- add_scale_initial_fraction_A(fig_output, name_A)
+	# Construct plot
+	fig_output <- ggplot2::ggplot(data_for_plot)
+	fig_output <- add_scale_initial_fraction(fig_output, name_A)
+	fig_output <- add_scale_fitness_ratio(fig_output, name_A, name_B)
+	fig_output <- add_points_within_group(fig_output)
 
 	# Return ggplot object
 	fig_output
