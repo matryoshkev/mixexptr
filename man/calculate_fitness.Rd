@@ -7,7 +7,8 @@
 calculate_fitness(data, population_vars, strain_names, keep = NULL)
 }
 \arguments{
-\item{data}{Data frame or data frame extension (e.g. tibble)}
+\item{data}{Data frame or data frame extension (e.g. tibble). Each row
+contains data for two microbes in the same population.}
 
 \item{population_vars}{Named character vector of columns in \code{data} that
 describe initial and final abundances. See Details.}
@@ -36,22 +37,22 @@ frequencies}
 
 \item{\code{fitness_B}}{Fitness of strain B}
 
-\item{\code{fitness_total}}{Total group fitness}
+\item{\code{fitness_total}}{Total-group fitness. Sum of both strains.}
 
 \item{\code{fitness_ratio_A_B}}{Within-group relative fitness measured as
 \code{fitness_A} / \code{fitness_B}}
 
 All \code{fitness} values are unscaled Wrightian fitness measured over the entire
 time period between the initial and final abundances. If \eqn{n_i} and
-\eqn{n'_i} are the initial and final abundances of microbe \eqn{i}, then
+\eqn{n'_i} are the initial and final abundances of microbe \eqn{i}, then its
 Wrightian fitness is \deqn{w_i = n'_i / n_i} If the absolute abundance of a
 microbe increases 100-fold, its fitness will be \eqn{w = 100}. If it
-decreases in absolute abundance to 10\% of its initial value, its fitness
-will be \eqn{w = 0.1}. These fitness measures are robust across microbial
-species and types of interaction, make fitness effects quantitatively
-comparable across systems, and can be meaningfully incorporated into
-theoretical models of microbial social evolution. They are best visualized
-and analyzed over \eqn{\log_{10}} scales.
+decreases to 10\% of its initial abundance, its fitness will be \eqn{w =
+ 0.1}. These fitness measures are robust across microbial species and types
+of interaction, make fitness effects quantitatively comparable across
+systems, and can be meaningfully incorporated into theoretical models of
+microbial social evolution. They are best visualized and analyzed over
+\eqn{\log_{10}} scales.
 }
 \description{
 Calculates several measures of microbial fitness given a data frame with the
@@ -61,24 +62,27 @@ initial and final abundances of two microbes.
 \code{data} columns named in \code{population_vars} must be sufficient to identify
 initial and final abundance of both strains. For initial abundance, vector
 names should be two of \code{initial_number_A}, \code{initial_number_B},
-\code{initial_number_total}, \code{initial_fraction_A}, and \code{initial_fraction_B.} For
+\code{initial_number_total}, \code{initial_fraction_A}, or \code{initial_fraction_B.} For
 final abundance, vector names should be two of \code{final_number_A},
-\code{final_number_B}, \code{final_number_total}, \code{final_fraction_A}, and
-\code{final_fraction_B}.
+\code{final_number_B}, \code{final_number_total}, \code{final_fraction_A}, or
+\code{final_fraction_B}. Values of \code{number} vars can be counts or densities, but
+initial and final must have same units.
 }
 \examples{
-# Sporulation of Myxococcus bacteria in mixed-genotype fruiting bodies
-data_smith_2010 |>
-  calculate_fitness(
-    population_vars = c(
-      initial_number_A = "initial_cells_evolved",
-      initial_number_B = "initial_cells_ancestral",
-      final_number_A   = "final_spores_evolved",
-      final_number_B   = "final_spores_ancestral"
-    ),
-    strain_names = c("GVB206.3", "GJV10"),
-    keep = "exptl_block"
-  )
+# Data with cell counts for each strain
+calculate_fitness(
+  data_smith_2010,
+  population_vars = c(
+    initial_number_A = "initial_cells_evolved",
+    initial_number_B = "initial_cells_ancestral",
+    final_number_A   = "final_spores_evolved",
+    final_number_B   = "final_spores_ancestral"
+  ),
+  strain_names = c("GVB206.3", "GJV10"),
+  keep = "exptl_block"
+)
+
+# Data with total density and strain frequency
 
 }
 \references{

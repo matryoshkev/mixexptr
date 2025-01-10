@@ -1,4 +1,4 @@
-# Prepare data_smith2010
+# Prepare data_smith_2010
 
 library(dplyr, warn.conflicts = FALSE)
 library(usethis)
