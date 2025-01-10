@@ -1,9 +1,11 @@
 # Example usage of mixexptr
-
 library(dplyr)
 
-data_smith_2010 %>%
-	# tibble() %>%
+# data_smith_2010 --------------------------------------------------------------
+
+fitness_smith_2010 <-
+	data_smith_2010 %>%
+	tibble() %>%
 	calculate_fitness(
 		population_vars = c(
 			initial_number_A = "initial_cells_evolved",
@@ -14,9 +16,13 @@ data_smith_2010 %>%
 		strain_names = c("GVB206.3", "GJV10"),
 		keep = "exptl_block"
 	)
+fitness_smith_2010
+
+
+# data_Yurtsev_2013 ------------------------------------------------------------
 
 data_Yurtsev_2013 %>%
-	# tibble() %>%
+	tibble() %>%
 	calculate_fitness(
 		population_vars = c(
 			initial_number_total = "OD_initial",

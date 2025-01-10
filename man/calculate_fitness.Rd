@@ -20,7 +20,7 @@ B second.}
 (e.g. treatment variables, experimental block)}
 }
 \value{
-Data frame of same type as \code{data} with the following columns:
+A data frame of same type as \code{data} with the following columns:
 \item{\code{name_A}}{Name of strain A}
 
 \item{\code{name_B}}{Name of strain B}
@@ -42,17 +42,17 @@ frequencies}
 \item{\code{fitness_ratio_A_B}}{Within-group relative fitness measured as
 \code{fitness_A} / \code{fitness_B}}
 
-All \code{fitness} values are unscaled Wrightian fitness measured over the entire
-time period between the initial and final abundances. If \eqn{n_i} and
-\eqn{n'_i} are the initial and final abundances of microbe \eqn{i}, then its
-Wrightian fitness is \deqn{w_i = n'_i / n_i} If the absolute abundance of a
-microbe increases 100-fold, its fitness will be \eqn{w = 100}. If it
-decreases to 10\% of its initial abundance, its fitness will be \eqn{w =
- 0.1}. These fitness measures are robust across microbial species and types
-of interaction, make fitness effects quantitatively comparable across
-systems, and can be meaningfully incorporated into theoretical models of
-microbial social evolution. They are best visualized and analyzed over
-\eqn{\log_{10}} scales.
+All \code{fitness} values are unscaled Wrightian fitness measured over the
+entire time period between the initial and final abundances. If \eqn{n_i}
+and \eqn{n'_i} are the initial and final abundances of microbe \eqn{i}, then
+its Wrightian fitness is \deqn{w_i = n'_i / n_i} If the absolute abundance of
+a microbe increases 100-fold, its fitness will be \eqn{w = 100}. If it
+decreases to 10\% of its initial abundance, its fitness will be \eqn{w = 0.1}.
+These fitness measures are robust across microbial species and types of
+interaction, make fitness effects quantitatively comparable across systems,
+and can be meaningfully incorporated into theoretical models of microbial
+social evolution. They are best visualized and analyzed over \eqn{\log_{10}}
+scales.
 }
 \description{
 Calculates several measures of microbial fitness given a data frame with the
@@ -94,8 +94,8 @@ calculate_fitness(
   strain_names = c("AmpR", "AmpS"),
   keep = c("ampicillin", "dilution", "replicate")
 )
-# Warns of nonbiological values in data. Some resistant fractions < 0.
-# Probably artifact of flow cytometry measurements.
+# Warns of nonbiological values in data: some resistant fractions < 0
+# Artifact of subtracting background during flow cytometry?
 
 }
 \references{
