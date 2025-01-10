@@ -25,4 +25,6 @@ Depends:
 Imports: 
     ggplot2
 Suggests:
-    dplyr
+    dplyr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
