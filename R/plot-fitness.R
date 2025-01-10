@@ -1,3 +1,5 @@
+# Plotting functions
+
 plot_fitness <- function() {}
 
 
@@ -7,7 +9,7 @@ plot_fitness <- function() {}
 #
 plot_fitness_strain_group <- function() {}
 
-# Reshape data to strain and/or total-group fitness
+# Reshape data to plot strain and/or total-group fitness
 #
 format_to_plot_fitness <- function(
 	data,
@@ -57,3 +59,43 @@ format_to_plot_fitness <- function(
 
 	output
 }
+
+# Plot relative within-group fitness (fitness_A/fitness_B)
+#   Will eventually be user-facing
+#
+plot_within_group_fitness <- function(
+	data,
+	var_names = c(
+		name_A = "name_A",
+		name_B = "name_B",
+		initial_fraction_A = "initial_fraction_A",
+		initial_ratio_A_B = "initial_ratio_A_B",
+		fitness_A = "fitness_A",
+		fitness_B = "fitness_B",
+		fitness_total = "fitness_total",
+		fitness_ratio_A_B = "fitness_ratio_A_B"
+	),
+	mix_scale = "initial_proportion_A"
+) {
+	var_names <- as.list(var_names)
+	name_A <- data[[var_names$name_A]][[1]]
+
+	# Format to plot fitness ratio
+	data_for_plot <- as.data.frame(data)
+	data_for_plot$initial_fraction_A <- data[[var_names$initial_fraction_A]]
+	data_for_plot$initial_ratio_A_B <- data[[var_names$initial_ratio_A_B]]
+	data_for_plot$fitness_ratio_A_B <- data[[var_names$fitness_ratio_A_B]]
+	data_for_plot <- subset(data_for_plot, !is.na(fitness_ratio_A_B))
+
+	# Construct ggplot object
+	fig_output <-
+		ggplot2::ggplot(data_for_plot) +
+		ggplot2::aes(y = .data$fitness_ratio_A_B) +
+		ggplot2::scale_y_log10() +
+		ggplot2::geom_point(shape = 1)
+	fig_output <- add_scale_initial_fraction_A(fig_output, name_A)
+
+	# Return ggplot object
+	fig_output
+}
+

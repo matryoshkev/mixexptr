@@ -20,6 +20,9 @@ fitness_smith_2010
 
 fitness_smith_2010 %>% format_to_plot_fitness()
 
+dev.new(width = 4, height = 3)
+fitness_smith_2010 %>% plot_within_group_fitness()
+
 
 # data_Yurtsev_2013 ------------------------------------------------------------
 
