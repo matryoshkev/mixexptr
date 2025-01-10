@@ -76,6 +76,19 @@
 #' )
 #'
 #' # Data with total density and strain frequency
+#' calculate_fitness(
+#'   data_Yurtsev_2013,
+#'   population_vars = c(
+#'     initial_number_total = "OD_initial",
+#'     initial_fraction_A = "fraction_resistant_initial",
+#'     final_number_total = "OD_final",
+#'     final_fraction_A = "fraction_resistant_final"
+#'   ),
+#'   strain_names = c("AmpR", "AmpS"),
+#'   keep = c("ampicillin", "dilution", "replicate")
+#' )
+#' # Warns of nonbiological values in data. Some resistant fractions < 0.
+#' # Probably artifact of flow cytometry measurements.
 #'
 #'@export
 #'
@@ -233,6 +246,7 @@ set_final_population <- function(output, data, vars) {
 		!is.null(vars$final_fraction_A)
 	) {
 		output$final_number_total <- data[[vars$final_number_total]]
+		output$final_fraction_A <- data[[vars$final_fraction_A]]
 		output <- within(output, {
 			final_number_A <- final_number_total * final_fraction_A
 			final_number_B <- final_number_total * (1-final_fraction_A)
@@ -243,6 +257,7 @@ set_final_population <- function(output, data, vars) {
 		!is.null(vars$final_fraction_B)
 	) {
 		output$final_number_total <- data[[vars$final_number_total]]
+		output$final_fraction_B <- data[[vars$final_fraction_B]]
 		output <- within(output, {
 			final_number_A <- final_number_total * (1-final_fraction_B)
 			final_number_B <- final_number_total * final_fraction_B

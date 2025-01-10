@@ -83,6 +83,19 @@ calculate_fitness(
 )
 
 # Data with total density and strain frequency
+calculate_fitness(
+  data_Yurtsev_2013,
+  population_vars = c(
+    initial_number_total = "OD_initial",
+    initial_fraction_A = "fraction_resistant_initial",
+    final_number_total = "OD_final",
+    final_fraction_A = "fraction_resistant_final"
+  ),
+  strain_names = c("AmpR", "AmpS"),
+  keep = c("ampicillin", "dilution", "replicate")
+)
+# Warns of nonbiological values in data. Some resistant fractions < 0.
+# Probably artifact of flow cytometry measurements.
 
 }
 \references{
