@@ -50,13 +50,11 @@ plot_fitness <- function(
 			fitness_ratio_A_B = "fitness_ratio_A_B"
 		)
 	}
-	fig_output <-
-		combine_figures(
-			plot_fitness_strain_total(data, var_names, mix_scale),
-			plot_within_group_fitness(data, var_names, mix_scale),
-			widths = c(14, 8)
-		)
-	fig_output
+	figA <- plot_fitness_strain_total(data, var_names, mix_scale)
+	figB <- plot_within_group_fitness(data, var_names, mix_scale)
+	fig_output <- combine_figures(figA, figB, widths = c(14, 8))
+	grid::grid.draw(fig_output)
+	return(invisible(fig_output))
 }
 
 
@@ -191,28 +189,27 @@ plot_within_group_fitness <- function(
 }
 
 # Combine subfigures
-#   Eventually user-facing?
+#   Deprecated: Maybe try `patchwork` package
 combine_figures <- function(fig1, fig2, widths = c(1, 1)) {
 	width_1 <- widths[[1]]
 	width_2 <- widths[[2]]
 	# grDevices::pdf(file = NULL)
 		# So ggplotGrob() doesn't create blank plot window
 		# see https://github.com/tidyverse/ggplot2/issues/809
-	fig_output <-
-		gtable::gtable_add_grob(
-			gtable::gtable(
-				widths  = grid::unit(rep(1, width_1 + width_2), "null"),
-				heights = grid::unit(rep(1, 1), "null")
-			),
-			grobs = list(
-				ggplot2::ggplotGrob(fig1),
-				ggplot2::ggplotGrob(fig2)
-			),
-			l = c(1, width_1 + 1), # Left extents
-			r = c(width_1, width_1 + width_2),  # Right extents
-			t = c(1, 1), # Top extents
-			b = c(1, 1)  # Bottom extents
-		)
+	fig1 <- ggplot2::ggplotGrob(fig1)
+	fig2 <- ggplot2::ggplotGrob(fig2)
+	fig_output <- gtable::gtable(
+		widths  = grid::unit(rep(1, width_1 + width_2), "null"),
+		heights = grid::unit(rep(1, 1), "null")
+	)
+	fig_output <- gtable::gtable_add_grob(
+		fig_output,
+		grobs = list(fig1, fig2),
+		l = c(1, width_1 + 1), # Left extents
+		r = c(width_1, width_1 + width_2),  # Right extents
+		t = c(1, 1), # Top extents
+		b = c(1, 1)  # Bottom extents
+	)
 	# grDevices::dev.off()  # end of workaround
 	fig_output
 }

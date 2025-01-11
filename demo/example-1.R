@@ -25,12 +25,12 @@ fitness_smith_2010
 # dev.new(width = 2.25, height = 2.25, units = "in")
 # fitness_smith_2010 %>% plot_within_group_fitness()
 #
-# dev.new(width = 4.5, height = 2.25, units = "in")
-# fitness_smith_2010 %>% plot_fitness_strain_total()
+dev.new(width = 4.5, height = 2.25, units = "in")
+tmp <- fitness_smith_2010 %>% plot_fitness_strain_total()
 
 dev.new(width = 6.25, height = 2.25, units = "in")
-tmp <- fitness_smith_2010 %>% plot_fitness()
-plot(tmp)
+fitness_smith_2010 %>% plot_fitness()
+# tmp <- fitness_smith_2010 %>% plot_fitness()
 
 
 # data_Yurtsev_2013 ------------------------------------------------------------
