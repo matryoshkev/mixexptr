@@ -7,8 +7,9 @@
 calculate_fitness(data, population_vars, strain_names, keep = NULL)
 }
 \arguments{
-\item{data}{Data frame or data frame extension (e.g. tibble). Each row
-contains data for two microbes in the same population.}
+\item{data}{Data frame of initial and final abundance values. Each row must
+contain data for two microbes in the same population. Accepts data frame
+extensions like \code{tibble}. See Details.}
 
 \item{population_vars}{Named character vector of columns in \code{data} that
 describe initial and final abundances. See Details.}
@@ -22,23 +23,15 @@ B second.}
 \value{
 A data frame of same type as \code{data} with the following columns:
 \item{\code{name_A}}{Name of strain A}
-
 \item{\code{name_B}}{Name of strain B}
-
 \item{...}{Other columns specified by \code{keep}}
-
 \item{\code{initial_fraction_A}}{Initial frequency of strain A. Fraction of all
 cells or virions.}
-
 \item{\code{initial_ratio_A_B}}{Initial ratio of strain A to strain B
 frequencies}
-
 \item{\code{fitness_A}}{Fitness of strain A}
-
 \item{\code{fitness_B}}{Fitness of strain B}
-
 \item{\code{fitness_total}}{Total-group fitness. Sum of both strains.}
-
 \item{\code{fitness_ratio_A_B}}{Within-group relative fitness measured as
 \code{fitness_A} / \code{fitness_B}}
 
@@ -55,7 +48,7 @@ social evolution. They are best visualized and analyzed over \eqn{\log_{10}}
 scales.
 }
 \description{
-Calculates several measures of microbial fitness given a data frame with the
+Calculate several measures of microbial fitness from a data frame of the
 initial and final abundances of two microbes.
 }
 \details{

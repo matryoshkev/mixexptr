@@ -1,29 +1,55 @@
 # Plotting functions
 
-#' Title
+#' Plot strain and multilevel fitness
 #'
-#' @param data
-#' @param var_names
-#' @param mix_scale
+#' Draw a combined plot of strain, total group, and relative within-group
+#' fitness against mix frequency.
 #'
-#' @return
+#' @param data Data frame of fitness values. Each row must contain data for two
+#'   microbes in the same population. Accepts data frame extensions like
+#'   `tibble`.
+#' @param var_names Named character vector identifying which fitness measures
+#'   are contained in `data` variables. If `NULL`, defaults to column names
+#'   returned by `calculate_fitness().` See Details.
+#' @param mix_scale Determines x-axis scale. `"fraction"` uses
+#'   `initial_fraction_A`. `"ratio"` uses `initial_ratio_A_B` (on
+#'   \eqn{\log_{10}} scale).
+#'
+#' @details
+#' `var_names` must be a named vector with the following elements (default
+#' values shown):
+#' ```
+#' var_names = c(
+#'   name_A = "name_A",
+#'   name_B = "name_B",
+#'   initial_fraction_A = "initial_fraction_A",
+#'   initial_ratio_A_B = "initial_ratio_A_B",
+#'   fitness_A = "fitness_A",
+#'   fitness_B = "fitness_B",
+#'   fitness_total = "fitness_total",
+#'   fitness_ratio_A_B = "fitness_ratio_A_B"
+#' )
+#' ```
+#'
 #' @export
 #'
-#' @examples
 plot_fitness <- function(
 	data,
-	var_names = c(
-		name_A = "name_A",
-		name_B = "name_B",
-		initial_fraction_A = "initial_fraction_A",
-		initial_ratio_A_B = "initial_ratio_A_B",
-		fitness_A = "fitness_A",
-		fitness_B = "fitness_B",
-		fitness_total = "fitness_total",
-		fitness_ratio_A_B = "fitness_ratio_A_B"
-	),
+	var_names = NULL,
 	mix_scale = "fraction"
 ) {
+	if (is.null(var_names)) {
+		var_names <- c(
+			name_A = "name_A",
+			name_B = "name_B",
+			initial_fraction_A = "initial_fraction_A",
+			initial_ratio_A_B = "initial_ratio_A_B",
+			fitness_A = "fitness_A",
+			fitness_B = "fitness_B",
+			fitness_total = "fitness_total",
+			fitness_ratio_A_B = "fitness_ratio_A_B"
+		)
+	}
 	fig_output <-
 		combine_figures(
 			plot_fitness_strain_total(data, var_names, mix_scale),

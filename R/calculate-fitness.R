@@ -1,8 +1,19 @@
 #' Calculate fitness measures
 #'
-#' Calculates several measures of microbial fitness given a data frame with the
+#' Calculate several measures of microbial fitness from a data frame of the
 #' initial and final abundances of two microbes.
 #'
+#' @param data Data frame of initial and final abundance values. Each row must
+#'   contain data for two microbes in the same population. Accepts data frame
+#'   extensions like `tibble`. See Details.
+#' @param population_vars Named character vector of columns in `data` that
+#'   describe initial and final abundances. See Details.
+#' @param strain_names Character vector of microbe names. Strain A first, strain
+#'   B second.
+#' @param keep Optional character vector of columns in `data` to keep in output
+#'   (e.g. treatment variables, experimental block)
+#'
+#' @details
 #' `data` columns named in `population_vars` must be sufficient to identify
 #' initial and final abundance of both strains. For initial abundance, vector
 #' names should be two of `initial_number_A`, `initial_number_B`,
@@ -12,35 +23,18 @@
 #' `final_fraction_B`. Values of `number` vars can be counts or densities, but
 #' initial and final must have same units.
 #'
-#' @param data Data frame or data frame extension (e.g. tibble). Each row
-#'   contains data for two microbes in the same population.
-#' @param population_vars Named character vector of columns in `data` that
-#'   describe initial and final abundances. See Details.
-#' @param strain_names Character vector of microbe names. Strain A first, strain
-#'   B second.
-#' @param keep Optional character vector of columns in `data` to keep in output
-#'   (e.g. treatment variables, experimental block)
-#'
 #' @return
 #' A data frame of same type as `data` with the following columns:
 #' \item{`name_A`}{Name of strain A}
-#'
 #' \item{`name_B`}{Name of strain B}
-#'
 #' \item{...}{Other columns specified by `keep`}
-#'
 #' \item{`initial_fraction_A`}{Initial frequency of strain A. Fraction of all
 #' cells or virions.}
-#'
 #' \item{`initial_ratio_A_B`}{Initial ratio of strain A to strain B
 #' frequencies}
-#'
 #' \item{`fitness_A`}{Fitness of strain A}
-#'
 #' \item{`fitness_B`}{Fitness of strain B}
-#'
 #' \item{`fitness_total`}{Total-group fitness. Sum of both strains.}
-#'
 #' \item{`fitness_ratio_A_B`}{Within-group relative fitness measured as
 #' `fitness_A` / `fitness_B`}
 #'
