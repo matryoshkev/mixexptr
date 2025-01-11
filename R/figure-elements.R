@@ -30,10 +30,30 @@ add_scale_initial_fraction <- function(input_fig, name_A) {
 		)
 }
 
+# Add x-axis scale: initial ratio A/B (log10)
+add_scale_initial_ratio <- function(
+	input_fig, name_A, name_B, show_intercept = TRUE
+) {
+	breaks <- 10^c(-10:10)
+	output <- input_fig +
+		ggplot2::aes(x = .data$initial_ratio_A_B) +
+		ggplot2::scale_x_log10(
+			name = paste("Initial ratio\n", name_A, "/", name_B),
+			breaks = breaks,
+			minor_breaks = breaks,
+			labels = scales::label_log()
+		)
+	if (show_intercept) {
+		output <- output +
+			ggplot2::geom_vline(xintercept = 1, color = "white", linewidth = 1)
+	}
+	output
+}
+
 # Add y-axis scale: fitness (strain A, strain B, total group)
 add_scale_fitness <- function(input_fig, show_intercept = TRUE) {
 	output <- input_fig +
-		ggplot2::aes(y = fitness) +
+		ggplot2::aes(y = .data$fitness) +
 		ggplot2::scale_y_log10(
 			name = "Wrightian fitness\n (final no. / initial no.)",
 			labels = scales::label_log()

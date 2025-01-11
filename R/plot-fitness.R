@@ -81,13 +81,24 @@ plot_fitness_strain_total <- function(
 
 	# Format to plot fitness
 	data_for_plot <- format_to_plot_fitness(data, var_names)
+	if (mix_scale == "ratio") {
+		data_for_plot <- subset(data_for_plot,
+			is.finite(initial_ratio_A_B) & initial_ratio_A_B > 0
+		)
+	}
 
 	# Construct plot
 	fig_output <-
 		ggplot2::ggplot(data_for_plot) +
 		theme_mixexptr() +
 		ggplot2::ggtitle("")  # Space for legend, align height with other plots
-	fig_output <- add_scale_initial_fraction(fig_output, name_A)
+
+	if (mix_scale == "fraction") {
+		fig_output <- add_scale_initial_fraction(fig_output, name_A)
+	} else if (mix_scale == "ratio") {
+		fig_output <- add_scale_initial_ratio(fig_output, name_A, name_B)
+	}
+
 	fig_output <- add_scale_fitness(fig_output)
 	fig_output <- add_points(fig_output)
 	fig_output <- add_scale_strain_color(fig_output)
@@ -119,14 +130,14 @@ format_to_plot_fitness <- function(
 
 	output <- as.data.frame(data)  # So reshape() doesn't choke on tibbles
 	output$initial_fraction_A <- output[[var_names$initial_fraction_A]]
-	output$initial_ratio_A    <- output[[var_names$initial_ratio_A]]
+	output$initial_ratio_A_B  <- output[[var_names$initial_ratio_A_B]]
 	output$fitness_A          <- output[[var_names$fitness_A]]
 	output$fitness_B          <- output[[var_names$fitness_B]]
 	output$fitness_total      <- output[[var_names$fitness_total]]
 	output <- subset(
 		output,
 		select = c(
-			"initial_fraction_A", "initial_ratio_A",
+			"initial_fraction_A", "initial_ratio_A_B",
 			"fitness_A", "fitness_B", "fitness_total"
 		)
 	)
@@ -174,13 +185,23 @@ plot_within_group_fitness <- function(
 	data_for_plot$initial_ratio_A_B  <- data[[var_names$initial_ratio_A_B]]
 	data_for_plot$fitness_ratio_A_B  <- data[[var_names$fitness_ratio_A_B]]
 	data_for_plot <- subset(data_for_plot, !is.na(fitness_ratio_A_B))
+	if (mix_scale == "ratio") {
+		data_for_plot <- subset(data_for_plot,
+			is.finite(initial_ratio_A_B) & initial_ratio_A_B > 0
+		)
+	}
 
 	# Construct plot
 	fig_output <-
 		ggplot2::ggplot(data_for_plot) +
 		theme_mixexptr() +
 		ggplot2::ggtitle("")  # Space for legend, align height with other plots
-	fig_output <- add_scale_initial_fraction(fig_output, name_A)
+	if (mix_scale == "fraction") {
+		fig_output <- add_scale_initial_fraction(fig_output, name_A)
+	} else if (mix_scale == "ratio") {
+		fig_output <- add_scale_initial_ratio(fig_output, name_A, name_B)
+	}
+	# fig_output <- add_scale_initial_fraction(fig_output, name_A)
 	fig_output <- add_scale_fitness_ratio(fig_output, name_A, name_B)
 	fig_output <- add_points_within_group(fig_output)
 

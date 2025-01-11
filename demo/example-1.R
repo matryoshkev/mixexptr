@@ -29,8 +29,9 @@ dev.new(width = 4.5, height = 2.25, units = "in")
 tmp <- fitness_smith_2010 %>% plot_fitness_strain_total()
 
 dev.new(width = 6.25, height = 2.25, units = "in")
-fitness_smith_2010 %>% plot_fitness()
 # tmp <- fitness_smith_2010 %>% plot_fitness()
+fitness_smith_2010 %>% plot_fitness()
+fitness_smith_2010 %>% plot_fitness(mix_scale = "ratio")
 
 
 # data_Yurtsev_2013 ------------------------------------------------------------
@@ -80,3 +81,7 @@ tmp <-
 	filter(dilution == 100 & ampicillin == 100) %>%
 	plot_fitness()
 plot(tmp)
+
+fitness_Yurstev_2013 %>%
+	filter(dilution == 100 & ampicillin == 100) %>%
+	plot_fitness(mix_scale = "ratio")
