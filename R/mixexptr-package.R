@@ -6,6 +6,7 @@
 #' visualize fitness measures that help researchers get the most out of their
 #' data and quantitatively compare results across systems.
 #'
+#' @importFrom rlang .data
 #' @keywords internal
 "_PACKAGE"
 
@@ -13,4 +14,3 @@
 ## usethis namespace: end
 NULL
 
-#' @importFrom rlang .data

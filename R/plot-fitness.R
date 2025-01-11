@@ -1,16 +1,80 @@
 # Plotting functions
 
-plot_fitness <- function() {}
+#' Title
+#'
+#' @param data
+#' @param var_names
+#' @param mix_scale
+#'
+#' @return
+#' @export
+#'
+#' @examples
+plot_fitness <- function(
+	data,
+	var_names = c(
+		name_A = "name_A",
+		name_B = "name_B",
+		initial_fraction_A = "initial_fraction_A",
+		initial_ratio_A_B = "initial_ratio_A_B",
+		fitness_A = "fitness_A",
+		fitness_B = "fitness_B",
+		fitness_total = "fitness_total",
+		fitness_ratio_A_B = "fitness_ratio_A_B"
+	),
+	mix_scale = "fraction"
+) {
+	fig_output <-
+		combine_figures(
+			plot_fitness_strain_total(data, var_names, mix_scale),
+			plot_within_group_fitness(data, var_names, mix_scale),
+			widths = c(14, 8)
+		)
+	fig_output
+}
 
 
 # Helper functions =============================================================
 
 # Plot strain and total-group fitness
-#
-plot_fitness_strain_group <- function() {}
+plot_fitness_strain_total <- function(
+	data,
+	var_names = c(
+		name_A = "name_A",
+		name_B = "name_B",
+		initial_fraction_A = "initial_fraction_A",
+		initial_ratio_A_B = "initial_ratio_A_B",
+		fitness_A = "fitness_A",
+		fitness_B = "fitness_B",
+		fitness_total = "fitness_total",
+		fitness_ratio_A_B = "fitness_ratio_A_B"
+	),
+	mix_scale = "fraction"
+) {
+	var_names <- as.list(var_names)
+	name_A <- data[[var_names$name_A]][[1]]
+	name_B <- data[[var_names$name_B]][[1]]
+
+	# Format to plot fitness
+	data_for_plot <- format_to_plot_fitness(data, var_names)
+
+	# Construct plot
+	fig_output <-
+		ggplot2::ggplot(data_for_plot) +
+		theme_mixexptr() +
+		ggplot2::ggtitle("")  # Space for legend, align height with other plots
+	fig_output <- add_scale_initial_fraction(fig_output, name_A)
+	fig_output <- add_scale_fitness(fig_output)
+	fig_output <- add_points(fig_output)
+	fig_output <- add_scale_strain_color(fig_output)
+	fig_output <- add_scale_strain_fill(fig_output)
+	fig_output <- fig_output + ggplot2::facet_wrap(~ my_facet, nrow = 1)
+
+	# Return ggplot object
+	fig_output
+}
 
 # Reshape data to plot strain and/or total-group fitness
-#
 format_to_plot_fitness <- function(
 	data,
 	var_names = c(
@@ -47,7 +111,7 @@ format_to_plot_fitness <- function(
 		direction = "long",
 		varying = c("fitness_A", "fitness_B", "fitness_total"),
 		v.names = c("fitness"),
-		times = c(name_A, name_A, name_total),
+		times = c(name_A, name_B, name_total),
 		timevar = "strain"
 	)
 	output <- subset(output, !is.na(fitness))
@@ -62,7 +126,6 @@ format_to_plot_fitness <- function(
 
 # Plot relative within-group fitness (fitness_A/fitness_B)
 #   Will eventually be user-facing
-#
 plot_within_group_fitness <- function(
 	data,
 	var_names = c(
@@ -84,12 +147,15 @@ plot_within_group_fitness <- function(
 	# Format to plot fitness ratio
 	data_for_plot <- as.data.frame(data)
 	data_for_plot$initial_fraction_A <- data[[var_names$initial_fraction_A]]
-	data_for_plot$initial_ratio_A_B <- data[[var_names$initial_ratio_A_B]]
-	data_for_plot$fitness_ratio_A_B <- data[[var_names$fitness_ratio_A_B]]
+	data_for_plot$initial_ratio_A_B  <- data[[var_names$initial_ratio_A_B]]
+	data_for_plot$fitness_ratio_A_B  <- data[[var_names$fitness_ratio_A_B]]
 	data_for_plot <- subset(data_for_plot, !is.na(fitness_ratio_A_B))
 
 	# Construct plot
-	fig_output <- ggplot2::ggplot(data_for_plot)
+	fig_output <-
+		ggplot2::ggplot(data_for_plot) +
+		theme_mixexptr() +
+		ggplot2::ggtitle("")  # Space for legend, align height with other plots
 	fig_output <- add_scale_initial_fraction(fig_output, name_A)
 	fig_output <- add_scale_fitness_ratio(fig_output, name_A, name_B)
 	fig_output <- add_points_within_group(fig_output)
@@ -98,3 +164,29 @@ plot_within_group_fitness <- function(
 	fig_output
 }
 
+# Combine subfigures
+#   Eventually user-facing?
+combine_figures <- function(fig1, fig2, widths = c(1, 1)) {
+	width_1 <- widths[[1]]
+	width_2 <- widths[[2]]
+	# grDevices::pdf(file = NULL)
+		# So ggplotGrob() doesn't create blank plot window
+		# see https://github.com/tidyverse/ggplot2/issues/809
+	fig_output <-
+		gtable::gtable_add_grob(
+			gtable::gtable(
+				widths  = grid::unit(rep(1, width_1 + width_2), "null"),
+				heights = grid::unit(rep(1, 1), "null")
+			),
+			grobs = list(
+				ggplot2::ggplotGrob(fig1),
+				ggplot2::ggplotGrob(fig2)
+			),
+			l = c(1, width_1 + 1), # Left extents
+			r = c(width_1, width_1 + width_2),  # Right extents
+			t = c(1, 1), # Top extents
+			b = c(1, 1)  # Bottom extents
+		)
+	# grDevices::dev.off()  # end of workaround
+	fig_output
+}

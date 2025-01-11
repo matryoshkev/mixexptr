@@ -19,9 +19,18 @@ fitness_smith_2010 <-
 fitness_smith_2010
 
 # Testing
-fitness_smith_2010 %>% format_to_plot_fitness()
-dev.new(width = 3, height = 2.25)
-fitness_smith_2010 %>% plot_within_group_fitness()
+#
+# fitness_smith_2010 %>% format_to_plot_fitness()
+#
+# dev.new(width = 2.25, height = 2.25, units = "in")
+# fitness_smith_2010 %>% plot_within_group_fitness()
+#
+# dev.new(width = 4.5, height = 2.25, units = "in")
+# fitness_smith_2010 %>% plot_fitness_strain_total()
+
+dev.new(width = 6.25, height = 2.25, units = "in")
+tmp <- fitness_smith_2010 %>% plot_fitness()
+plot(tmp)
 
 
 # data_Yurtsev_2013 ------------------------------------------------------------
@@ -51,12 +60,23 @@ fitness_Yurstev_2013 <-
 fitness_Yurstev_2013
 
 # Testing
-fitness_Yurstev_2013 %>% format_to_plot_fitness()
+#
+# fitness_Yurstev_2013 %>% format_to_plot_fitness()
+#
+# dev.new(width = 2.25, height = 2.25, units = "in")
+# fitness_Yurstev_2013 %>%
+# 	filter(dilution == 100 & ampicillin == 100) %>%
+# 	plot_within_group_fitness()
+# 	# ggplot2::aes(color = factor(ampicillin))
+#
+# dev.new(width = 4.5, height = 2.25, units = "in")
+# fitness_Yurstev_2013 %>%
+# 	filter(dilution == 100 & ampicillin == 100) %>%
+# 	plot_fitness_strain_total()
 
-dev.new(width = 3, height = 2.25)
-fitness_Yurstev_2013 %>%
-	filter(dilution == 100) %>%
-	plot_within_group_fitness() +
-	ggplot2::aes(color = factor(ampicillin))
-
-
+dev.new(width = 6.25, height = 2.25, units = "in")
+tmp <-
+	fitness_Yurstev_2013 %>%
+	filter(dilution == 100 & ampicillin == 100) %>%
+	plot_fitness()
+plot(tmp)
