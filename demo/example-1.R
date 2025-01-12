@@ -24,14 +24,14 @@ fitness_smith_2010
 #
 # dev.new(width = 2.25, height = 2.25, units = "in")
 #
-dev.new(width = 4.5, height = 2.25, units = "in")
-tmp1 <- fitness_smith_2010 %>% plot_fitness_strain_total()
-tmp2 <- fitness_smith_2010 %>% plot_within_group_fitness()
+# dev.new(width = 4.5, height = 2.25, units = "in")
+# tmp1 <- fitness_smith_2010 %>% plot_fitness_strain_total()
+# tmp2 <- fitness_smith_2010 %>% plot_within_group_fitness()
 
 dev.new(width = 6.25, height = 2.25, units = "in")
 # tmp <- fitness_smith_2010 %>% plot_fitness()
-fitness_smith_2010 %>% plot_fitness()
-fitness_smith_2010 %>% plot_fitness(mix_scale = "ratio")
+fitness_smith_2010 %>% plot_mix_fitness()
+fitness_smith_2010 %>% plot_mix_fitness(mix_scale = "ratio")
 
 
 # data_Yurtsev_2013 ------------------------------------------------------------
@@ -79,9 +79,9 @@ dev.new(width = 6.25, height = 2.25, units = "in")
 tmp <-
 	fitness_Yurstev_2013 %>%
 	filter(dilution == 100 & ampicillin == 100) %>%
-	plot_fitness()
+	plot_mix_fitness()
 plot(tmp)
 
 fitness_Yurstev_2013 %>%
 	filter(dilution == 100 & ampicillin == 100) %>%
-	plot_fitness(mix_scale = "ratio")
+	plot_mix_fitness(mix_scale = "ratio")

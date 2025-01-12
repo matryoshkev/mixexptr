@@ -33,7 +33,7 @@
 #'
 #' @export
 #'
-plot_fitness <- function(
+plot_mix_fitness <- function(
 	data,
 	var_names = NULL,
 	mix_scale = "fraction"
