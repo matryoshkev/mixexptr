@@ -3,7 +3,8 @@
 #' Plot strain and multilevel fitness
 #'
 #' Draw a combined plot of strain, total group, and relative within-group
-#' fitness against mix frequency.
+#' fitness against mix frequency. Useful as a quick diagnostic for fitness
+#' effects in data.
 #'
 #' @param data Data frame of fitness values. Each row must contain data for two
 #'   microbes in the same population. Accepts data frame extensions like
@@ -52,9 +53,14 @@ plot_mix_fitness <- function(
 	}
 	figA <- plot_fitness_strain_total(data, var_names, mix_scale)
 	figB <- plot_within_group_fitness(data, var_names, mix_scale)
-	fig_output <- combine_figures(figA, figB, widths = c(14, 8))
-	grid::grid.draw(fig_output)
-	return(invisible(fig_output))
+	fig_output <-
+		figA + figB +
+		patchwork::plot_layout(
+			widths = grid::unit(c(3.2, 1.6), "inches"),
+			heights = grid::unit(1.4, "inches")
+			# Units affect plotting area, not total size
+		)
+	fig_output
 }
 
 
@@ -206,31 +212,5 @@ plot_within_group_fitness <- function(
 	fig_output <- add_points_within_group(fig_output)
 
 	# Return ggplot object
-	fig_output
-}
-
-# Combine subfigures
-#   Deprecated: Maybe try `patchwork` package
-combine_figures <- function(fig1, fig2, widths = c(1, 1)) {
-	width_1 <- widths[[1]]
-	width_2 <- widths[[2]]
-	# grDevices::pdf(file = NULL)
-		# So ggplotGrob() doesn't create blank plot window
-		# see https://github.com/tidyverse/ggplot2/issues/809
-	fig1 <- ggplot2::ggplotGrob(fig1)
-	fig2 <- ggplot2::ggplotGrob(fig2)
-	fig_output <- gtable::gtable(
-		widths  = grid::unit(rep(1, width_1 + width_2), "null"),
-		heights = grid::unit(rep(1, 1), "null")
-	)
-	fig_output <- gtable::gtable_add_grob(
-		fig_output,
-		grobs = list(fig1, fig2),
-		l = c(1, width_1 + 1), # Left extents
-		r = c(width_1, width_1 + width_2),  # Right extents
-		t = c(1, 1), # Top extents
-		b = c(1, 1)  # Bottom extents
-	)
-	# grDevices::dev.off()  # end of workaround
 	fig_output
 }

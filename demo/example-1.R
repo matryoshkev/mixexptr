@@ -29,7 +29,6 @@ fitness_smith_2010
 # tmp2 <- fitness_smith_2010 %>% plot_within_group_fitness()
 
 dev.new(width = 6.25, height = 2.25, units = "in")
-# tmp <- fitness_smith_2010 %>% plot_fitness()
 fitness_smith_2010 %>% plot_mix_fitness()
 fitness_smith_2010 %>% plot_mix_fitness(mix_scale = "ratio")
 
@@ -82,6 +81,3 @@ tmp <-
 	plot_mix_fitness()
 plot(tmp)
 
-fitness_Yurstev_2013 %>%
-	filter(dilution == 100 & ampicillin == 100) %>%
-	plot_mix_fitness(mix_scale = "ratio")

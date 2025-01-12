@@ -23,7 +23,8 @@ LazyData: true
 Depends: 
     R (>= 3.5)
 Imports: 
-    ggplot2
+    ggplot2,
+    patchwork
 Suggests:
     dplyr,
     testthat (>= 3.0.0)
