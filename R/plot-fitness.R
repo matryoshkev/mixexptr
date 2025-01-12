@@ -10,14 +10,14 @@
 #'   `tibble`.
 #' @param var_names Named character vector identifying which fitness measures
 #'   are contained in `data` variables. If `NULL`, defaults to column names
-#'   returned by `calculate_fitness().` See Details.
+#'   returned by `calculate_mix_fitness().` See Details.
 #' @param mix_scale Determines x-axis scale. `"fraction"` uses
 #'   `initial_fraction_A`. `"ratio"` uses `initial_ratio_A_B` (on
 #'   \eqn{\log_{10}} scale).
 #'
 #' @details
-#' `var_names` must be a named vector with the following elements (default
-#' values shown):
+#' `var_names` must be a named vector with the following elements (shown with
+#' default values):
 #' ```
 #' var_names = c(
 #'   name_A = "name_A",

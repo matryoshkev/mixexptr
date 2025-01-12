@@ -58,7 +58,7 @@
 #'
 #' @examples
 #' # Data with cell counts for each strain
-#' calculate_fitness(
+#' calculate_mix_fitness(
 #'   data_smith_2010,
 #'   population_vars = c(
 #'     initial_number_A = "initial_cells_evolved",
@@ -71,7 +71,7 @@
 #' )
 #'
 #' # Data with total density and strain frequency
-#' calculate_fitness(
+#' calculate_mix_fitness(
 #'   data_Yurtsev_2013,
 #'   population_vars = c(
 #'     initial_number_total = "OD_initial",
@@ -87,7 +87,7 @@
 #'
 #' @export
 #'
-calculate_fitness <- function(
+calculate_mix_fitness <- function(
 	data,
 	population_vars,
 	strain_names,
