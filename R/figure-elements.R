@@ -1,6 +1,5 @@
 # Figure elements
 
-
 # Theme
 #   Size suited to figures in papers
 #   Less clutter
@@ -94,29 +93,29 @@ geom_point_mixexptr <- function(shape = 21, ...) {
 }
 
 # Color points by strain/total-group
-add_scale_strain_color <- function(
-	input_fig,
-	values = c(color_strain_A(), color_strain_B(), color_group())
+scale_color_strain <- function(
+	values = c(color_strain_A(), color_strain_B(), color_group()),
+	...
 ) {
-	input_fig +
-	ggplot2::aes(color = .data$strain) +
-	ggplot2::scale_color_manual(values = values)
+	list(
+		ggplot2::aes(color = .data$strain),
+		ggplot2::scale_color_manual(values = values, ...)
+	)
 }
-
-# Fill points by strain/total-group
-add_scale_strain_fill <- function(
-	input_fig,
-	values = c(fill_strain_A(), fill_strain_B(), fill_group())
-) {
-	input_fig +
-	ggplot2::aes(fill = .data$strain) +
-	ggplot2::scale_fill_manual(values = values)
-}
-
-# Default color and fill values
 color_strain_A <- function() "tan4"
 color_strain_B <- function() "lightsteelblue4"
 color_group    <- function() gray(0)
+
+# Fill points by strain/total-group
+scale_fill_strain <- function(
+	values = c(fill_strain_A(), fill_strain_B(), fill_group()),
+	...
+) {
+	list(
+		ggplot2::aes(fill = .data$strain),
+		ggplot2::scale_fill_manual(values = values, ...)
+	)
+}
 fill_strain_A  <- function() "tan"
 fill_strain_B  <- function() "lightsteelblue"
 fill_group     <- function() gray(0.65)

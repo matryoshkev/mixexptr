@@ -102,10 +102,11 @@ plot_fitness_strain_total <- function(
 	}
 
 	fig_output <- add_scale_fitness(fig_output)
-	fig_output <- fig_output + geom_point_mixexptr()
-	fig_output <- add_scale_strain_color(fig_output)
-	fig_output <- add_scale_strain_fill(fig_output)
-	fig_output <- fig_output + ggplot2::facet_wrap(~ my_facet, nrow = 1)
+	fig_output <- fig_output +
+		geom_point_mixexptr() +
+		scale_color_strain() +
+		scale_fill_strain() +
+		ggplot2::facet_wrap(~ my_facet, nrow = 1)
 
 	# Return ggplot object
 	fig_output
