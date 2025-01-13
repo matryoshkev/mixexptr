@@ -57,7 +57,7 @@ plot_mix_fitness <- function(
 
 # Helper functions =============================================================
 
-# Default variable names
+# Default names for fitness and mixing variables
 var_names_default <- function() {
 	c(
 		name_A = "name_A",
@@ -102,7 +102,7 @@ plot_fitness_strain_total <- function(
 	}
 
 	fig_output <- add_scale_fitness(fig_output)
-	fig_output <- add_points(fig_output)
+	fig_output <- fig_output + geom_point_mixexptr()
 	fig_output <- add_scale_strain_color(fig_output)
 	fig_output <- add_scale_strain_fill(fig_output)
 	fig_output <- fig_output + ggplot2::facet_wrap(~ my_facet, nrow = 1)
@@ -185,9 +185,9 @@ plot_within_group_fitness <- function(
 	} else if (mix_scale == "ratio") {
 		fig_output <- add_scale_initial_ratio(fig_output, name_A, name_B)
 	}
-	# fig_output <- add_scale_initial_fraction(fig_output, name_A)
 	fig_output <- add_scale_fitness_ratio(fig_output, name_A, name_B)
-	fig_output <- add_points_within_group(fig_output)
+	fig_output <- fig_output +
+		geom_point_mixexptr(color = color_group(), fill = fill_group())
 
 	# Return ggplot object
 	fig_output

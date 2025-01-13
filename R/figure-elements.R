@@ -1,5 +1,6 @@
 # Figure elements
 
+
 # Theme
 #   Size suited to figures in papers
 #   Less clutter
@@ -82,25 +83,20 @@ add_scale_fitness_ratio <- function(
 	output
 }
 
-# Add points for within-group plots
-add_points_within_group <- function(
-	input_fig, color = gray(0.1), fill = gray(0.65)
-) {
-	input_fig +
-	ggplot2::geom_point(shape = 21, color = color, fill = fill) +
-	ggplot2::geom_point(shape = 1, color = color)
-}
-
-# Add points (generic)
-add_points <- function(input_fig) {
-	input_fig +
-	ggplot2::geom_point(shape = 21) +
-	ggplot2::geom_point(shape = 1)
+# Points that are readable when overlapped
+geom_point_mixexptr <- function(shape = 21, ...) {
+	suppressWarnings(  # So ggplot2 doesn't warn if fill supplied
+		list(
+			ggplot2::geom_point(shape = shape, ...),
+			ggplot2::geom_point(shape = shape, fill = NA, ...)
+		)
+	)
 }
 
 # Color points by strain/total-group
 add_scale_strain_color <- function(
-	input_fig, values = c("tan4", "lightsteelblue4", gray(0.1))
+	input_fig,
+	values = c(color_strain_A(), color_strain_B(), color_group())
 ) {
 	input_fig +
 	ggplot2::aes(color = .data$strain) +
@@ -109,9 +105,18 @@ add_scale_strain_color <- function(
 
 # Fill points by strain/total-group
 add_scale_strain_fill <- function(
-	input_fig, values = c("tan", "lightsteelblue", gray(0.65))
+	input_fig,
+	values = c(fill_strain_A(), fill_strain_B(), fill_group())
 ) {
 	input_fig +
 	ggplot2::aes(fill = .data$strain) +
 	ggplot2::scale_fill_manual(values = values)
 }
+
+# Default color and fill values
+color_strain_A <- function() "tan4"
+color_strain_B <- function() "lightsteelblue4"
+color_group    <- function() gray(0)
+fill_strain_A  <- function() "tan"
+fill_strain_B  <- function() "lightsteelblue"
+fill_group     <- function() gray(0.65)
