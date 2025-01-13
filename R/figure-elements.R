@@ -1,7 +1,7 @@
 # Figure elements
 
 # Theme
-#   Size suited to figures in papers
+#   Text size suited to figures in papers
 #   Less clutter
 theme_mixexptr <- function(...) {
 	ggplot2::theme_grey(...) +
@@ -18,36 +18,47 @@ theme_mixexptr <- function(...) {
 }
 
 # Add x-axis scale: initial fraction strain A
-add_scale_initial_fraction <- function(input_fig, name_A) {
-	breaks <- seq(0, 1, by = 0.2)
-	input_fig +
-		ggplot2::aes(x = .data$initial_fraction_A) +
+scale_x_initial_fraction <- function(
+	name_A,
+	...,
+	breaks = seq(0, 1, by = 0.2),
+	minor_breaks = NULL
+) {
+	list(
+		ggplot2::aes(x = .data$initial_fraction_A),
 		ggplot2::scale_x_continuous(
 			name = paste("Initial fraction", name_A),
 			limits = c(0, 1),
 			breaks = breaks,
-			minor_breaks = breaks
+			minor_breaks = minor_breaks
 		)
+	)
 }
 
 # Add x-axis scale: initial ratio A/B (log10)
-add_scale_initial_ratio <- function(
-	input_fig, name_A, name_B, show_intercept = TRUE
+scale_x_initial_ratio <- function(
+	name_A,
+	name_B,
+	...,
+	breaks = 10^c(-10:10),
+	minor_breaks = NULL,
+	show_intercept = TRUE
 ) {
-	breaks <- 10^c(-10:10)
-	output <- input_fig +
-		ggplot2::aes(x = .data$initial_ratio_A_B) +
+	scale <- list(
+		ggplot2::aes(x = .data$initial_ratio_A_B),
 		ggplot2::scale_x_log10(
 			name = paste("Initial ratio\n", name_A, "/", name_B),
 			breaks = breaks,
-			minor_breaks = breaks,
+			minor_breaks = minor_breaks,
 			labels = scales::label_log()
 		)
+	)
 	if (show_intercept) {
-		output <- output +
+		scale <- c(scale, list(
 			ggplot2::geom_vline(xintercept = 1, color = "white", linewidth = 1)
+		))
 	}
-	output
+	scale
 }
 
 # Add y-axis scale: fitness (strain A, strain B, total group)
@@ -120,6 +131,6 @@ scale_fill_strain <- function(
 		ggplot2::scale_fill_manual(values = values, ...)
 	)
 }
-fill_strain_A  <- function() "tan"
-fill_strain_B  <- function() "lightsteelblue"
-fill_group     <- function() gray(0.65)
+fill_strain_A <- function() "tan"
+fill_strain_B <- function() "lightsteelblue"
+fill_group    <- function() gray(0.65)

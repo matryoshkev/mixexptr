@@ -93,20 +93,16 @@ plot_fitness_strain_total <- function(
 	fig_output <-
 		ggplot2::ggplot(data_for_plot) +
 		theme_mixexptr() +
-		ggplot2::ggtitle("")  # Space for legend, align height with other plots
-
-	if (mix_scale == "fraction") {
-		fig_output <- add_scale_initial_fraction(fig_output, name_A)
-	} else if (mix_scale == "ratio") {
-		fig_output <- add_scale_initial_ratio(fig_output, name_A, name_B)
-	}
-
-	# fig_output <- add_scale_fitness(fig_output)
-	fig_output <- fig_output +
+		switch(
+			mix_scale,
+			fraction = scale_x_initial_fraction(name_A = name_A),
+			ratio = scale_x_initial_ratio(name_A = name_A, name_B = name_B)
+		) +
 		scale_y_fitness() +
 		geom_point_mixexptr() +
 		scale_color_strain() +
 		scale_fill_strain() +
+		ggplot2::ggtitle("") +  # Space for legend, align height
 		ggplot2::facet_wrap(~ my_facet, nrow = 1)
 
 	# Return ggplot object
@@ -181,15 +177,14 @@ plot_within_group_fitness <- function(
 	fig_output <-
 		ggplot2::ggplot(data_for_plot) +
 		theme_mixexptr() +
-		ggplot2::ggtitle("")  # Space for legend, align height with other plots
-	if (mix_scale == "fraction") {
-		fig_output <- add_scale_initial_fraction(fig_output, name_A)
-	} else if (mix_scale == "ratio") {
-		fig_output <- add_scale_initial_ratio(fig_output, name_A, name_B)
-	}
-	fig_output <- fig_output +
+		switch(
+			mix_scale,
+			fraction = scale_x_initial_fraction(name_A = name_A),
+			ratio = scale_x_initial_ratio(name_A = name_A, name_B = name_B)
+		) +
 		scale_y_fitness_ratio(name_A = name_A, name_B = name_B) +
-		geom_point_mixexptr(color = color_group(), fill = fill_group())
+		geom_point_mixexptr(color = color_group(), fill = fill_group()) +
+		ggplot2::ggtitle("")  # Space for legend, align height
 
 	# Return ggplot object
 	fig_output
