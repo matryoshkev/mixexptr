@@ -51,38 +51,42 @@ add_scale_initial_ratio <- function(
 }
 
 # Add y-axis scale: fitness (strain A, strain B, total group)
-add_scale_fitness <- function(input_fig, show_intercept = TRUE) {
-	output <- input_fig +
-		ggplot2::aes(y = .data$fitness) +
+scale_y_fitness <- function(..., show_intercept = TRUE) {
+	scale <- list(
+		ggplot2::aes(y = .data$fitness),
 		ggplot2::scale_y_log10(
 			name = "Wrightian fitness\n (final no. / initial no.)",
 			labels = scales::label_log()
 		)
+	)
 	if (show_intercept) {
-		output <- output +
+		scale <- c(scale, list(
 			ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
+		))
 	}
-	output
+	scale
 }
 
 # Add y-axis scale: within-group fitness ratio A/B
-add_scale_fitness_ratio <- function(
-	input_fig, name_A, name_B, show_intercept = TRUE
+scale_y_fitness_ratio <- function(
+	name_A, name_B, ..., show_intercept = TRUE
 ) {
-	output <- input_fig +
-		ggplot2::aes(y = .data$fitness_ratio_A_B) +
+	scale <- list(
+		ggplot2::aes(y = .data$fitness_ratio_A_B),
 		ggplot2::scale_y_log10(
 			name = paste("Fitness ratio\n", name_A, "/",name_B),
-			labels = scales::label_log(),
+			labels = scales::label_log()
 		)
+	)
 	if (show_intercept) {
-		output <- output +
+		scale <- c(scale, list(
 			ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
+		))
 	}
-	output
+	scale
 }
 
-# Points that are readable when overlapped
+# Add points that are readable when overlapped
 geom_point_mixexptr <- function(shape = 21, ...) {
 	suppressWarnings(  # So ggplot2 doesn't warn if fill supplied
 		list(
