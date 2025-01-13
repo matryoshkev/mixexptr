@@ -119,7 +119,7 @@ scale_color_strain <- function(
 }
 color_strain_A <- function() "tan4"
 color_strain_B <- function() "lightsteelblue4"
-color_group    <- function() gray(0)
+color_group    <- function() "black"
 
 # Fill points by strain/total-group
 scale_fill_strain <- function(
@@ -133,4 +133,4 @@ scale_fill_strain <- function(
 }
 fill_strain_A <- function() "tan"
 fill_strain_B <- function() "lightsteelblue"
-fill_group    <- function() gray(0.65)
+fill_group    <- function() "gray65"

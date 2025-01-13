@@ -24,7 +24,9 @@ Depends:
     R (>= 3.5)
 Imports: 
     ggplot2,
-    patchwork
+    scales,
+    patchwork,
+    rlang
 Suggests:
     dplyr,
     testthat (>= 3.0.0)
