@@ -19,9 +19,9 @@ fitness_smith_2010 <-
 fitness_smith_2010
 
 # Testing
-#
-# fitness_smith_2010 %>% format_to_plot_fitness()
-#
+
+fitness_smith_2010 %>% format_to_plot_fitness()
+
 # dev.new(width = 2.25, height = 2.25, units = "in")
 #
 # dev.new(width = 4.5, height = 2.25, units = "in")

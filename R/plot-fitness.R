@@ -40,16 +40,7 @@ plot_mix_fitness <- function(
 	mix_scale = "fraction"
 ) {
 	if (is.null(var_names)) {
-		var_names <- c(
-			name_A = "name_A",
-			name_B = "name_B",
-			initial_fraction_A = "initial_fraction_A",
-			initial_ratio_A_B = "initial_ratio_A_B",
-			fitness_A = "fitness_A",
-			fitness_B = "fitness_B",
-			fitness_total = "fitness_total",
-			fitness_ratio_A_B = "fitness_ratio_A_B"
-		)
+		var_names <- var_names_default()
 	}
 	figA <- plot_fitness_strain_total(data, var_names, mix_scale)
 	figB <- plot_within_group_fitness(data, var_names, mix_scale)
@@ -66,10 +57,9 @@ plot_mix_fitness <- function(
 
 # Helper functions =============================================================
 
-# Plot strain and total-group fitness
-plot_fitness_strain_total <- function(
-	data,
-	var_names = c(
+# Default variable names
+var_names_default <- function() {
+	c(
 		name_A = "name_A",
 		name_B = "name_B",
 		initial_fraction_A = "initial_fraction_A",
@@ -78,7 +68,13 @@ plot_fitness_strain_total <- function(
 		fitness_B = "fitness_B",
 		fitness_total = "fitness_total",
 		fitness_ratio_A_B = "fitness_ratio_A_B"
-	),
+	)
+}
+
+# Plot strain and total-group fitness
+plot_fitness_strain_total <- function(
+	data,
+	var_names = var_names_default(),
 	mix_scale = "fraction"
 ) {
 	var_names <- as.list(var_names)
@@ -118,16 +114,7 @@ plot_fitness_strain_total <- function(
 # Reshape data to plot strain and/or total-group fitness
 format_to_plot_fitness <- function(
 	data,
-	var_names = c(
-		name_A = "name_A",
-		name_B = "name_B",
-		initial_fraction_A = "initial_fraction_A",
-		initial_ratio_A_B = "initial_ratio_A_B",
-		fitness_A = "fitness_A",
-		fitness_B = "fitness_B",
-		fitness_total = "fitness_total",
-		fitness_ratio_A_B = "fitness_ratio_A_B"
-	)
+	var_names = var_names_default()
 ) {
 	var_names <- as.list(var_names)
 	name_A <- data[[var_names$name_A]][[1]]
@@ -169,16 +156,7 @@ format_to_plot_fitness <- function(
 #   Will eventually be user-facing
 plot_within_group_fitness <- function(
 	data,
-	var_names = c(
-		name_A = "name_A",
-		name_B = "name_B",
-		initial_fraction_A = "initial_fraction_A",
-		initial_ratio_A_B = "initial_ratio_A_B",
-		fitness_A = "fitness_A",
-		fitness_B = "fitness_B",
-		fitness_total = "fitness_total",
-		fitness_ratio_A_B = "fitness_ratio_A_B"
-	),
+	var_names = var_names_default(),
 	mix_scale = "fraction"
 ) {
 	var_names <- as.list(var_names)
