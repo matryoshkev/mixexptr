@@ -100,12 +100,11 @@ calculate_mix_fitness <- function(
 	output <- set_final_population(output, data, population_vars)
 
 	# Calculate fitness measures
-	output <- within(output, {
-		fitness_A         <- final_number_A / initial_number_A
-		fitness_B         <- final_number_B / initial_number_B
-		fitness_total     <- final_number_total / initial_number_total
-		fitness_ratio_A_B <- fitness_A / fitness_B
-	})
+	output$fitness_A <- output$final_number_A / output$initial_number_A
+	output$fitness_B <- output$final_number_B / output$initial_number_B
+	output$fitness_total <-
+		output$final_number_total / output$initial_number_total
+	output$fitness_ratio_A_B <- output$fitness_A / output$fitness_B
 
 	# Replace NaN from single-strain expts etc
 	output[sapply(output, is.nan)] <- NA
