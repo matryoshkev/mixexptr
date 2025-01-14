@@ -145,11 +145,12 @@ set_initial_population <- function(output, data, vars) {
 	) {
 		output$initial_number_A <- data[[vars$initial_number_A]]
 		output$initial_number_B <- data[[vars$initial_number_B]]
-		output <- within(output, {
-			initial_number_total <- initial_number_A + initial_number_B
-			initial_fraction_A <- initial_number_A / initial_number_total
-			initial_ratio_A_B <- initial_number_A / initial_number_B
-		})
+		output$initial_number_total <-
+			output$initial_number_A + output$initial_number_B
+		output$initial_fraction_A <-
+			output$initial_number_A / output$initial_number_total
+		output$initial_ratio_A_B <-
+			output$initial_number_A / output$initial_number_B
 	} else if (
 		# Data are number total & fraction A
 		!is.null(vars$initial_number_total) &
@@ -157,11 +158,12 @@ set_initial_population <- function(output, data, vars) {
 	) {
 		output$initial_number_total <- data[[vars$initial_number_total]]
 		output$initial_fraction_A <- data[[vars$initial_fraction_A]]
-		output <- within(output, {
-			initial_number_A <- initial_number_total * initial_fraction_A
-			initial_number_B <- initial_number_total * (1-initial_fraction_A)
-			initial_ratio_A_B <- initial_fraction_A / (1-initial_fraction_A)
-		})
+		output$initial_number_A <-
+			output$initial_number_total * output$initial_fraction_A
+		output$initial_number_B <-
+			output$initial_number_total * (1-output$initial_fraction_A)
+		output$initial_ratio_A_B <-
+			output$initial_fraction_A / (1-output$initial_fraction_A)
 	} else if (
 		# Data are number total & fraction B
 		!is.null(vars$initial_number_total) &
@@ -169,11 +171,12 @@ set_initial_population <- function(output, data, vars) {
 	) {
 		output$initial_number_total <- data[[vars$initial_number_total]]
 		output$initial_fraction_B <- data[[vars$initial_fraction_B]]
-		output <- within(output, {
-			initial_number_A <- initial_number_total * (1-initial_fraction_B)
-			initial_number_B <- initial_number_total * initial_fraction_B
-			initial_ratio_A_B <- initial_number_A / initial_number_B
-		})
+		output$initial_number_A <-
+			output$initial_number_total * (1-output$initial_fraction_B)
+		output$initial_number_B <-
+				output$initial_number_total * output$initial_fraction_B
+		output$initial_ratio_A_B <-
+			output$initial_number_A / output$initial_number_B
 	} else if (
 		# Data are number total & number A
 		!is.null(vars$initial_number_total) &
@@ -181,11 +184,12 @@ set_initial_population <- function(output, data, vars) {
 	) {
 		output$initial_number_total <- data[[vars$initial_number_total]]
 		output$initial_number_A <- data[[vars$initial_number_A]]
-		output <- within(output, {
-			initial_number_B <- initial_number_total - initial_number_A
-			initial_fraction_A <- initial_number_A / initial_number_total
-			initial_ratio_A_B <- initial_number_A / initial_number_B
-		})
+		output$initial_number_B <-
+			output$initial_number_total - output$initial_number_A
+		output$initial_fraction_A <-
+			output$initial_number_A / output$initial_number_total
+		output$initial_ratio_A_B <-
+			output$initial_number_A / output$initial_number_B
 	} else if (
 		# Data are number total & number B
 		!is.null(vars$initial_number_total) &
@@ -193,11 +197,12 @@ set_initial_population <- function(output, data, vars) {
 	) {
 		output$initial_number_total <- data[[vars$initial_number_total]]
 		output$initial_number_B <- data[[vars$initial_number_B]]
-		output <- within(output, {
-			initial_number_A <- initial_number_total - initial_number_B
-			initial_fraction_A <- initial_number_A / initial_number_total
-			initial_ratio_A_B <- initial_number_A / initial_number_B
-		})
+		output$initial_number_A <-
+			output$initial_number_total - output$initial_number_B
+		output$initial_fraction_A <-
+			output$initial_number_A / output$initial_number_total
+		output$initial_ratio_A_B <-
+			output$initial_number_A / output$initial_number_B
 	} else {
 		stop("Cannot calculate initial population from data")
 	}
@@ -211,7 +216,7 @@ set_initial_population <- function(output, data, vars) {
 			)
 		}
 	}
-	# TODO: Replace with warning if nonbiological input
+	# TODO: Replace with warning if nonbiological *input*
 
 	output
 }
@@ -230,9 +235,7 @@ set_final_population <- function(output, data, vars) {
 	) {
 		output$final_number_A <- data[[vars$final_number_A]]
 		output$final_number_B <- data[[vars$final_number_B]]
-		output <- within(output, {
-			final_number_total <- final_number_A + final_number_B
-		})
+		output$final_number_total <- output$final_number_A + output$final_number_B
 	} else if (
 		# Data are number total & fraction A
 		!is.null(vars$final_number_total) &
@@ -240,10 +243,10 @@ set_final_population <- function(output, data, vars) {
 	) {
 		output$final_number_total <- data[[vars$final_number_total]]
 		output$final_fraction_A <- data[[vars$final_fraction_A]]
-		output <- within(output, {
-			final_number_A <- final_number_total * final_fraction_A
-			final_number_B <- final_number_total * (1-final_fraction_A)
-		})
+		output$final_number_A <-
+			output$final_number_total * output$final_fraction_A
+		output$final_number_B <-
+			output$final_number_total * (1-output$final_fraction_A)
 	} else if (
 		# Data are number total & fraction B
 		!is.null(vars$final_number_total) &
@@ -251,10 +254,10 @@ set_final_population <- function(output, data, vars) {
 	) {
 		output$final_number_total <- data[[vars$final_number_total]]
 		output$final_fraction_B <- data[[vars$final_fraction_B]]
-		output <- within(output, {
-			final_number_A <- final_number_total * (1-final_fraction_B)
-			final_number_B <- final_number_total * final_fraction_B
-		})
+		output$final_number_A <-
+			output$final_number_total * (1-output$final_fraction_B)
+		output$final_number_B <-
+			output$final_number_total * output$final_fraction_B
 	} else if (
 		# Data are number total & number A
 		!is.null(vars$final_number_total) &
@@ -262,9 +265,7 @@ set_final_population <- function(output, data, vars) {
 	) {
 		output$final_number_total <- data[[vars$final_number_total]]
 		output$final_number_A <- data[[vars$final_number_A]]
-		output <- within(output, {
-			final_number_B <- final_number_total - final_number_A
-		})
+		output$final_number_B <- output$final_number_total - output$final_number_A
 	} else if (
 		# Data are number total & number B
 		!is.null(vars$final_number_total) &
@@ -272,9 +273,7 @@ set_final_population <- function(output, data, vars) {
 	) {
 		output$final_number_total <- data[[vars$final_number_total]]
 		output$final_number_B <- data[[vars$final_number_B]]
-		output <- within(output, {
-			final_number_A <- final_number_total - final_number_B
-		})
+		output$final_number_A <- output$final_number_total - output$final_number_B
 	} else {
 		stop("Cannot calculate final population from data")
 	}
@@ -288,7 +287,7 @@ set_final_population <- function(output, data, vars) {
 			)
 		}
 	}
-	# TODO: Replace with warning if nonbiological input
+	# TODO: Replace with warning if nonbiological *input*
 
 	output
 }
