@@ -109,7 +109,7 @@ plot_fitness_strain_total <- function(
 	fig_output
 }
 
-# Reshape data to plot strain and/or total-group fitness
+# Format data to plot strain and/or total-group fitness
 format_to_plot_fitness <- function(
 	data,
 	var_names = fitness_vars_default()
@@ -161,17 +161,8 @@ plot_within_group_fitness <- function(
 	name_A <- data[[var_names$name_A]][[1]]
 	name_B <- data[[var_names$name_B]][[1]]
 
-	# Format to plot fitness ratio
-	data_for_plot <- as.data.frame(data)
-	data_for_plot$initial_fraction_A <- data[[var_names$initial_fraction_A]]
-	data_for_plot$initial_ratio_A_B  <- data[[var_names$initial_ratio_A_B]]
-	data_for_plot$fitness_ratio_A_B  <- data[[var_names$fitness_ratio_A_B]]
-	data_for_plot <- subset(data_for_plot, !is.na(fitness_ratio_A_B))
-	if (mix_scale == "ratio") {
-		data_for_plot <- subset(data_for_plot,
-			is.finite(initial_ratio_A_B) & initial_ratio_A_B > 0
-		)
-	}
+	# Format data for plot
+	data_for_plot <- format_to_plot_fitness_ratio(data, var_names, mix_scale)
 
 	# Construct plot
 	fig_output <-
@@ -188,4 +179,22 @@ plot_within_group_fitness <- function(
 
 	# Return ggplot object
 	fig_output
+}
+
+# Format data to plot within-group relative fitness
+format_to_plot_fitness_ratio <- function(data, var_names, mix_scale) {
+	output <- as.data.frame(data)
+	output$initial_fraction_A <- data[[var_names$initial_fraction_A]]
+	output$initial_ratio_A_B  <- data[[var_names$initial_ratio_A_B]]
+	output$fitness_ratio_A_B  <- data[[var_names$fitness_ratio_A_B]]
+
+	if (mix_scale == "ratio") {
+		# Drop rows where mixing ratio undefined on log scale
+		output <- output[is.finite(output$initial_ratio_A_B), ]
+		output <- output[output$initial_ratio_A_B > 0, ]
+	}
+	# Drop rows with no value for fitness ratio
+	output <- output[!is.na(output$fitness_ratio_A_B), ]
+
+	output
 }
