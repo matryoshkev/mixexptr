@@ -96,8 +96,8 @@ calculate_mix_fitness <- function(
 	output <- data
 
 	# Calculate initial and final population states
-	output <- set_initial_population(output, data, population_vars)
-	output <- set_final_population(output, data, population_vars)
+	output <- set_population(output, "initial", data, population_vars)
+	output <- set_population(output, "final", data, population_vars)
 
 	# Calculate fitness measures
 	output$fitness_A <- output$final_number_A / output$initial_number_A
@@ -131,165 +131,110 @@ calculate_mix_fitness <- function(
 
 # Helper functions =============================================================
 
-# Calculate initial population state
-#   Using separate data, output to avoid column name conflicts
-set_initial_population <- function(output, data, vars) {
-	vars <- as.list(vars)
+# Calculate initial/final population state
+set_population <- function(output, time_point, data, var_names) {
+	time_point <- match.arg(time_point, c("initial", "final"))
 
-	# TODO: Warn if nonbiological input
+	# Names for output data frame
+	name_number_A     <- paste0(time_point, "_number_A")
+	name_number_B     <- paste0(time_point, "_number_B")
+	name_number_total <- paste0(time_point, "_number_total")
+	name_fraction_A   <- paste0(time_point, "_fraction_A")
+	name_fraction_B   <- paste0(time_point, "_fraction_B")
+	name_ratio_A_B    <- paste0(time_point, "_ratio_A_B")
 
-	if (
+	# Variable names in data
+	var_names <- as.list(var_names)
+	var_number_A     <- var_names[[name_number_A]]
+	var_number_B     <- var_names[[name_number_B]]
+	var_number_total <- var_names[[name_number_total]]
+	var_fraction_A   <- var_names[[name_fraction_A]]
+	var_fraction_B   <- var_names[[name_fraction_B]]
+
+	if (!is.null(var_number_A) & !is.null(var_number_B)) {
 		# Data are number A & number B
-		!is.null(vars$initial_number_A) &
-		!is.null(vars$initial_number_B)
-	) {
-		output$initial_number_A <- data[[vars$initial_number_A]]
-		output$initial_number_B <- data[[vars$initial_number_B]]
-		output$initial_number_total <-
-			output$initial_number_A + output$initial_number_B
-		output$initial_fraction_A <-
-			output$initial_number_A / output$initial_number_total
-		output$initial_ratio_A_B <-
-			output$initial_number_A / output$initial_number_B
-	} else if (
+		validate_count_data(data, var_number_A)
+		validate_count_data(data, var_number_B)
+		number_A     <- data[[var_number_A]]
+		number_B     <- data[[var_number_B]]
+		number_total <- number_A + number_B
+		fraction_A   <- number_A / number_total
+	} else if (!is.null(var_number_total) & !is.null(var_fraction_A)) {
 		# Data are number total & fraction A
-		!is.null(vars$initial_number_total) &
-		!is.null(vars$initial_fraction_A)
-	) {
-		output$initial_number_total <- data[[vars$initial_number_total]]
-		output$initial_fraction_A <- data[[vars$initial_fraction_A]]
-		output$initial_number_A <-
-			output$initial_number_total * output$initial_fraction_A
-		output$initial_number_B <-
-			output$initial_number_total * (1-output$initial_fraction_A)
-		output$initial_ratio_A_B <-
-			output$initial_fraction_A / (1-output$initial_fraction_A)
-	} else if (
+		validate_count_data(data, var_number_total)
+		validate_fraction_data(data, var_fraction_A)
+		number_total <- data[[var_number_total]]
+		fraction_A   <- data[[var_fraction_A]]
+		number_A     <- number_total * fraction_A
+		number_B     <- number_total * (1-fraction_A)
+	} else if (!is.null(var_number_total) & !is.null(var_fraction_B)) {
 		# Data are number total & fraction B
-		!is.null(vars$initial_number_total) &
-		!is.null(vars$initial_fraction_B)
-	) {
-		output$initial_number_total <- data[[vars$initial_number_total]]
-		output$initial_fraction_B <- data[[vars$initial_fraction_B]]
-		output$initial_number_A <-
-			output$initial_number_total * (1-output$initial_fraction_B)
-		output$initial_number_B <-
-				output$initial_number_total * output$initial_fraction_B
-		output$initial_ratio_A_B <-
-			output$initial_number_A / output$initial_number_B
-	} else if (
+		validate_count_data(data, var_number_total)
+		validate_fraction_data(data, var_fraction_B)
+		number_total <- data[[var_number_total]]
+		fraction_A   <- 1 - data[[var_fraction_B]]
+		number_A     <- number_total * fraction_A
+		number_B     <- number_total * (1-fraction_A)
+	} else if (!is.null(var_number_total) & !is.null(var_number_A)) {
 		# Data are number total & number A
-		!is.null(vars$initial_number_total) &
-		!is.null(vars$initial_number_A)
-	) {
-		output$initial_number_total <- data[[vars$initial_number_total]]
-		output$initial_number_A <- data[[vars$initial_number_A]]
-		output$initial_number_B <-
-			output$initial_number_total - output$initial_number_A
-		output$initial_fraction_A <-
-			output$initial_number_A / output$initial_number_total
-		output$initial_ratio_A_B <-
-			output$initial_number_A / output$initial_number_B
-	} else if (
+		validate_count_data(data, var_number_total)
+		validate_count_data(data, var_number_A)
+		validate_difference_data(data, var_number_A, var_number_total)
+		number_total <- data[[var_number_total]]
+		number_A     <- data[[var_number_A]]
+		number_B     <- number_total - number_A
+		fraction_A   <- number_A / number_total
+	} else if (!is.null(var_number_total) & !is.null(var_number_B)) {
 		# Data are number total & number B
-		!is.null(vars$initial_number_total) &
-		!is.null(vars$initial_number_B)
-	) {
-		output$initial_number_total <- data[[vars$initial_number_total]]
-		output$initial_number_B <- data[[vars$initial_number_B]]
-		output$initial_number_A <-
-			output$initial_number_total - output$initial_number_B
-		output$initial_fraction_A <-
-			output$initial_number_A / output$initial_number_total
-		output$initial_ratio_A_B <-
-			output$initial_number_A / output$initial_number_B
-	} else {
-		stop("Cannot calculate initial population from data")
+		validate_count_data(data, var_number_total)
+		validate_count_data(data, var_number_B)
+		validate_difference_data(data, var_number_B, var_number_total)
+		number_total <- data[[var_number_total]]
+		number_B     <- data[[var_number_B]]
+		number_A     <- number_total - number_B
+		fraction_A   <- number_A / number_total
 	}
 
-	# Warn if nonbiological population state
-	for (var_name in c("initial_number_A", "initial_number_B")) {
-		if (any(output[[var_name]] < 0, na.rm = TRUE)) {
-			warning(
-				"Some ", var_name, " values < 0: Not biologically meaningful",
-				call. = FALSE
-			)
-		}
+	output[[name_number_A]]     <- number_A
+	output[[name_number_B]]     <- number_B
+	output[[name_number_total]] <- number_total
+	if (time_point == "initial") {
+		output[[name_fraction_A]] <- fraction_A
+		output[[name_ratio_A_B]]  <- number_A / number_B
 	}
-	# TODO: Replace with warning if nonbiological *input*
-
 	output
 }
 
-# Calculate final population state
-#   Using separate data, output to avoid column name conflicts
-set_final_population <- function(output, data, vars) {
-	vars <- as.list(vars)
-
-	# TODO: Warn if nonbiological input
-
-	if (
-		# Data are number A & number B
-		!is.null(vars$final_number_A) &
-		!is.null(vars$final_number_B)
-	) {
-		output$final_number_A <- data[[vars$final_number_A]]
-		output$final_number_B <- data[[vars$final_number_B]]
-		output$final_number_total <- output$final_number_A + output$final_number_B
-	} else if (
-		# Data are number total & fraction A
-		!is.null(vars$final_number_total) &
-		!is.null(vars$final_fraction_A)
-	) {
-		output$final_number_total <- data[[vars$final_number_total]]
-		output$final_fraction_A <- data[[vars$final_fraction_A]]
-		output$final_number_A <-
-			output$final_number_total * output$final_fraction_A
-		output$final_number_B <-
-			output$final_number_total * (1-output$final_fraction_A)
-	} else if (
-		# Data are number total & fraction B
-		!is.null(vars$final_number_total) &
-		!is.null(vars$final_fraction_B)
-	) {
-		output$final_number_total <- data[[vars$final_number_total]]
-		output$final_fraction_B <- data[[vars$final_fraction_B]]
-		output$final_number_A <-
-			output$final_number_total * (1-output$final_fraction_B)
-		output$final_number_B <-
-			output$final_number_total * output$final_fraction_B
-	} else if (
-		# Data are number total & number A
-		!is.null(vars$final_number_total) &
-		!is.null(vars$final_number_A)
-	) {
-		output$final_number_total <- data[[vars$final_number_total]]
-		output$final_number_A <- data[[vars$final_number_A]]
-		output$final_number_B <- output$final_number_total - output$final_number_A
-	} else if (
-		# Data are number total & number B
-		!is.null(vars$final_number_total) &
-		!is.null(vars$final_number_B)
-	) {
-		output$final_number_total <- data[[vars$final_number_total]]
-		output$final_number_B <- data[[vars$final_number_B]]
-		output$final_number_A <- output$final_number_total - output$final_number_B
-	} else {
-		stop("Cannot calculate final population from data")
+# Validate number data
+validate_count_data <- function(data, var_name) {
+	if (any(data[[var_name]] < 0, na.rm = TRUE)) {
+		warning(
+			"Some ", var_name, " values < 0: Not biologically meaningful",
+			call. = FALSE
+		)
 	}
+}
 
-	# Warn if nonbiological population state
-	for (var_name in c("final_number_A", "final_number_B")) {
-		if (any(output[[var_name]] < 0, na.rm = TRUE)) {
-			warning(
-				"Some ", var_name, " values < 0: Not biologically meaningful",
-				call. = FALSE
-			)
-		}
+# Validate fraction data
+validate_fraction_data <- function(data, var_name) {
+	if (any(c(data[[var_name]] < 0, data[[var_name]] > 1), na.rm = TRUE)) {
+		warning(
+			"Some ", var_name, " values not in range [0, 1]",
+			": Not biologically meaningful",
+			call. = FALSE
+		)
 	}
-	# TODO: Replace with warning if nonbiological *input*
+}
 
-	output
+# Validate data difference between strain and total number
+validate_difference_data <- function(data, var_name_strain, var_name_total) {
+	if (any(c(data[[var_name_strain]] > data[[var_name_total]]), na.rm = TRUE)) {
+		warning(
+			"Some ", var_name_strain, " values > ", var_name_total,
+			": Not biologically meaningful",
+			call. = FALSE
+		)
+	}
 }
 
 # TODO: Set strain names

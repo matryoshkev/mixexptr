@@ -20,13 +20,11 @@ fitness_smith_2010
 
 # Testing
 
-# fitness_smith_2010 %>% format_to_plot_fitness()
-
-# dev.new(width = 2.25, height = 2.25, units = "in")
-#
 # dev.new(width = 4.5, height = 2.25, units = "in")
 # tmp1 <- fitness_smith_2010 %>% plot_fitness_strain_total()
-# tmp2 <- fitness_smith_2010 %>% plot_within_group_fitness()
+
+# dev.new(width = 2.25, height = 2.25, units = "in")
+# fitness_smith_2010 %>% plot_within_group_fitness()
 
 dev.new(width = 6.25, height = 2.25, units = "in")
 
@@ -40,15 +38,15 @@ fitness_smith_2010 %>% plot_mix_fitness(mix_scale = "ratio")
 fitness_Yurstev_2013 <-
 	data_Yurtsev_2013 %>%
 	tibble() %>%
-	subset(
-		# Drop rows with nonbiological values
-		!is.na(fraction_resistant_initial) &
-		!is.na(fraction_resistant_final) &
-		fraction_resistant_initial > 0 &
-		fraction_resistant_final > 0 &
-		fraction_resistant_initial < 1 &
-		fraction_resistant_final < 1
-	) %>%
+	# subset(
+	# 	# Drop rows with nonbiological values
+	# 	!is.na(fraction_resistant_initial) &
+	# 	!is.na(fraction_resistant_final) &
+	# 	fraction_resistant_initial > 0 &
+	# 	fraction_resistant_final > 0 &
+	# 	fraction_resistant_initial < 1 &
+	# 	fraction_resistant_final < 1
+	# ) %>%
 	calculate_mix_fitness(
 		population_vars = c(
 			initial_number_total = "OD_initial",
@@ -62,19 +60,6 @@ fitness_Yurstev_2013 <-
 fitness_Yurstev_2013
 
 # Testing
-#
-# fitness_Yurstev_2013 %>% format_to_plot_fitness()
-#
-# dev.new(width = 2.25, height = 2.25, units = "in")
-# fitness_Yurstev_2013 %>%
-# 	filter(dilution == 100 & ampicillin == 100) %>%
-# 	plot_within_group_fitness()
-# 	# ggplot2::aes(color = factor(ampicillin))
-#
-# dev.new(width = 4.5, height = 2.25, units = "in")
-# fitness_Yurstev_2013 %>%
-# 	filter(dilution == 100 & ampicillin == 100) %>%
-# 	plot_fitness_strain_total()
 
 dev.new(width = 6.25, height = 2.25, units = "in")
 tmp <-
