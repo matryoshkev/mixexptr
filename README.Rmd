@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # mixexptr - Analyze microbial mix experiments in R
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/matryoshkev/mixexptr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matryoshkev/mixexptr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 A common experimental design when studying microbial interactions is to mix together two different microbes (different genotypes, for example) then measure how their fitness and behavior depends on mix frequency. How do they behave differently together compared to on their own? 
@@ -33,7 +34,7 @@ You can install the development version of mixexptr from [GitHub](https://github
 
 ``` r
 # install.packages("pak")
-pak::pak("matryoshkev/mixexptr")
+# pak::pak("matryoshkev/mixexptr")
 ```
 
 ## Example
@@ -41,14 +42,14 @@ pak::pak("matryoshkev/mixexptr")
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-library(mixexptr)
+# library(mixexptr)
 ## basic example code
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
 ```{r cars}
-summary(cars)
+# summary(cars)
 ```
 
 You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
@@ -56,7 +57,7 @@ You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-da
 You can also embed plots, for example:
 
 ```{r pressure, echo = FALSE}
-plot(pressure)
+# plot(pressure)
 ```
 
 In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
