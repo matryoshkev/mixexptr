@@ -40,7 +40,7 @@ plot_mix_fitness <- function(
 	mix_scale = "fraction"
 ) {
 	if (is.null(var_names)) {
-		var_names <- var_names_default()
+		var_names <- fitness_vars_default()
 	}
 	figA <- plot_fitness_strain_total(data, var_names, mix_scale)
 	figB <- plot_within_group_fitness(data, var_names, mix_scale)
@@ -58,7 +58,7 @@ plot_mix_fitness <- function(
 # Helper functions =============================================================
 
 # Default names for fitness and mixing variables
-var_names_default <- function() {
+fitness_vars_default <- function() {
 	c(
 		name_A = "name_A",
 		name_B = "name_B",
@@ -74,7 +74,7 @@ var_names_default <- function() {
 # Plot strain and total-group fitness
 plot_fitness_strain_total <- function(
 	data,
-	var_names = var_names_default(),
+	var_names = fitness_vars_default(),
 	mix_scale = "fraction"
 ) {
 	var_names <- as.list(var_names)
@@ -112,7 +112,7 @@ plot_fitness_strain_total <- function(
 # Reshape data to plot strain and/or total-group fitness
 format_to_plot_fitness <- function(
 	data,
-	var_names = var_names_default()
+	var_names = fitness_vars_default()
 ) {
 	var_names <- as.list(var_names)
 	name_A <- data[[var_names$name_A]][[1]]
@@ -154,7 +154,7 @@ format_to_plot_fitness <- function(
 #   Will eventually be user-facing
 plot_within_group_fitness <- function(
 	data,
-	var_names = var_names_default(),
+	var_names = fitness_vars_default(),
 	mix_scale = "fraction"
 ) {
 	var_names <- as.list(var_names)
