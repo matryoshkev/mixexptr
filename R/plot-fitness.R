@@ -55,6 +55,39 @@ plot_mix_fitness <- function(
 }
 
 
+# Functions that will eventually be exported ===================================
+
+# Plot relative within-group fitness (fitness_A/fitness_B)
+plot_within_group_fitness <- function(
+	data,
+	var_names = fitness_vars_default(),
+	mix_scale = "fraction"
+) {
+	var_names <- as.list(var_names)
+	name_A <- data[[var_names$name_A]][[1]]
+	name_B <- data[[var_names$name_B]][[1]]
+
+	# Format data for plot
+	data_for_plot <- format_to_plot_fitness_ratio(data, var_names, mix_scale)
+
+	# Construct plot
+	fig_output <-
+		ggplot2::ggplot(data_for_plot) +
+		theme_mixexptr() +
+		switch(
+			mix_scale,
+			fraction = scale_x_initial_fraction(name_A = name_A),
+			ratio = scale_x_initial_ratio(name_A = name_A, name_B = name_B)
+		) +
+		scale_y_fitness_ratio(name_A = name_A, name_B = name_B) +
+		geom_point_mixexptr(color = color_group(), fill = fill_group()) +
+		ggplot2::ggtitle("")  # Space for legend, align height
+
+	# Return ggplot object
+	fig_output
+}
+
+
 # Helper functions =============================================================
 
 # Default names for fitness and mixing variables
@@ -151,37 +184,6 @@ format_to_plot_fitness <- function(
 	}
 
 	output
-}
-
-# Plot relative within-group fitness (fitness_A/fitness_B)
-#   Will eventually be user-facing
-plot_within_group_fitness <- function(
-	data,
-	var_names = fitness_vars_default(),
-	mix_scale = "fraction"
-) {
-	var_names <- as.list(var_names)
-	name_A <- data[[var_names$name_A]][[1]]
-	name_B <- data[[var_names$name_B]][[1]]
-
-	# Format data for plot
-	data_for_plot <- format_to_plot_fitness_ratio(data, var_names, mix_scale)
-
-	# Construct plot
-	fig_output <-
-		ggplot2::ggplot(data_for_plot) +
-		theme_mixexptr() +
-		switch(
-			mix_scale,
-			fraction = scale_x_initial_fraction(name_A = name_A),
-			ratio = scale_x_initial_ratio(name_A = name_A, name_B = name_B)
-		) +
-		scale_y_fitness_ratio(name_A = name_A, name_B = name_B) +
-		geom_point_mixexptr(color = color_group(), fill = fill_group()) +
-		ggplot2::ggtitle("")  # Space for legend, align height
-
-	# Return ggplot object
-	fig_output
 }
 
 # Format data to plot within-group relative fitness
