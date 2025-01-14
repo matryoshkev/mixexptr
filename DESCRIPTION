@@ -1,5 +1,5 @@
 Package: mixexptr
-Title: Analyze Microbial Mix Experiments
+Title: Analyze Microbial Interactions in Mix Experiments
 Version: 0.0.0.9000
 Authors@R: 
     person(
@@ -8,11 +8,10 @@ Authors@R:
     	role = c("aut", "cre"),
     	comment = c(ORCID = "0000-0001-8445-586X")
     )
-Description: Tools to analyze microbial interactions in mix experiments,
-    which measure how fitness and behavior change with the local frequency of 
-    different microbe types. 'mixexptr' provides tools to calculate and 
-    visualize fitness measures that help researchers get the most out of their 
-    data and quantitatively compare results across systems. 
+Description: Calculate and plot fitness measures that help maximize the 
+    inferences that can be drawn from a dataset, enable quantitative comparisons 
+    across different microbial systems, and are meaningful for both kin and 
+    multilevel selection theories of social evolution. 
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
