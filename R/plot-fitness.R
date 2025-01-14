@@ -82,12 +82,7 @@ plot_fitness_strain_total <- function(
 	name_B <- data[[var_names$name_B]][[1]]
 
 	# Format to plot fitness
-	data_for_plot <- format_to_plot_fitness(data, var_names)
-	if (mix_scale == "ratio") {
-		data_for_plot <- subset(data_for_plot,
-			is.finite(initial_ratio_A_B) & initial_ratio_A_B > 0
-		)
-	}
+	data_for_plot <- format_to_plot_fitness(data, var_names, mix_scale)
 
 	# Construct plot
 	fig_output <-
@@ -112,7 +107,8 @@ plot_fitness_strain_total <- function(
 # Format data to plot strain and/or total-group fitness
 format_to_plot_fitness <- function(
 	data,
-	var_names = fitness_vars_default()
+	var_names = fitness_vars_default(),
+	mix_scale
 ) {
 	var_names <- as.list(var_names)
 	name_A <- data[[var_names$name_A]][[1]]
@@ -140,12 +136,19 @@ format_to_plot_fitness <- function(
 		times = c(name_A, name_B, name_total),
 		timevar = "strain"
 	)
-	output <- subset(output, !is.na(fitness))
 	output$strain <- factor(
 		output$strain,
 		levels = c(name_A, name_B, name_total)
 	)
 	output$my_facet <- output$strain == name_total
+
+	# Drop rows with no value for fitness
+	output <- output[!is.na(output$fitness), ]
+	if (mix_scale == "ratio") {
+		# Drop rows where mixing ratio undefined on log scale
+		output <- output[is.finite(output$initial_ratio_A_B), ]
+		output <- output[output$initial_ratio_A_B > 0, ]
+	}
 
 	output
 }
@@ -188,13 +191,13 @@ format_to_plot_fitness_ratio <- function(data, var_names, mix_scale) {
 	output$initial_ratio_A_B  <- data[[var_names$initial_ratio_A_B]]
 	output$fitness_ratio_A_B  <- data[[var_names$fitness_ratio_A_B]]
 
+	# Drop rows with no value for fitness ratio
+	output <- output[!is.na(output$fitness_ratio_A_B), ]
 	if (mix_scale == "ratio") {
 		# Drop rows where mixing ratio undefined on log scale
 		output <- output[is.finite(output$initial_ratio_A_B), ]
 		output <- output[output$initial_ratio_A_B > 0, ]
 	}
-	# Drop rows with no value for fitness ratio
-	output <- output[!is.na(output$fitness_ratio_A_B), ]
 
 	output
 }
