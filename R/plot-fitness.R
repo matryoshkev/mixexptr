@@ -2,7 +2,7 @@
 
 #' Plot strain and multilevel fitness
 #'
-#' Plot diagnostic overview of fitness effects in data. Draws a combined plot
+#' Show diagnostic overview of fitness effects in data. Draws a combined plot
 #' of strain, total group, and relative within-group fitness against mix
 #' frequency.
 #'
@@ -11,15 +11,16 @@
 #'   extensions like `tibble`.
 #' @param var_names Named character vector identifying fitness and mixing
 #'   variables in `data`. See Details. If `NULL`, defaults to column names
-#'   returned by `calculate_mix_fitness().`
+#'   returned by `calculate_mix_fitness()`.
 #' @param mix_scale Character string or vector choosing mixing scale(s) to show
 #'   on x axis. If `"fraction"`, uses `initial_fraction_A`. If `"ratio"`, uses
 #'   `initial_ratio_A_B` (on \eqn{\log_{10}} scale). Defaults to show both
 #'   scales.
 #'
 #' @details
-#' `var_names` must be a named vector with the following elements (shown with
-#' default values):
+#' Expects Wrightian fitness measures like those returned by
+#' `calculate_mix_fitness()`. `var_names` must be a named vector with the
+#' following elements (shown here with default values):
 #' ```
 #' var_names = c(
 #'   name_A = "name_A",

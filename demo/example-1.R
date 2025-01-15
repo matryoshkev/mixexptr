@@ -62,10 +62,9 @@ fitness_Yurstev_2013
 
 # Testing
 
-dev.new(width = 6.25, height = 2.25, units = "in")
-tmp <-
-	fitness_Yurstev_2013 %>%
-	filter(dilution == 100 & ampicillin == 100) %>%
-	plot_mix_fitness()
-plot(tmp)
+# dev.new(width = 6.25, height = 2.25, units = "in")
+
+fitness_Yurstev_2013 %>%
+filter(dilution == 100 & ampicillin == 100) %>%
+plot_mix_fitness()
 

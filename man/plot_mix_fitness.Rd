@@ -13,7 +13,7 @@ extensions like \code{tibble}.}
 
 \item{var_names}{Named character vector identifying fitness and mixing
 variables in \code{data}. See Details. If \code{NULL}, defaults to column names
-returned by \verb{calculate_mix_fitness().}}
+returned by \code{calculate_mix_fitness()}.}
 
 \item{mix_scale}{Character string or vector choosing mixing scale(s) to show
 on x axis. If \code{"fraction"}, uses \code{initial_fraction_A}. If \code{"ratio"}, uses
@@ -21,13 +21,14 @@ on x axis. If \code{"fraction"}, uses \code{initial_fraction_A}. If \code{"ratio
 scales.}
 }
 \description{
-Plot diagnostic overview of fitness effects in data. Draws a combined plot
+Show diagnostic overview of fitness effects in data. Draws a combined plot
 of strain, total group, and relative within-group fitness against mix
 frequency.
 }
 \details{
-\code{var_names} must be a named vector with the following elements (shown with
-default values):
+Expects Wrightian fitness measures like those returned by
+\code{calculate_mix_fitness()}. \code{var_names} must be a named vector with the
+following elements (shown here with default values):
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{var_names = c(
   name_A = "name_A",
