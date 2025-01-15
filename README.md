@@ -14,9 +14,13 @@ then measure how their fitness and behavior depends on mix frequency.
 How do they behave differently together compared to on their own?
 
 mixexptr is an R package for analyzing microbial mix experiments.
-mixexptr provides tools to calculate and visualize fitness measures that
-help researchers get the most out of their data and quantitatively
-compare results across systems.
+mixexptr provides tools to calculate and plot fitness measures that help
+researchers get the most out of their data and quantitatively compare
+results across systems.
+
+## Plot fitness effects
+
+![Diagnostic plot from mixexptr](./man/figures/README-smith-2010.png)
 
 ## Further reading
 
