@@ -7,10 +7,11 @@ mixexptr - Analyze microbial interactions in mix experiments
 [![R-CMD-check](https://github.com/matryoshkev/mixexptr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matryoshkev/mixexptr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-A common experimental design when studying microbial interactions is to
-mix together two different microbes (different genotypes, for example)
-then measure how their fitness and behavior depends on mix frequency.
-How do they behave differently together compared to on their own?
+A common experimental design for studying microbial interactions is to
+mix together two different microbes (different bacterial genotypes, for
+example) then measure how their fitness and behavior depends on mix
+frequency. How do they behave differently together compared to on their
+own?
 
 `mixexptr` is an R package that provides tools to **calculate and plot
 the fitness effects of microbial interactions**, helping researchers get
@@ -21,10 +22,10 @@ the most out of their data.
 `mixexptr` provides a convenient way to calculate best-practice fitness
 measures that are:
 
--   Robust across different species and types of interaction
+-   Robust and quantitatively comparable across different species and
+    types of interaction
 -   Well-suited to statistical analysis of effect sizes and confidence
     intervals
--   Quantitatively comparable across studies and microbial systems
 -   Meaningful for both kin and multilevel selection theories of social
     evolution
 
