@@ -33,9 +33,7 @@ dev.new(width = 6.25, height = 2.25, units = "in")
 fitness_smith_2010 %>% plot_mix_fitness(mix_scale = "fraction")
 fitness_smith_2010 %>% plot_mix_fitness(mix_scale = "ratio")
 
-png(width = 1000, height = 360, res = 160)
-fitness_smith_2010 %>% plot_mix_fitness(mix_scale = "fraction")
-dev.off()
+plot_mix_fitness(fitness_smith_2010, mix_scale = "fraction")
 
 
 # data_Yurtsev_2013 ------------------------------------------------------------
