@@ -4,25 +4,26 @@
 \alias{plot_mix_fitness}
 \title{Plot strain and multilevel fitness}
 \usage{
-plot_mix_fitness(data, var_names = NULL, mix_scale = "fraction")
+plot_mix_fitness(data, var_names = NULL, mix_scale = c("fraction", "ratio"))
 }
 \arguments{
-\item{data}{Data frame of fitness values. Each row must contain data for two
-microbes in the same population. Accepts data frame extensions like
-\code{tibble}.}
+\item{data}{Wide-format data frame of fitness values. Each row must contain
+data for two microbes in the same population. Accepts data frame
+extensions like \code{tibble}.}
 
-\item{var_names}{Named character vector identifying which fitness measures
-are contained in \code{data} variables. If \code{NULL}, defaults to column names
-returned by \verb{calculate_mix_fitness().} See Details.}
+\item{var_names}{Named character vector identifying fitness and mixing
+variables in \code{data}. See Details. If \code{NULL}, defaults to column names
+returned by \verb{calculate_mix_fitness().}}
 
-\item{mix_scale}{Determines x-axis scale. \code{"fraction"} uses
-\code{initial_fraction_A}. \code{"ratio"} uses \code{initial_ratio_A_B} (on
-\eqn{\log_{10}} scale).}
+\item{mix_scale}{Character string or vector choosing mixing scale(s) to show
+on x axis. If \code{"fraction"}, uses \code{initial_fraction_A}. If \code{"ratio"}, uses
+\code{initial_ratio_A_B} (on \eqn{\log_{10}} scale). Defaults to show both
+scales.}
 }
 \description{
-Draw a combined plot of strain, total group, and relative within-group
-fitness against mix frequency. Useful as a quick diagnostic for fitness
-effects in data.
+Plot diagnostic overview of fitness effects in data. Draws a combined plot
+of strain, total group, and relative within-group fitness against mix
+frequency.
 }
 \details{
 \code{var_names} must be a named vector with the following elements (shown with

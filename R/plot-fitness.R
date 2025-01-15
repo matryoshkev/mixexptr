@@ -2,19 +2,20 @@
 
 #' Plot strain and multilevel fitness
 #'
-#' Draw a combined plot of strain, total group, and relative within-group
-#' fitness against mix frequency. Useful as a quick diagnostic for fitness
-#' effects in data.
+#' Plot diagnostic overview of fitness effects in data. Draws a combined plot
+#' of strain, total group, and relative within-group fitness against mix
+#' frequency.
 #'
-#' @param data Data frame of fitness values. Each row must contain data for two
-#'   microbes in the same population. Accepts data frame extensions like
-#'   `tibble`.
-#' @param var_names Named character vector identifying which fitness measures
-#'   are contained in `data` variables. If `NULL`, defaults to column names
-#'   returned by `calculate_mix_fitness().` See Details.
-#' @param mix_scale Determines x-axis scale. `"fraction"` uses
-#'   `initial_fraction_A`. `"ratio"` uses `initial_ratio_A_B` (on
-#'   \eqn{\log_{10}} scale).
+#' @param data Wide-format data frame of fitness values. Each row must contain
+#'   data for two microbes in the same population. Accepts data frame
+#'   extensions like `tibble`.
+#' @param var_names Named character vector identifying fitness and mixing
+#'   variables in `data`. See Details. If `NULL`, defaults to column names
+#'   returned by `calculate_mix_fitness().`
+#' @param mix_scale Character string or vector choosing mixing scale(s) to show
+#'   on x axis. If `"fraction"`, uses `initial_fraction_A`. If `"ratio"`, uses
+#'   `initial_ratio_A_B` (on \eqn{\log_{10}} scale). Defaults to show both
+#'   scales.
 #'
 #' @details
 #' `var_names` must be a named vector with the following elements (shown with
@@ -37,20 +38,37 @@
 plot_mix_fitness <- function(
 	data,
 	var_names = NULL,
-	mix_scale = "fraction"
+	mix_scale = c("fraction", "ratio")
 ) {
-	if (is.null(var_names)) {
-		var_names <- fitness_vars_default()
+	# Use default variable names if not supplied
+	if (is.null(var_names)) {var_names <- fitness_vars_default()}
+
+	# Choose mix scale(s)
+	mix_scale <- rlang::arg_match(
+		mix_scale, c("fraction", "ratio"), multiple = TRUE
+	)
+
+	if (("fraction" %in% mix_scale) & ("ratio" %in% mix_scale)) {
+		# Show both mix scales
+		figA <- plot_fitness_strain_total(data, var_names, "fraction")
+		figB <- plot_within_group_fitness(data, var_names, "fraction")
+		figC <- plot_fitness_strain_total(data, var_names, "ratio")
+		figD <- plot_within_group_fitness(data, var_names, "ratio")
+		fig_output <- figA + figB + figC + figD
+	} else {
+		# Show one mix scale
+		figA <- plot_fitness_strain_total(data, var_names, mix_scale)
+		figB <- plot_within_group_fitness(data, var_names, mix_scale)
+		fig_output <- figA + figB
 	}
-	figA <- plot_fitness_strain_total(data, var_names, mix_scale)
-	figB <- plot_within_group_fitness(data, var_names, mix_scale)
-	fig_output <-
-		figA + figB +
-		patchwork::plot_layout(
-			widths = grid::unit(c(3.2, 1.6), "inches"),
-			heights = grid::unit(1.4, "inches")
-			# Units affect plotting area, not total size
-		)
+
+	# Size plots for page-width figure
+	# (units affect plotting area, not total size)
+	fig_output <- fig_output + patchwork::plot_layout(
+		widths = grid::unit(c(3.2, 1.6), "inches"),
+		heights = grid::unit(1.4, "inches")
+	)
+
 	fig_output
 }
 
