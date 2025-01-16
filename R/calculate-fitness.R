@@ -237,8 +237,23 @@ validate_difference_data <- function(data, var_name_strain, var_name_total) {
 	}
 }
 
-# TODO: Set strain names
-#   Can be character vector e.g. c("Strain A", "Strain B")
-#   Or can be columns in data (useful if data compares different strains)
-# set_strain_names <- function(data, strain_names) {}
+# Set strain names in target frame using vars in input frame
+#   If input var not present use string
+set_strain_names <- function(target, input, var_names) {
+	var_names <- as.list(var_names)
+	var_name_A <- var_names$name_A
+	var_name_B <- var_names$name_B
+
+	# Error if names missing
+	if (is.null(var_name_A)) stop("var_names must contain name_A")
+	if (is.null(var_name_B)) stop("var_names must contain name_B")
+
+	# If input var not present use string
+	name_A <- input[[var_name_A]]
+	name_B <- input[[var_name_B]]
+	target$name_A <- if (is.null(name_A)) var_name_A else name_A
+	target$name_B <- if (is.null(name_B)) var_name_B else name_B
+
+	target
+}
 
