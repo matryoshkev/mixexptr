@@ -32,29 +32,30 @@ measures that are:
 ``` r
 fitness_results <- calculate_mix_fitness(
     data_smith_2010, 
-    population_vars = c(
+    var_names = c(
         initial_number_A = "initial_cells_evolved",
         initial_number_B = "initial_cells_ancestral",
         final_number_A = "final_spores_evolved",
-        final_number_B = "final_spores_ancestral"
-    ),
-    strain_names = c("GVB206.3", "GJV10")
+        final_number_B = "final_spores_ancestral", 
+        name_A = "GVB206.3", 
+        name_B = "GJV10"
+    )
 )
 head(fitness_results)
-#>     name_A name_B initial_fraction_A initial_ratio_A_B    fitness_A  fitness_B fitness_total
-#> 1 GVB206.3  GJV10         1.00000000               Inf 1.200000e-07         NA  1.200000e-07
-#> 2 GVB206.3  GJV10         0.98901099       90.00000000 1.555556e-07 0.00000400  1.978022e-07
-#> 3 GVB206.3  GJV10         0.90000000        9.00000000 2.600000e-06 0.00000480  2.820000e-06
-#> 4 GVB206.3  GJV10         0.50000000        1.00000000 4.280000e-04 0.00156000  9.940000e-04
-#> 5 GVB206.3  GJV10         0.10000000        0.11111111 4.200000e-02 0.01400000  1.680000e-02
-#> 6 GVB206.3  GJV10         0.01098901        0.01111111 8.420000e-01 0.02288889  3.189011e-02
-#>   fitness_ratio_A_B
-#> 1                NA
-#> 2        0.03888889
-#> 3        0.54166667
-#> 4        0.27435897
-#> 5        3.00000000
-#> 6       36.78640777
+#>     name_A name_B initial_fraction_A initial_ratio_A_B    fitness_A  fitness_B
+#> 1 GVB206.3  GJV10         1.00000000               Inf 1.200000e-07         NA
+#> 2 GVB206.3  GJV10         0.98901099       90.00000000 1.555556e-07 0.00000400
+#> 3 GVB206.3  GJV10         0.90000000        9.00000000 2.600000e-06 0.00000480
+#> 4 GVB206.3  GJV10         0.50000000        1.00000000 4.280000e-04 0.00156000
+#> 5 GVB206.3  GJV10         0.10000000        0.11111111 4.200000e-02 0.01400000
+#> 6 GVB206.3  GJV10         0.01098901        0.01111111 8.420000e-01 0.02288889
+#>   fitness_total fitness_ratio_A_B
+#> 1  1.200000e-07                NA
+#> 2  1.978022e-07        0.03888889
+#> 3  2.820000e-06        0.54166667
+#> 4  9.940000e-04        0.27435897
+#> 5  1.680000e-02        3.00000000
+#> 6  3.189011e-02       36.78640777
 ```
 
 ## Plot fitness effects

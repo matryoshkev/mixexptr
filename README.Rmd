@@ -33,13 +33,14 @@ A common experimental design for studying microbial interactions is to mix toget
 ```{r}
 fitness_results <- calculate_mix_fitness(
 	data_smith_2010, 
-	population_vars = c(
+	var_names = c(
 		initial_number_A = "initial_cells_evolved",
 		initial_number_B = "initial_cells_ancestral",
 		final_number_A = "final_spores_evolved",
-		final_number_B = "final_spores_ancestral"
-	),
-	strain_names = c("GVB206.3", "GJV10")
+		final_number_B = "final_spores_ancestral", 
+		name_A = "GVB206.3", 
+		name_B = "GJV10"
+	)
 )
 head(fitness_results)
 ```

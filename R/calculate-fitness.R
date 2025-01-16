@@ -6,22 +6,35 @@
 #' @param data Data frame of initial and final abundance values. Each row must
 #'   contain data for two microbes in the same population. Accepts data frame
 #'   extensions like `tibble`. See Details.
-#' @param population_vars Named character vector of columns in `data` that
+#' @param var_names Named character vector of columns in `data` that
 #'   describe initial and final abundances. See Details.
-#' @param strain_names Character vector of microbe names. Strain A first, strain
-#'   B second.
 #' @param keep Optional character vector of columns in `data` to keep in output
 #'   (e.g. treatment variables, experimental block)
 #'
 #' @details
-#' `data` columns named in `population_vars` must be sufficient to identify
-#' initial and final abundance of both strains. For initial abundance, vector
-#' names should be two of `initial_number_A`, `initial_number_B`,
-#' `initial_number_total`, `initial_fraction_A`, or `initial_fraction_B.` For
-#' final abundance, vector names should be two of `final_number_A`,
-#' `final_number_B`, `final_number_total`, `final_fraction_A`, or
-#' `final_fraction_B`. Values of `number` vars can be counts or densities, but
-#' initial and final must have same units.
+#' `var_names` must identify variables in `data` that are sufficient to identify
+#' initial and final abundance of both strains. For initial abundance, this must
+#' be two of:
+#' * `initial_number_A`
+#' * `initial_number_B`
+#' * `initial_number_total`
+#' * `initial_fraction_A`
+#' * `initial_fraction_B`
+#'
+#' For final abundance, this must be two of:
+#' * `final_number_A`
+#' * `final_number_B`
+#' * `final_number_total`
+#' * `final_fraction_A`
+#' * `final_fraction_B`
+#'
+#' Values of `number` vars in `data` can be counts or densities, but `initial`
+#' and `final` must have same units.
+#'
+#' `var_names` must also contain `name_A` and `name_B` naming the
+#' microbes in `data.` If these values are column names in `data`, `data` values
+#' will be used in the output frame. Otherwise the output frame will use the
+#' string values as names.
 #'
 #' @return
 #' A data frame of same type as `data` with the following columns:
@@ -60,26 +73,28 @@
 #' # Data with cell counts for each strain
 #' calculate_mix_fitness(
 #'   data_smith_2010,
-#'   population_vars = c(
+#'   var_names = c(
 #'     initial_number_A = "initial_cells_evolved",
 #'     initial_number_B = "initial_cells_ancestral",
 #'     final_number_A   = "final_spores_evolved",
-#'     final_number_B   = "final_spores_ancestral"
+#'     final_number_B   = "final_spores_ancestral",
+#'     name_A = "Evolved GVB206.3",
+#'     name_B = "Ancestral GJV10"
 #'   ),
-#'   strain_names = c("GVB206.3", "GJV10"),
 #'   keep = "exptl_block"
 #' )
 #'
 #' # Data with total density and strain frequency
 #' calculate_mix_fitness(
 #'   data_Yurtsev_2013,
-#'   population_vars = c(
+#'   var_names = c(
 #'     initial_number_total = "OD_initial",
 #'     initial_fraction_A = "fraction_resistant_initial",
 #'     final_number_total = "OD_final",
-#'     final_fraction_A = "fraction_resistant_final"
+#'     final_fraction_A = "fraction_resistant_final",
+#'     name_A = "AmpR",
+#'     name_B = "AmpS"
 #'   ),
-#'   strain_names = c("AmpR", "AmpS"),
 #'   keep = c("ampicillin", "dilution", "replicate")
 #' )
 #' # Warns of nonbiological values in data: some resistant fractions < 0
@@ -87,17 +102,12 @@
 #'
 #' @export
 #'
-calculate_mix_fitness <- function(
-	data,
-	population_vars,
-	strain_names,
-	keep = NULL
-) {
+calculate_mix_fitness <- function(data, var_names, keep = NULL) {
 	output <- data
 
 	# Calculate initial and final population states
-	output <- set_population(output, "initial", data, population_vars)
-	output <- set_population(output, "final", data, population_vars)
+	output <- set_population(output, "initial", data, var_names)
+	output <- set_population(output, "final", data, var_names)
 
 	# Calculate fitness measures
 	output$fitness_A <- output$final_number_A / output$initial_number_A
@@ -118,8 +128,7 @@ calculate_mix_fitness <- function(
 	}
 
 	# Label which is A and which is B
-	output$name_A <- strain_names[[1]]
-	output$name_B <- strain_names[[2]]
+	output <- set_strain_names(output, data, var_names)
 
 	# Return data frame with calculated values
 	subset(output, select = c(

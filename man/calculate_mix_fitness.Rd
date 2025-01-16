@@ -4,18 +4,15 @@
 \alias{calculate_mix_fitness}
 \title{Calculate fitness measures}
 \usage{
-calculate_mix_fitness(data, population_vars, strain_names, keep = NULL)
+calculate_mix_fitness(data, var_names, keep = NULL)
 }
 \arguments{
 \item{data}{Data frame of initial and final abundance values. Each row must
 contain data for two microbes in the same population. Accepts data frame
 extensions like \code{tibble}. See Details.}
 
-\item{population_vars}{Named character vector of columns in \code{data} that
+\item{var_names}{Named character vector of columns in \code{data} that
 describe initial and final abundances. See Details.}
-
-\item{strain_names}{Character vector of microbe names. Strain A first, strain
-B second.}
 
 \item{keep}{Optional character vector of columns in \code{data} to keep in output
 (e.g. treatment variables, experimental block)}
@@ -52,39 +49,60 @@ Calculate several measures of microbial fitness from a data frame of the
 initial and final abundances of two microbes.
 }
 \details{
-\code{data} columns named in \code{population_vars} must be sufficient to identify
-initial and final abundance of both strains. For initial abundance, vector
-names should be two of \code{initial_number_A}, \code{initial_number_B},
-\code{initial_number_total}, \code{initial_fraction_A}, or \code{initial_fraction_B.} For
-final abundance, vector names should be two of \code{final_number_A},
-\code{final_number_B}, \code{final_number_total}, \code{final_fraction_A}, or
-\code{final_fraction_B}. Values of \code{number} vars can be counts or densities, but
-initial and final must have same units.
+\code{var_names} must identify variables in \code{data} that are sufficient to identify
+initial and final abundance of both strains. For initial abundance, this must
+be two of:
+\itemize{
+\item \code{initial_number_A}
+\item \code{initial_number_B}
+\item \code{initial_number_total}
+\item \code{initial_fraction_A}
+\item \code{initial_fraction_B}
+}
+
+For final abundance, this must be two of:
+\itemize{
+\item \code{final_number_A}
+\item \code{final_number_B}
+\item \code{final_number_total}
+\item \code{final_fraction_A}
+\item \code{final_fraction_B}
+}
+
+Values of \code{number} vars in \code{data} can be counts or densities, but \code{initial}
+and \code{final} must have same units.
+
+\code{var_names} must also contain \code{name_A} and \code{name_B} naming the
+microbes in \code{data.} If these values are column names in \code{data}, \code{data} values
+will be used in the output frame. Otherwise the output frame will use the
+string values as names.
 }
 \examples{
 # Data with cell counts for each strain
 calculate_mix_fitness(
   data_smith_2010,
-  population_vars = c(
+  var_names = c(
     initial_number_A = "initial_cells_evolved",
     initial_number_B = "initial_cells_ancestral",
     final_number_A   = "final_spores_evolved",
-    final_number_B   = "final_spores_ancestral"
+    final_number_B   = "final_spores_ancestral",
+    name_A = "Evolved GVB206.3",
+    name_B = "Ancestral GJV10"
   ),
-  strain_names = c("GVB206.3", "GJV10"),
   keep = "exptl_block"
 )
 
 # Data with total density and strain frequency
 calculate_mix_fitness(
   data_Yurtsev_2013,
-  population_vars = c(
+  var_names = c(
     initial_number_total = "OD_initial",
     initial_fraction_A = "fraction_resistant_initial",
     final_number_total = "OD_final",
-    final_fraction_A = "fraction_resistant_final"
+    final_fraction_A = "fraction_resistant_final",
+    name_A = "AmpR",
+    name_B = "AmpS"
   ),
-  strain_names = c("AmpR", "AmpS"),
   keep = c("ampicillin", "dilution", "replicate")
 )
 # Warns of nonbiological values in data: some resistant fractions < 0
