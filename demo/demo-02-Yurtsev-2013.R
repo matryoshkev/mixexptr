@@ -86,12 +86,13 @@ fitness_Fig3AB <- fitness_Fig3AB %>%
 		initial_freq_AmpR, initial_ratio_AmpRS,
 		fitness_AmpR, fitness_AmpS, fitness_total, fitness_ratio_AmpRS
 	)
-# Including all fitness outcomes to maximize data re-usability
+# Including all fitness outcomes increases data re-usability
 
 
 # Within-group fitness ---------------------------------------------------------
 
-# Plot within-group fitness ratio, including treatment effects
+# We can use mixexptr plot functions with our preferred variable names
+# as long as we tell them what's what
 fitness_names_Yurtsev <- c(
 	initial_fraction_A = "initial_freq_AmpR",
 	initial_ratio_A_B = "initial_ratio_AmpRS",
@@ -99,6 +100,8 @@ fitness_names_Yurtsev <- c(
 	name_A = "AmpR",
 	name_B = "AmpS"
 )
+
+# Plot within-group fitness ratio, including treatment effects
 fitness_Fig3AB %>%
 	plot_within_group_fitness(
 		var_names = fitness_names_Yurtsev
