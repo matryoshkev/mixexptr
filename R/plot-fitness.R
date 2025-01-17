@@ -76,6 +76,9 @@ plot_mix_fitness <- function(
 
 # Functions that will eventually be exported ===================================
 
+# Plot total group fitness
+# plot_total_group_fitness <- function()
+
 # Plot relative within-group fitness (fitness_A/fitness_B)
 plot_within_group_fitness <- function(
 	data,
