@@ -3,6 +3,9 @@
 library(dplyr)
 library(ggplot2)
 
+
+# Calculate fitness ------------------------------------------------------------
+
 # Data is initial and final cell counts
 head(data_smith_2010)
 
@@ -23,9 +26,12 @@ fitness_smith_2010 <-
 	)
 fitness_smith_2010
 
-# Diagnostic plot of fitness effects
-dev.new(width = 6.25, height = 4.5, units = "in")
+
+# Diagnostic plot of fitness effects -------------------------------------------
+
+# dev.new(width = 6.25, height = 4.5, units = "in")
 plot_mix_fitness(fitness_smith_2010)
+
 # Multilevel fitness appears most informative/convenient
 #   Total group over mixing fraction
 #   Within-group over mixing ratio
@@ -34,7 +40,7 @@ plot_mix_fitness(fitness_smith_2010)
 # Within-group fitness ---------------------------------------------------------
 
 # Plot within-group fitness
-dev.new(width = 2.5, height = 2.25, units = "in")
+# dev.new(width = 2.5, height = 2.25, units = "in")
 fig_within_group <-
 	fitness_smith_2010 %>%
 	plot_within_group_fitness(mix_scale = "ratio")
