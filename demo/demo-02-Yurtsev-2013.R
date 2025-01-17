@@ -102,9 +102,6 @@ fitness_names_Yurtsev <- c(
 )
 
 # Plot within-group fitness ratio, including treatment effects
+# dev.new(width = 2.5, height = 2.25, units = "in")
 fitness_Fig3AB %>%
-	plot_within_group_fitness(
-		var_names = fitness_names_Yurtsev
-		# keep = c("ampicillin", "dilution")
-	)
-
+	plot_within_group_fitness(var_names = fitness_names_Yurtsev)

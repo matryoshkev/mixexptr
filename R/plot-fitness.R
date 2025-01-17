@@ -76,8 +76,21 @@ plot_mix_fitness <- function(
 
 # Functions that will eventually be exported ===================================
 
+# Plot strain fitness
+plot_strain_fitness <- function(
+	data,
+	var_names = fitness_vars_default(),
+	mix_scale = "fraction"
+) {
+}
+
 # Plot total group fitness
-# plot_total_group_fitness <- function()
+plot_total_group_fitness <- function(
+	data,
+	var_names = fitness_vars_default(),
+	mix_scale = "fraction"
+) {
+}
 
 # Plot relative within-group fitness (fitness_A/fitness_B)
 plot_within_group_fitness <- function(
@@ -86,8 +99,10 @@ plot_within_group_fitness <- function(
 	mix_scale = "fraction"
 ) {
 	var_names <- as.list(var_names)
-	name_A <- data[[var_names$name_A]][[1]]
-	name_B <- data[[var_names$name_B]][[1]]
+	# name_A <- data[[var_names$name_A]][[1]]
+	# name_B <- data[[var_names$name_B]][[1]]
+	name_A <- var_names$name_A[[1]]
+	name_B <- var_names$name_B[[1]]
 
 	# Format data for plot
 	data_for_plot <- format_to_plot_fitness_ratio(data, var_names, mix_scale)
@@ -98,10 +113,12 @@ plot_within_group_fitness <- function(
 		theme_mixexptr() +
 		switch(
 			mix_scale,
-			fraction = scale_x_initial_fraction(name_A = name_A),
-			ratio = scale_x_initial_ratio(name_A = name_A, name_B = name_B)
+			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
+			ratio = scale_x_initial_ratio(
+				var_names, name_A = name_A, name_B = name_B
+			)
 		) +
-		scale_y_fitness_ratio(name_A = name_A, name_B = name_B) +
+		scale_y_fitness_ratio(var_names, name_A = name_A, name_B = name_B) +
 		geom_point_mixexptr(color = color_group(), fill = fill_group()) +
 		ggplot2::ggtitle("")  # Space for legend, align height
 
@@ -139,14 +156,18 @@ plot_fitness_strain_total <- function(
 	# Format to plot fitness
 	data_for_plot <- format_to_plot_fitness(data, var_names, mix_scale)
 
+	# Tmp fix
+	var_names$initial_fraction_A <- "initial_fraction_A"
+	var_names$initial_ratio_A_B <- "initial_ratio_A_B"
+
 	# Construct plot
 	fig_output <-
 		ggplot2::ggplot(data_for_plot) +
 		theme_mixexptr() +
 		switch(
 			mix_scale,
-			fraction = scale_x_initial_fraction(name_A = name_A),
-			ratio = scale_x_initial_ratio(name_A = name_A, name_B = name_B)
+			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
+			ratio = scale_x_initial_ratio(var_names, name_A = name_A, name_B = name_B)
 		) +
 		scale_y_fitness() +
 		geom_point_mixexptr() +
@@ -166,8 +187,10 @@ format_to_plot_fitness <- function(
 	mix_scale
 ) {
 	var_names <- as.list(var_names)
-	name_A <- data[[var_names$name_A]][[1]]
-	name_B <- data[[var_names$name_B]][[1]]
+	# name_A <- data[[var_names$name_A]][[1]]
+	# name_B <- data[[var_names$name_B]][[1]]
+	name_A <- var_names$name_A[[1]]
+	name_B <- var_names$name_B[[1]]
 	name_total <- "Total group"
 
 	output <- as.data.frame(data)  # So reshape() doesn't choke on tibbles
@@ -198,30 +221,25 @@ format_to_plot_fitness <- function(
 	output$my_facet <- output$strain == name_total
 
 	# Drop rows with no value for fitness
-	output <- output[!is.na(output$fitness), ]
 	if (mix_scale == "ratio") {
 		# Drop rows where mixing ratio undefined on log scale
-		output <- output[is.finite(output$initial_ratio_A_B), ]
+		output <- output[is.finite(output$initial_fraction_A), ]
 		output <- output[output$initial_ratio_A_B > 0, ]
+		# output <- output[is.finite(output[[var_initial_ratio]]), ]
+		# output <- output[output[[var_initial_ratio]] > 0, ]
 	}
 
 	output
 }
 
-# Format data to plot within-group relative fitness
+# Format data to plot within-group fitness ratio
 format_to_plot_fitness_ratio <- function(data, var_names, mix_scale) {
-	output <- as.data.frame(data)
-	output$initial_fraction_A <- data[[var_names$initial_fraction_A]]
-	output$initial_ratio_A_B  <- data[[var_names$initial_ratio_A_B]]
-	output$fitness_ratio_A_B  <- data[[var_names$fitness_ratio_A_B]]
-
-	# Drop rows with no value for fitness ratio
-	output <- output[!is.na(output$fitness_ratio_A_B), ]
+	output <- data
 	if (mix_scale == "ratio") {
 		# Drop rows where mixing ratio undefined on log scale
-		output <- output[is.finite(output$initial_ratio_A_B), ]
-		output <- output[output$initial_ratio_A_B > 0, ]
+		var_initial_ratio <- var_names$initial_ratio_A_B
+		output <- output[is.finite(output[[var_initial_ratio]]), ]
+		output <- output[output[[var_initial_ratio]] > 0, ]
 	}
-
 	output
 }

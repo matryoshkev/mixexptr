@@ -19,13 +19,14 @@ theme_mixexptr <- function(...) {
 
 # Add x-axis scale: initial fraction strain A
 scale_x_initial_fraction <- function(
+	var_names,
 	name_A,
 	...,
 	breaks = seq(0, 1, by = 0.2),
 	minor_breaks = NULL
 ) {
 	list(
-		ggplot2::aes(x = .data$initial_fraction_A),
+		ggplot2::aes(x = .data[[var_names$initial_fraction_A]]),
 		ggplot2::scale_x_continuous(
 			name = paste("Initial fraction", name_A),
 			limits = c(0, 1),
@@ -37,6 +38,7 @@ scale_x_initial_fraction <- function(
 
 # Add x-axis scale: initial ratio A/B (log10)
 scale_x_initial_ratio <- function(
+	var_names,
 	name_A,
 	name_B,
 	...,
@@ -45,7 +47,7 @@ scale_x_initial_ratio <- function(
 	show_intercept = TRUE
 ) {
 	scale <- list(
-		ggplot2::aes(x = .data$initial_ratio_A_B),
+		ggplot2::aes(x = .data[[var_names$initial_ratio_A_B]]),
 		ggplot2::scale_x_log10(
 			name = paste("Initial ratio\n", name_A, "/", name_B),
 			breaks = breaks,
@@ -80,10 +82,12 @@ scale_y_fitness <- function(..., show_intercept = TRUE) {
 
 # Add y-axis scale: within-group fitness ratio A/B
 scale_y_fitness_ratio <- function(
-	name_A, name_B, ..., show_intercept = TRUE
+	# name_A, name_B, ..., show_intercept = TRUE
+	var_names, name_A, name_B, ..., show_intercept = TRUE
 ) {
+	var_names <- as.list(var_names)
 	scale <- list(
-		ggplot2::aes(y = .data$fitness_ratio_A_B),
+		ggplot2::aes(y = .data[[var_names$fitness_ratio_A_B]]),
 		ggplot2::scale_y_log10(
 			name = paste("Fitness ratio\n", name_A, "/",name_B),
 			labels = scales::label_log()
@@ -98,11 +102,11 @@ scale_y_fitness_ratio <- function(
 }
 
 # Add points that are readable when overlapped
-geom_point_mixexptr <- function(shape = 21, ...) {
+geom_point_mixexptr <- function(shape = 21, ..., na.rm = TRUE) {
 	suppressWarnings(  # So ggplot2 doesn't warn if fill supplied
 		list(
-			ggplot2::geom_point(shape = shape, ...),
-			ggplot2::geom_point(shape = shape, fill = NA, ...)
+			ggplot2::geom_point(shape = shape, ..., na.rm = na.rm),
+			ggplot2::geom_point(shape = shape, fill = NA, ..., na.rm = na.rm)
 		)
 	)
 }
