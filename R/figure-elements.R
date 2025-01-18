@@ -1,5 +1,8 @@
 # Figure elements
 
+
+# Theme ------------------------------------------------------------------------
+
 # Theme
 #   Text size suited to figures in papers
 #   Less clutter
@@ -16,6 +19,9 @@ theme_mixexptr <- function(...) {
 		strip.background     = ggplot2::element_blank()
 	)
 }
+
+
+# Scale ------------------------------------------------------------------------
 
 # Add x-axis scale: initial fraction strain A
 scale_x_initial_fraction <- function(
@@ -72,11 +78,11 @@ scale_y_fitness <- function(..., show_intercept = TRUE) {
 			labels = scales::label_log()
 		)
 	)
-	if (show_intercept) {
-		scale <- c(scale, list(
-			ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
-		))
-	}
+	# if (show_intercept) {
+	# 	scale <- c(scale, list(
+	# 		ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
+	# 	))
+	# }
 	scale
 }
 
@@ -93,22 +99,12 @@ scale_y_fitness_ratio <- function(
 			labels = scales::label_log()
 		)
 	)
-	if (show_intercept) {
-		scale <- c(scale, list(
-			ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
-		))
-	}
+	# if (show_intercept) {
+	# 	scale <- c(scale, list(
+	# 		ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
+	# 	))
+	# }
 	scale
-}
-
-# Add points that are readable when overlapped
-geom_point_mixexptr <- function(shape = 21, ..., na.rm = TRUE) {
-	suppressWarnings(  # So ggplot2 doesn't warn if fill supplied
-		list(
-			ggplot2::geom_point(shape = shape, ..., na.rm = na.rm),
-			ggplot2::geom_point(shape = shape, fill = NA, ..., na.rm = na.rm)
-		)
-	)
 }
 
 # Color points by strain/total-group
@@ -138,3 +134,25 @@ scale_fill_strain <- function(
 fill_strain_A <- function() "tan"
 fill_strain_B <- function() "lightsteelblue"
 fill_group    <- function() "gray65"
+
+# Fill default for mixed groups
+scale_fill_group <- function(...) {
+	list(
+		ggplot2::aes(fill = .data$mixexptr_dummy_var),
+		ggplot2::scale_fill_manual(values = fill_group(), ...)
+	)
+}
+
+
+# Geom -------------------------------------------------------------------------
+
+# Add points that are readable when overlapped
+geom_point_mixexptr <- function(shape = 21, ..., na.rm = TRUE) {
+	suppressWarnings(  # So ggplot2 doesn't warn if fill supplied
+		list(
+			ggplot2::geom_point(shape = shape, ..., na.rm = na.rm),
+			ggplot2::geom_point(shape = shape, fill = NA, ..., na.rm = na.rm)
+		)
+	)
+}
+

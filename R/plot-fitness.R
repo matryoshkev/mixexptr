@@ -74,7 +74,7 @@ plot_mix_fitness <- function(
 }
 
 
-# Functions that will eventually be exported ===================================
+# Functions that will be exported ==============================================
 
 # Plot strain fitness
 plot_strain_fitness <- function(
@@ -119,7 +119,8 @@ plot_within_group_fitness <- function(
 			)
 		) +
 		scale_y_fitness_ratio(var_names, name_A = name_A, name_B = name_B) +
-		geom_point_mixexptr(color = color_group(), fill = fill_group()) +
+		geom_point_mixexptr() +
+		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
 
 	# Return ggplot object
@@ -136,6 +137,7 @@ fitness_vars_default <- function() {
 		name_B = "name_B",
 		initial_fraction_A = "initial_fraction_A",
 		initial_ratio_A_B = "initial_ratio_A_B",
+		fitness = "fitness",
 		fitness_A = "fitness_A",
 		fitness_B = "fitness_B",
 		fitness_total = "fitness_total",
@@ -235,11 +237,16 @@ format_to_plot_fitness <- function(
 # Format data to plot within-group fitness ratio
 format_to_plot_fitness_ratio <- function(data, var_names, mix_scale) {
 	output <- data
+
 	if (mix_scale == "ratio") {
 		# Drop rows where mixing ratio undefined on log scale
 		var_initial_ratio <- var_names$initial_ratio_A_B
 		output <- output[is.finite(output[[var_initial_ratio]]), ]
 		output <- output[output[[var_initial_ratio]] > 0, ]
 	}
+
+	# Dummy variable for aesthetics user can replace
+	output$mixexptr_dummy_var <- TRUE
+
 	output
 }

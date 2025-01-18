@@ -103,5 +103,10 @@ fitness_names_Yurtsev <- c(
 
 # Plot within-group fitness ratio, including treatment effects
 # dev.new(width = 2.5, height = 2.25, units = "in")
+# dev.new(width = 5, height = 2.5, units = "in")
 fitness_Fig3AB %>%
-	plot_within_group_fitness(var_names = fitness_names_Yurtsev)
+	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
+	facet_wrap(~ dilution, labeller = "label_both") +
+	aes(fill = factor(ampicillin)) +
+	scale_fill_discrete(name = "Ampicillin\n(µg/mL)") +
+	theme_bw()
