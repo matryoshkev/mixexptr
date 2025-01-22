@@ -108,5 +108,12 @@ fitness_Fig3AB %>%
 	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +
+	scale_fill_discrete(name = "Ampicillin\n(µg/mL)")
+
+# Can use theme options of your choice
+fitness_Fig3AB %>%
+	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
+	facet_wrap(~ dilution, labeller = "label_both") +
+	aes(fill = factor(ampicillin)) +
 	scale_fill_discrete(name = "Ampicillin\n(µg/mL)") +
 	theme_bw()

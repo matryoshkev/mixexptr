@@ -3,13 +3,24 @@
 
 # Theme ------------------------------------------------------------------------
 
-# Theme
-#   Text size suited to figures in papers
-#   Less clutter
-theme_mixexptr <- function(...) {
-	ggplot2::theme_grey(...) +
+# Package default theme (suited to figures in papers)
+theme_mixexptr <- function() {
+	ggplot2::theme_grey() +
 	ggplot2::theme(
-		text                 = ggplot2::element_text(size = 9),
+		text = ggplot2::element_text(size = 9),
+		# legend.title         = ggplot2::element_blank(),
+		# legend.background    = ggplot2::element_blank(),
+		# legend.direction     = "horizontal",
+		# legend.justification = c(0.5, 0.15),
+		# legend.position      = c(0.5, 1),
+		# strip.text           = ggplot2::element_blank(),
+		# strip.background     = ggplot2::element_blank()
+	)
+}
+
+# Additional theme options for plot_mix_fitness() (less clutter)
+theme_plot_mix_fitness <- function() {
+	ggplot2::theme(
 		legend.title         = ggplot2::element_blank(),
 		legend.background    = ggplot2::element_blank(),
 		legend.direction     = "horizontal",
@@ -21,7 +32,7 @@ theme_mixexptr <- function(...) {
 }
 
 
-# Scale ------------------------------------------------------------------------
+# Axes -------------------------------------------------------------------------
 
 # Add x-axis scale: initial fraction strain A
 scale_x_initial_fraction <- function(
@@ -70,9 +81,11 @@ scale_x_initial_ratio <- function(
 }
 
 # Add y-axis scale: fitness (strain A, strain B, total group)
-scale_y_fitness <- function(..., show_intercept = TRUE) {
+scale_y_fitness <- function(var_names, ..., show_intercept = TRUE) {
+	var_names <- as.list(var_names)
 	scale <- list(
-		ggplot2::aes(y = .data$fitness),
+		# ggplot2::aes(y = .data$fitness),
+		ggplot2::aes(y = .data[[var_names$fitness]]),
 		ggplot2::scale_y_log10(
 			name = "Wrightian fitness\n (final no. / initial no.)",
 			labels = scales::label_log()
@@ -107,6 +120,9 @@ scale_y_fitness_ratio <- function(
 	scale
 }
 
+
+# Other aesthetics -------------------------------------------------------------
+
 # Color points by strain/total-group
 scale_color_strain <- function(
 	values = c(color_strain_A(), color_strain_B(), color_group()),
@@ -135,18 +151,18 @@ fill_strain_A <- function() "tan"
 fill_strain_B <- function() "lightsteelblue"
 fill_group    <- function() "gray65"
 
-# Fill default for mixed groups
+# Fill default for mixed groups that user can replace
 scale_fill_group <- function(...) {
 	list(
 		ggplot2::aes(fill = .data$mixexptr_dummy_var),
-		ggplot2::scale_fill_manual(values = fill_group(), ...)
+		ggplot2::scale_fill_manual(values = fill_group(), ..., guide = "none")
 	)
 }
 
 
 # Geom -------------------------------------------------------------------------
 
-# Add points that are readable when overlapped
+# Default points that are more readable when overlapped
 geom_point_mixexptr <- function(shape = 21, ..., na.rm = TRUE) {
 	suppressWarnings(  # So ggplot2 doesn't warn if fill supplied
 		list(

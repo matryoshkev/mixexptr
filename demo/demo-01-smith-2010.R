@@ -71,6 +71,9 @@ fig_within_group
 # Total-group fitness ----------------------------------------------------------
 
 # Plot total-group fitness
+# dev.new(width = 2.5, height = 2.25)
+fitness_smith_2010 %>% plot_total_group_fitness()
+
 
 # Fit statistical model
 

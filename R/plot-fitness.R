@@ -69,6 +69,7 @@ plot_mix_fitness <- function(
 		widths = grid::unit(c(3.2, 1.6), "inches"),
 		heights = grid::unit(1.4, "inches")
 	)
+	# & theme_plot_mix_fitness()
 
 	fig_output
 }
@@ -79,17 +80,55 @@ plot_mix_fitness <- function(
 # Plot strain fitness
 plot_strain_fitness <- function(
 	data,
-	var_names = fitness_vars_default(),
+	var_names = NULL,
 	mix_scale = "fraction"
 ) {
+
+
 }
 
 # Plot total group fitness
 plot_total_group_fitness <- function(
 	data,
-	var_names = fitness_vars_default(),
+	var_names = NULL,
 	mix_scale = "fraction"
 ) {
+	# Use default variable names if not supplied
+	if (is.null(var_names)) {var_names <- fitness_vars_default()}
+	var_names <- as.list(var_names)
+	var_names$fitness <- var_names$fitness_total
+
+	# Choose mix scale(s)
+	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
+
+	# Strain namaes
+	# name_A <- data[[var_names$name_A]][[1]]
+	# name_B <- data[[var_names$name_B]][[1]]
+	name_A <- var_names$name_A[[1]]
+	name_B <- var_names$name_B[[1]]
+
+	# Dummy variable for aes(fill) user can replace
+	data$mixexptr_dummy_var <- TRUE
+
+
+	# Construct plot
+	fig_output <-
+		ggplot2::ggplot(data) +
+		theme_mixexptr() +
+		switch(
+			mix_scale,
+			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
+			ratio = scale_x_initial_ratio(
+				var_names, name_A = name_A, name_B = name_B
+			)
+		) +
+		scale_y_fitness(var_names) +
+		geom_point_mixexptr() +
+		scale_fill_group() +
+		ggplot2::ggtitle("")  # Space for legend, align height
+
+	# Return ggplot object
+	fig_output
 }
 
 # Plot relative within-group fitness (fitness_A/fitness_B)
