@@ -116,7 +116,7 @@ fitness_Fig3AB %>%
 	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +
-	scale_fill_brewer(name = "Ampicillin\n(C\u03BCg/mL)", palette = "YlOrRd") +
+	scale_fill_brewer(name = "Ampicillin\n(\u03BCg/mL)", palette = "YlOrRd") +
 	theme_bw()
 
 # Total-group fitness ---------------------------------------------------------
@@ -145,6 +145,12 @@ fitness_Fig3AB %>%
 	plot_strain_fitness(var_names = fitness_names_Yurtsev) +
 	facet_wrap(~ dilution, labeller = "label_both")
 
+fitness_Fig3AB %>%
+	filter(ampicillin == 100 & dilution == 100) %>%
+	plot_fitness_strain_total(var_names = fitness_names_Yurtsev)
 
-
+dev.new()
+fitness_Fig3AB %>%
+	filter(ampicillin == 100 & dilution == 100) %>%
+	plot_mix_fitness(var_names = fitness_names_Yurtsev)
 
