@@ -92,15 +92,10 @@ plot_strain_fitness <- function(
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
 	var_names <- as.list(var_names)
 	var_names$fitness <- "fitness"
+	strain_names <- get_strain_names(data, var_names)
 
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
-
-	# Strain namaes
-	# name_A <- data[[var_names$name_A]][[1]]
-	# name_B <- data[[var_names$name_B]][[1]]
-	name_A <- var_names$name_A[[1]]
-	name_B <- var_names$name_B[[1]]
 
 	data_to_plot <- stats::reshape(
 		as.data.frame(data),  # reshape() chokes on tibbles
@@ -108,7 +103,7 @@ plot_strain_fitness <- function(
 		varying = c(var_names$fitness_A, var_names$fitness_B),
 		v.names = "fitness",
 		timevar = "strain",
-		times = c(name_A, name_B)
+		times = c(strain_names$A, strain_names$B)
 	)
 
 	# Construct plot
@@ -117,9 +112,11 @@ plot_strain_fitness <- function(
 		theme_mixexptr() +
 		switch(
 			mix_scale,
-			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
+			fraction = scale_x_initial_fraction(
+				var_names = var_names, strain_names = strain_names
+			),
 			ratio = scale_x_initial_ratio(
-				var_names, name_A = name_A, name_B = name_B
+				var_names = var_names, strain_names = strain_names
 			)
 		) +
 		scale_y_fitness(var_names) +
@@ -130,9 +127,9 @@ plot_strain_fitness <- function(
 
 	# Expand limits to include log-intercepts
 	if (show_xintercept)
-		fig_output <- fig_output + expand_limits(x = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
 	if (show_yintercept)
-		fig_output <- fig_output + expand_limits(y = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
 
 	# Return ggplot object
 	fig_output
@@ -148,20 +145,15 @@ plot_total_group_fitness <- function(
 	show_xintercept = TRUE,
 	show_yintercept = TRUE
 	# xlim = c(NA, NA),
-	# ylim = c(NA, NA),
+	# ylim = c(NA, NA)
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
 	var_names <- as.list(var_names)
+	strain_names <- get_strain_names(data, var_names)
 
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
-
-	# Strain namaes
-	# name_A <- data[[var_names$name_A]][[1]]
-	# name_B <- data[[var_names$name_B]][[1]]
-	name_A <- var_names$name_A[[1]]
-	name_B <- var_names$name_B[[1]]
 
 	# Construct plot
 	fig_output <-
@@ -169,9 +161,11 @@ plot_total_group_fitness <- function(
 		theme_mixexptr() +
 		switch(
 			mix_scale,
-			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
+			fraction = scale_x_initial_fraction(
+				var_names, strain_names = strain_names
+			),
 			ratio = scale_x_initial_ratio(
-				var_names, name_A = name_A, name_B = name_B
+				var_names, strain_names = strain_names
 			)
 		) +
 		ggplot2::aes(y = .data[[var_names$fitness_total]]) +
@@ -183,9 +177,9 @@ plot_total_group_fitness <- function(
 
 	# Expand limits to include log-intercepts
 	if (show_xintercept)
-		fig_output <- fig_output + expand_limits(x = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
 	if (show_yintercept)
-		fig_output <- fig_output + expand_limits(y = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
 
 	# Return ggplot object
 	fig_output
@@ -206,11 +200,7 @@ plot_within_group_fitness <- function(
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
 	var_names <- as.list(var_names)
-
-	# name_A <- data[[var_names$name_A]][[1]]
-	# name_B <- data[[var_names$name_B]][[1]]
-	name_A <- var_names$name_A[[1]]
-	name_B <- var_names$name_B[[1]]
+	strain_names <- get_strain_names(data, var_names)
 
 	# Choose mix scale
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
@@ -221,21 +211,23 @@ plot_within_group_fitness <- function(
 		theme_mixexptr() +
 		switch(
 			mix_scale,
-			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
+			fraction = scale_x_initial_fraction(
+				var_names = var_names, strain_names = strain_names
+			),
 			ratio = scale_x_initial_ratio(
-				var_names, name_A = name_A, name_B = name_B
+				var_names = var_names, strain_names = strain_names
 			)
 		) +
-		scale_y_fitness_ratio(var_names, name_A = name_A, name_B = name_B) +
+		scale_y_fitness_ratio(var_names = var_names, strain_names = strain_names) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
 
 	# Expand limits to include log-intercepts
 	if (show_xintercept)
-		fig_output <- fig_output + expand_limits(x = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
 	if (show_yintercept)
-		fig_output <- fig_output + expand_limits(y = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
 
 	# Return ggplot object
 	fig_output
@@ -269,11 +261,7 @@ plot_fitness_strain_total <- function(
 ) {
 	var_names <- as.list(var_names)
 	var_names$fitness <- "fitness"
-
-	# name_A <- data[[var_names$name_A]][[1]]
-	# name_B <- data[[var_names$name_B]][[1]]
-	name_A <- var_names$name_A[[1]]
-	name_B <- var_names$name_B[[1]]
+	strain_names <- get_strain_names(data, var_names)
 	name_total <- "Total group"
 
 	# Choose mix scale
@@ -289,10 +277,11 @@ plot_fitness_strain_total <- function(
 		),
 		v.names = "fitness",
 		timevar = "strain",
-		times = c(name_A, name_B, name_total)
+		times = c(strain_names$A, strain_names$B, name_total)
 	)
 	data_for_plot$strain <- factor(
-		data_for_plot$strain, levels = c(name_A, name_B, name_total)
+		data_for_plot$strain,
+		levels = c(strain_names$A, strain_names$B, name_total)
 	)
 	data_for_plot$my_facet <- data_for_plot$strain == name_total
 
@@ -303,8 +292,12 @@ plot_fitness_strain_total <- function(
 		theme_plot_mix_fitness() +
 		switch(
 			mix_scale,
-			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
-			ratio = scale_x_initial_ratio(var_names, name_A = name_A, name_B = name_B)
+			fraction = scale_x_initial_fraction(
+				var_names = var_names, strain_names = strain_names
+			),
+			ratio = scale_x_initial_ratio(
+				var_names = var_names, strain_names = strain_names
+			)
 		) +
 		scale_y_fitness(var_names) +
 		geom_point_mixexptr() +
@@ -315,12 +308,27 @@ plot_fitness_strain_total <- function(
 
 	# Expand limits to include log-intercepts
 	if (show_xintercept)
-		fig_output <- fig_output + expand_limits(x = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
 	if (show_yintercept)
-		fig_output <- fig_output + expand_limits(y = 1)
+		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
 
 	# Return ggplot object
 	fig_output
+}
+
+# Get strain names from fitness_vars or data
+get_strain_names <- function(data, var_names) {
+	var_names <- as.list(var_names)
+	name_A <- var_names$name_A
+	name_B <- var_names$name_B
+
+	# Try from data
+	if (utils::hasName(data, name_A))
+		name_A <- data[[name_A]][[1]]
+	if (utils::hasName(data, name_B))
+		name_B <- data[[name_B]][[1]]
+
+	list(A = name_A, B = name_B)
 }
 
 # Format data to plot strain and/or total-group fitness

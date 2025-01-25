@@ -30,7 +30,7 @@ theme_plot_mix_fitness <- function() {
 # Add x-axis scale: initial fraction strain A
 scale_x_initial_fraction <- function(
 	var_names,
-	name_A,
+	strain_names,
 	...,
 	breaks = seq(0, 1, by = 0.2),
 	minor_breaks = NULL
@@ -38,7 +38,7 @@ scale_x_initial_fraction <- function(
 	list(
 		ggplot2::aes(x = .data[[var_names$initial_fraction_A]]),
 		ggplot2::scale_x_continuous(
-			name = paste("Initial fraction", name_A),
+			name = paste("Initial fraction", strain_names$A),
 			limits = c(0, 1),
 			breaks = breaks,
 			minor_breaks = minor_breaks
@@ -49,8 +49,7 @@ scale_x_initial_fraction <- function(
 # Add x-axis scale: initial ratio A/B (log10)
 scale_x_initial_ratio <- function(
 	var_names,
-	name_A,
-	name_B,
+	strain_names,
 	...,
 	breaks = 10^c(-10:10),
 	minor_breaks = NULL
@@ -58,7 +57,9 @@ scale_x_initial_ratio <- function(
 	scale <- list(
 		ggplot2::aes(x = .data[[var_names$initial_ratio_A_B]]),
 		ggplot2::scale_x_log10(
-			name = paste("Initial ratio\n", name_A, "/", name_B),
+			name = paste(
+				"Initial ratio\n", strain_names$A, "/", strain_names$B
+			),
 			breaks = breaks,
 			minor_breaks = minor_breaks,
 			labels = scales::label_log()
@@ -86,13 +87,17 @@ scale_y_fitness <- function(
 
 # Add y-axis scale: within-group fitness ratio A/B
 scale_y_fitness_ratio <- function(
-	var_names, name_A, name_B, ...
+	var_names,
+	strain_names,
+	...
 ) {
 	var_names <- as.list(var_names)
 	scale <- list(
 		ggplot2::aes(y = .data[[var_names$fitness_ratio_A_B]]),
 		ggplot2::scale_y_log10(
-			name = paste("Fitness ratio\n", name_A, "/",name_B),
+			name = paste(
+				"Fitness ratio\n", strain_names$A, "/", strain_names$B
+			),
 			labels = scales::label_log()
 		)
 	)
