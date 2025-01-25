@@ -64,12 +64,11 @@ plot_mix_fitness <- function(
 	}
 
 	# Size plots for page-width figure
-	# (units affect plotting area, not total size)
+	#   (units affect plotting area, not total size)
 	fig_output <- fig_output + patchwork::plot_layout(
 		widths = grid::unit(c(3.2, 1.6), "inches"),
 		heights = grid::unit(1.4, "inches")
 	)
-	# & theme_plot_mix_fitness()
 
 	fig_output
 }
@@ -81,11 +80,13 @@ plot_mix_fitness <- function(
 plot_strain_fitness <- function(
 	data,
 	var_names = NULL,
-	mix_scale = "fraction"
+	mix_scale = "fraction",
+	# xlab = NULL,
+	# ylab = NULL,
+	show_xintercept = TRUE,
+	show_yintercept = TRUE
 	# xlim = c(NA, NA),
 	# ylim = c(NA, NA),
-	# xlab = NULL,
-	# ylab = NULL
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
@@ -127,6 +128,12 @@ plot_strain_fitness <- function(
 		scale_color_strain() +
 		ggplot2::ggtitle("")  # Space for legend, align height
 
+	# Expand limits to include log-intercepts
+	if (show_xintercept)
+		fig_output <- fig_output + expand_limits(x = 1)
+	if (show_yintercept)
+		fig_output <- fig_output + expand_limits(y = 1)
+
 	# Return ggplot object
 	fig_output
 }
@@ -136,10 +143,12 @@ plot_total_group_fitness <- function(
 	data,
 	var_names = NULL,
 	mix_scale = "fraction",
+	# xlab = NULL,
+	ylab = "Total group fitness\n(final no. / initial no.)",
+	show_xintercept = TRUE,
+	show_yintercept = TRUE
 	# xlim = c(NA, NA),
 	# ylim = c(NA, NA),
-	# xlab = NULL,
-	ylab = "Total group fitness\n(final no. / initial no.)"
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
@@ -172,6 +181,12 @@ plot_total_group_fitness <- function(
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
 
+	# Expand limits to include log-intercepts
+	if (show_xintercept)
+		fig_output <- fig_output + expand_limits(x = 1)
+	if (show_yintercept)
+		fig_output <- fig_output + expand_limits(y = 1)
+
 	# Return ggplot object
 	fig_output
 }
@@ -180,11 +195,13 @@ plot_total_group_fitness <- function(
 plot_within_group_fitness <- function(
 	data,
 	var_names = NULL,
-	mix_scale = "fraction"
+	mix_scale = "fraction",
+	# xlab = NULL,
+	# ylab = NULL,
+	show_xintercept = TRUE,
+	show_yintercept = TRUE
 	# xlim = c(NA, NA),
 	# ylim = c(NA, NA),
-	# xlab = NULL,
-	# ylab = NULL
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
@@ -214,6 +231,12 @@ plot_within_group_fitness <- function(
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
 
+	# Expand limits to include log-intercepts
+	if (show_xintercept)
+		fig_output <- fig_output + expand_limits(x = 1)
+	if (show_yintercept)
+		fig_output <- fig_output + expand_limits(y = 1)
+
 	# Return ggplot object
 	fig_output
 }
@@ -240,7 +263,9 @@ fitness_vars_default <- function() {
 plot_fitness_strain_total <- function(
 	data,
 	var_names = fitness_vars_default(),
-	mix_scale = "fraction"
+	mix_scale = "fraction",
+	show_xintercept = TRUE,
+	show_yintercept = TRUE
 ) {
 	var_names <- as.list(var_names)
 	var_names$fitness <- "fitness"
@@ -287,6 +312,12 @@ plot_fitness_strain_total <- function(
 		scale_fill_strain() +
 		ggplot2::ggtitle("") +  # Space for legend, align height
 		ggplot2::facet_wrap(~ my_facet, nrow = 1)
+
+	# Expand limits to include log-intercepts
+	if (show_xintercept)
+		fig_output <- fig_output + expand_limits(x = 1)
+	if (show_yintercept)
+		fig_output <- fig_output + expand_limits(y = 1)
 
 	# Return ggplot object
 	fig_output

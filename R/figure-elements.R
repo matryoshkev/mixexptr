@@ -7,14 +7,7 @@
 theme_mixexptr <- function() {
 	ggplot2::theme_grey() +
 	ggplot2::theme(
-		text = ggplot2::element_text(size = 9),
-		# legend.title         = ggplot2::element_blank(),
-		# legend.background    = ggplot2::element_blank(),
-		# legend.direction     = "horizontal",
-		# legend.justification = c(0.5, 0.15),
-		# legend.position      = c(0.5, 1),
-		# strip.text           = ggplot2::element_blank(),
-		# strip.background     = ggplot2::element_blank()
+		text = ggplot2::element_text(size = 9)
 	)
 }
 
@@ -60,8 +53,7 @@ scale_x_initial_ratio <- function(
 	name_B,
 	...,
 	breaks = 10^c(-10:10),
-	minor_breaks = NULL,
-	show_intercept = TRUE
+	minor_breaks = NULL
 ) {
 	scale <- list(
 		ggplot2::aes(x = .data[[var_names$initial_ratio_A_B]]),
@@ -72,11 +64,6 @@ scale_x_initial_ratio <- function(
 			labels = scales::label_log()
 		)
 	)
-	if (show_intercept) {
-		scale <- c(scale, list(
-			ggplot2::geom_vline(xintercept = 1, color = "white", linewidth = 1)
-		))
-	}
 	scale
 }
 
@@ -84,8 +71,7 @@ scale_x_initial_ratio <- function(
 scale_y_fitness <- function(
 	var_names,
 	...,
-	name = "Wrightian fitness\n (final no. / initial no.)",
-	show_intercept = TRUE
+	name = "Wrightian fitness\n (final no. / initial no.)"
 ) {
 	var_names <- as.list(var_names)
 	scale <- list(
@@ -95,17 +81,12 @@ scale_y_fitness <- function(
 			labels = scales::label_log()
 		)
 	)
-	# if (show_intercept) {
-	# 	scale <- c(scale, list(
-	# 		ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
-	# 	))
-	# }
 	scale
 }
 
 # Add y-axis scale: within-group fitness ratio A/B
 scale_y_fitness_ratio <- function(
-	var_names, name_A, name_B, ..., show_intercept = TRUE
+	var_names, name_A, name_B, ...
 ) {
 	var_names <- as.list(var_names)
 	scale <- list(
@@ -115,11 +96,6 @@ scale_y_fitness_ratio <- function(
 			labels = scales::label_log()
 		)
 	)
-	# if (show_intercept) {
-	# 	scale <- c(scale, list(
-	# 		ggplot2::geom_hline(yintercept = 1, color = "white", linewidth = 1)
-	# 	))
-	# }
 	scale
 }
 

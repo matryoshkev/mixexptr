@@ -119,6 +119,7 @@ fitness_Fig3AB %>%
 	scale_fill_brewer(name = "Ampicillin\n(\u03BCg/mL)", palette = "YlOrRd") +
 	theme_bw()
 
+
 # Total-group fitness ---------------------------------------------------------
 
 # NOTE: This section mainly for dev
