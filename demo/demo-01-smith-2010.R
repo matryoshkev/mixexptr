@@ -1,7 +1,7 @@
 # Example usage of mixexptr: smith et al (2010) data
 
 library(dplyr)
-library(ggplot2)
+# library(ggplot2)
 
 
 # Calculate fitness ------------------------------------------------------------
@@ -46,7 +46,7 @@ fig_within_group <-
 	plot_within_group_fitness(mix_scale = "ratio")
 fig_within_group
 
-# Fit statistical model to log10-transformed data
+# Fit statistical model
 fitted_within_group <- lm(
 	log10(fitness_ratio_A_B) ~ log10(initial_ratio_A_B),
 	data = fitness_smith_2010
@@ -72,18 +72,33 @@ fig_within_group
 
 # Plot total-group fitness
 # dev.new(width = 2.5, height = 2.25)
-fitness_smith_2010 %>% plot_total_group_fitness()
-
+fig_total_group <- fitness_smith_2010 %>% plot_total_group_fitness()
+fig_total_group
 
 # Fit statistical model
+fitted_total_group <- lm(
+	log10(fitness_total) ~ poly(initial_fraction_A, 2),
+	data = fitness_smith_2010
+)
+
+# Parameter estimates and confidence intervals
+summary(fitted_total_group)
+confint(fitted_total_group)
 
 # Add fitted model to total-group figure
-
+predicted_total_group <- tibble(initial_fraction_A = seq(0,1, by = 0.02))
+predicted_total_group <- predicted_total_group %>%
+	mutate(
+		fitness_total =
+			predict(fitted_total_group, newdata = predicted_total_group),
+		fitness_total = 10^fitness_total
+	)
+fig_total_group <- fig_total_group + geom_line(data = predicted_total_group)
 
 
 # Make combined figure using `patchwork` package -------------------------------
 
-# dev.new(width = 4.5, height = 2.25, units = "in")
-# fig_smith_2010 <- fig_total_group + fig_within_group
-# fig_smith_2010
+dev.new(width = 4.5, height = 2.25, units = "in")
+fig_smith_2010 <- fig_total_group + fig_within_group
+fig_smith_2010
 

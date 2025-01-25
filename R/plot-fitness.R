@@ -78,25 +78,26 @@ plot_mix_fitness <- function(
 # Functions that will be exported ==============================================
 
 # Plot strain fitness
-plot_strain_fitness <- function(
-	data,
-	var_names = NULL,
-	mix_scale = "fraction"
-) {
-
-
-}
+# plot_strain_fitness <- function(
+# 	data,
+# 	var_names = NULL,
+# 	mix_scale = "fraction"
+# ) {
+# }
 
 # Plot total group fitness
 plot_total_group_fitness <- function(
 	data,
 	var_names = NULL,
-	mix_scale = "fraction"
+	mix_scale = "fraction",
+	# xlim = c(NA, NA),
+	# ylim = c(NA, NA),
+	# xlab = NULL,
+	ylab = "Total group fitness\n(final no. / initial no.)"
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
 	var_names <- as.list(var_names)
-	var_names$fitness <- var_names$fitness_total
 
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
@@ -106,10 +107,6 @@ plot_total_group_fitness <- function(
 	# name_B <- data[[var_names$name_B]][[1]]
 	name_A <- var_names$name_A[[1]]
 	name_B <- var_names$name_B[[1]]
-
-	# Dummy variable for aes(fill) user can replace
-	data$mixexptr_dummy_var <- TRUE
-
 
 	# Construct plot
 	fig_output <-
@@ -122,7 +119,9 @@ plot_total_group_fitness <- function(
 				var_names, name_A = name_A, name_B = name_B
 			)
 		) +
-		scale_y_fitness(var_names) +
+		ggplot2::aes(y = .data[[var_names$fitness_total]]) +
+		ggplot2::scale_y_log10(labels = scales::label_log()) +
+		ggplot2::ylab(ylab) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
@@ -134,21 +133,25 @@ plot_total_group_fitness <- function(
 # Plot relative within-group fitness (fitness_A/fitness_B)
 plot_within_group_fitness <- function(
 	data,
-	var_names = fitness_vars_default(),
+	var_names = NULL,
 	mix_scale = "fraction"
+	# xlim = c(NA, NA),
+	# ylim = c(NA, NA),
+	# xlab = NULL,
+	# ylab = NULL
 ) {
+	# Use default variable names if not supplied
+	if (is.null(var_names)) {var_names <- fitness_vars_default()}
 	var_names <- as.list(var_names)
+
 	# name_A <- data[[var_names$name_A]][[1]]
 	# name_B <- data[[var_names$name_B]][[1]]
 	name_A <- var_names$name_A[[1]]
 	name_B <- var_names$name_B[[1]]
 
-	# Format data for plot
-	data_for_plot <- format_to_plot_fitness_ratio(data, var_names, mix_scale)
-
 	# Construct plot
 	fig_output <-
-		ggplot2::ggplot(data_for_plot) +
+		ggplot2::ggplot(data) +
 		theme_mixexptr() +
 		switch(
 			mix_scale,
@@ -274,18 +277,15 @@ format_to_plot_fitness <- function(
 }
 
 # Format data to plot within-group fitness ratio
-format_to_plot_fitness_ratio <- function(data, var_names, mix_scale) {
-	output <- data
-
-	if (mix_scale == "ratio") {
-		# Drop rows where mixing ratio undefined on log scale
-		var_initial_ratio <- var_names$initial_ratio_A_B
-		output <- output[is.finite(output[[var_initial_ratio]]), ]
-		output <- output[output[[var_initial_ratio]] > 0, ]
-	}
-
-	# Dummy variable for aesthetics user can replace
-	output$mixexptr_dummy_var <- TRUE
-
-	output
-}
+# format_to_plot_fitness_ratio <- function(data, var_names, mix_scale) {
+# 	output <- data
+#
+# 	if (mix_scale == "ratio") {
+# 		# Drop rows where mixing ratio undefined on log scale
+# 		var_initial_ratio <- var_names$initial_ratio_A_B
+# 		output <- output[is.finite(output[[var_initial_ratio]]), ]
+# 		output <- output[output[[var_initial_ratio]] > 0, ]
+# 	}
+#
+# 	output
+# }

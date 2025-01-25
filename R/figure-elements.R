@@ -81,13 +81,17 @@ scale_x_initial_ratio <- function(
 }
 
 # Add y-axis scale: fitness (strain A, strain B, total group)
-scale_y_fitness <- function(var_names, ..., show_intercept = TRUE) {
+scale_y_fitness <- function(
+	var_names,
+	...,
+	name = "Wrightian fitness\n (final no. / initial no.)",
+	show_intercept = TRUE
+) {
 	var_names <- as.list(var_names)
 	scale <- list(
-		# ggplot2::aes(y = .data$fitness),
 		ggplot2::aes(y = .data[[var_names$fitness]]),
 		ggplot2::scale_y_log10(
-			name = "Wrightian fitness\n (final no. / initial no.)",
+			name = name,
 			labels = scales::label_log()
 		)
 	)
@@ -101,7 +105,6 @@ scale_y_fitness <- function(var_names, ..., show_intercept = TRUE) {
 
 # Add y-axis scale: within-group fitness ratio A/B
 scale_y_fitness_ratio <- function(
-	# name_A, name_B, ..., show_intercept = TRUE
 	var_names, name_A, name_B, ..., show_intercept = TRUE
 ) {
 	var_names <- as.list(var_names)
@@ -151,24 +154,30 @@ fill_strain_A <- function() "tan"
 fill_strain_B <- function() "lightsteelblue"
 fill_group    <- function() "gray65"
 
-# Fill default for mixed groups that user can replace
-scale_fill_group <- function(...) {
+# Default fill scale for mixed groups. Replaced if user specifies fill.
+scale_fill_group <- function() {
 	list(
-		ggplot2::aes(fill = .data$mixexptr_dummy_var),
-		ggplot2::scale_fill_manual(values = fill_group(), ..., guide = "none")
+		ggplot2::aes(fill = TRUE),
+		ggplot2::scale_fill_manual(values = fill_group(), guide = "none")
 	)
 }
+
+# Default shape scale for points. Replaced if user specifies shape.
+# scale_shape_mixexptr <- function() {
+# 	list(
+# 		ggplot2::aes(shape = TRUE),
+# 		ggplot2::scale_shape_manual(values = 21, guide = "none")
+# 	)
+# }
 
 
 # Geom -------------------------------------------------------------------------
 
 # Default points that are more readable when overlapped
 geom_point_mixexptr <- function(shape = 21, ..., na.rm = TRUE) {
-	suppressWarnings(  # So ggplot2 doesn't warn if fill supplied
-		list(
-			ggplot2::geom_point(shape = shape, ..., na.rm = na.rm),
-			ggplot2::geom_point(shape = shape, fill = NA, ..., na.rm = na.rm)
-		)
+	list(
+		ggplot2::geom_point(shape = shape, ..., na.rm = na.rm),
+		ggplot2::geom_point(shape = shape, fill = NA, ..., na.rm = na.rm)
 	)
 }
 

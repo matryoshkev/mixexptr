@@ -97,6 +97,7 @@ fitness_names_Yurtsev <- c(
 	initial_fraction_A = "initial_freq_AmpR",
 	initial_ratio_A_B = "initial_ratio_AmpRS",
 	fitness_ratio_A_B = "fitness_ratio_AmpRS",
+	fitness_total = "fitness_total",
 	name_A = "AmpR",
 	name_B = "AmpS"
 )
@@ -108,12 +109,26 @@ fitness_Fig3AB %>%
 	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +
-	scale_fill_discrete(name = "Ampicillin\n(µg/mL)")
+	scale_fill_discrete(name = "Ampicillin\n(\u03BCg/mL)")
 
 # Can use theme options of your choice
 fitness_Fig3AB %>%
 	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +
-	scale_fill_discrete(name = "Ampicillin\n(µg/mL)") +
+	scale_fill_brewer(name = "Ampicillin\n(C\u03BCg/mL)", palette = "YlOrRd") +
 	theme_bw()
+
+# Total-group fitness ---------------------------------------------------------
+
+# NOTE: This section mainly for dev
+
+fitness_Fig3AB %>%
+	plot_total_group_fitness(var_names = fitness_names_Yurtsev) +
+	facet_wrap(~ dilution, labeller = "label_both") +
+	aes(fill = factor(ampicillin)) +
+	scale_fill_brewer(name = "Ampicillin\n(\u03BCg/mL)", palette = "YlOrRd")
+
+
+
+
