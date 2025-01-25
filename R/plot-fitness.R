@@ -78,12 +78,58 @@ plot_mix_fitness <- function(
 # Functions that will be exported ==============================================
 
 # Plot strain fitness
-# plot_strain_fitness <- function(
-# 	data,
-# 	var_names = NULL,
-# 	mix_scale = "fraction"
-# ) {
-# }
+plot_strain_fitness <- function(
+	data,
+	var_names = NULL,
+	mix_scale = "fraction"
+	# xlim = c(NA, NA),
+	# ylim = c(NA, NA),
+	# xlab = NULL,
+	# ylab = NULL
+) {
+	# Use default variable names if not supplied
+	if (is.null(var_names)) {var_names <- fitness_vars_default()}
+	var_names <- as.list(var_names)
+	var_names$fitness <- "fitness"
+
+	# Choose mix scale(s)
+	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
+
+	# Strain namaes
+	# name_A <- data[[var_names$name_A]][[1]]
+	# name_B <- data[[var_names$name_B]][[1]]
+	name_A <- var_names$name_A[[1]]
+	name_B <- var_names$name_B[[1]]
+
+	data_to_plot <- stats::reshape(
+		as.data.frame(data),
+		direction = "long",
+		varying = c(var_names$fitness_A, var_names$fitness_B),
+		v.names = "fitness",
+		timevar = "strain",
+		times = c(name_A, name_B)
+	)
+
+	# Construct plot
+	fig_output <-
+		ggplot2::ggplot(data_to_plot) +
+		theme_mixexptr() +
+		switch(
+			mix_scale,
+			fraction = scale_x_initial_fraction(var_names, name_A = name_A),
+			ratio = scale_x_initial_ratio(
+				var_names, name_A = name_A, name_B = name_B
+			)
+		) +
+		scale_y_fitness(var_names) +
+		geom_point_mixexptr() +
+		scale_fill_strain() +
+		scale_color_strain() +
+		ggplot2::ggtitle("")  # Space for legend, align height
+
+	# Return ggplot object
+	fig_output
+}
 
 # Plot total group fitness
 plot_total_group_fitness <- function(

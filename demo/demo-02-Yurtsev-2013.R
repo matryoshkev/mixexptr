@@ -109,7 +109,7 @@ fitness_Fig3AB %>%
 	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +
-	scale_fill_discrete(name = "Ampicillin\n(\u03BCg/mL)")
+	scale_fill_brewer(name = "Ampicillin\n(\u03BCg/mL)", palette = "YlOrRd")
 
 # Can use theme options of your choice
 fitness_Fig3AB %>%
@@ -128,6 +128,22 @@ fitness_Fig3AB %>%
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +
 	scale_fill_brewer(name = "Ampicillin\n(\u03BCg/mL)", palette = "YlOrRd")
+
+
+# Strain fitness ---------------------------------------------------------------
+
+# NOTE: This section mainly for dev
+
+fitness_names_Yurtsev <- c(
+	fitness_names_Yurtsev,
+	fitness_A = "fitness_AmpR",
+	fitness_B = "fitness_AmpS"
+)
+
+fitness_Fig3AB %>%
+	filter(ampicillin == 100 ) %>%
+	plot_strain_fitness(var_names = fitness_names_Yurtsev) +
+	facet_wrap(~ dilution, labeller = "label_both")
 
 
 
