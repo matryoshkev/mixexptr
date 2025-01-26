@@ -42,8 +42,7 @@ plot_mix_fitness(fitness_smith_2010)
 # Plot within-group fitness
 # dev.new(width = 2.5, height = 2.25, units = "in")
 fig_within_group <-
-	fitness_smith_2010 %>%
-	plot_within_group_fitness(mix_scale = "ratio")
+	fitness_smith_2010 %>% plot_within_group_fitness(mix_scale = "ratio")
 fig_within_group
 
 # Fit statistical model
@@ -72,7 +71,8 @@ fig_within_group
 
 # Plot total-group fitness
 # dev.new(width = 2.5, height = 2.25)
-fig_total_group <- fitness_smith_2010 %>% plot_total_group_fitness()
+fig_total_group <-
+	fitness_smith_2010 %>% plot_total_group_fitness()
 fig_total_group
 
 # Fit statistical model
@@ -102,3 +102,9 @@ dev.new(width = 4.5, height = 2.25, units = "in")
 fig_smith_2010 <- fig_total_group + fig_within_group
 fig_smith_2010
 
+
+# Dev code ---------------------------------------------------------------------
+
+fitness_smith_2010 %>% plot_strain_fitness()
+
+fitness_smith_2010 %>% plot_fitness_strain_total()

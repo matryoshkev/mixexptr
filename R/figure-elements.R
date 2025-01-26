@@ -33,17 +33,23 @@ scale_x_initial_fraction <- function(
 	strain_names,
 	...,
 	xlab = NULL,
-	breaks = seq(0, 1, by = 0.2),
-	minor_breaks = NULL
+	xlim = NULL,
+	breaks = waiver(),
+	minor_breaks = waiver()
 ) {
 	if (is.null(xlab)) {
 		xlab <- paste("Initial fraction", strain_names$A)
+	}
+	if (is.null(xlim)) {
+		xlim <- c(0, 1)
+		breaks <- seq(0, 1, by = 0.2)
+		minor_breaks <- NULL
 	}
 	list(
 		ggplot2::aes(x = .data[[var_names$initial_fraction_A]]),
 		ggplot2::scale_x_continuous(
 			name = xlab,
-			limits = c(0, 1),
+			limits = xlim,
 			breaks = breaks,
 			minor_breaks = minor_breaks
 		)
@@ -56,16 +62,22 @@ scale_x_initial_ratio <- function(
 	strain_names,
 	...,
 	xlab = NULL,
-	breaks = 10^c(-10:10),
-	minor_breaks = NULL
+	xlim = NULL,
+	breaks = waiver(),
+	minor_breaks = waiver()
 ) {
 	if (is.null(xlab)) {
 		xlab <- paste("Initial ratio", strain_names$A, "/", strain_names$B)
+	}
+	if (is.null(xlim)) {
+		breaks <- 10^c(-12:12)
+		minor_breaks <- NULL
 	}
 	scale <- list(
 		ggplot2::aes(x = .data[[var_names$initial_ratio_A_B]]),
 		ggplot2::scale_x_log10(
 			name = xlab,
+			limits = xlim,
 			breaks = breaks,
 			minor_breaks = minor_breaks,
 			labels = scales::label_log()
@@ -78,7 +90,8 @@ scale_x_initial_ratio <- function(
 scale_y_fitness <- function(
 	var_names,
 	...,
-	ylab = NULL
+	ylab = NULL,
+	ylim = NULL
 ) {
 	var_names <- as.list(var_names)
 	if (is.null(ylab)) {
@@ -86,7 +99,11 @@ scale_y_fitness <- function(
 	}
 	scale <- list(
 		ggplot2::aes(y = .data[[var_names$fitness]]),
-		ggplot2::scale_y_log10(name = ylab, labels = scales::label_log())
+		ggplot2::scale_y_log10(
+			name = ylab,
+			limits = ylim,
+			labels = scales::label_log()
+		)
 	)
 	scale
 }
@@ -96,7 +113,8 @@ scale_y_fitness_ratio <- function(
 	var_names,
 	strain_names,
 	...,
-	ylab = NULL
+	ylab = NULL,
+	ylim = NULL
 ) {
 	var_names <- as.list(var_names)
 	if (is.null(ylab)) {
@@ -104,8 +122,11 @@ scale_y_fitness_ratio <- function(
 	}
 	scale <- list(
 		ggplot2::aes(y = .data[[var_names$fitness_ratio_A_B]]),
-		ggplot2::scale_y_log10(name = ylab, labels = scales::label_log())
-	)
+		ggplot2::scale_y_log10(
+			name = ylab,
+			limits = ylim,
+			labels = scales::label_log())
+		)
 	scale
 }
 

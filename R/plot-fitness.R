@@ -83,9 +83,8 @@ plot_strain_fitness <- function(
 	mix_scale = "fraction",
 	xlab = NULL,
 	ylab = NULL,
-	show_xintercept = TRUE,
-	show_yintercept = TRUE
-	# xlim = c(NA, NA),
+	show_yintercept = TRUE,
+	xlim = NULL
 	# ylim = c(NA, NA),
 ) {
 	# Use default variable names if not supplied
@@ -113,10 +112,16 @@ plot_strain_fitness <- function(
 		switch(
 			mix_scale,
 			fraction = scale_x_initial_fraction(
-				var_names = var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names,
+				strain_names = strain_names,
+				xlab = xlab,
+				xlim = xlim
 			),
 			ratio = scale_x_initial_ratio(
-				var_names = var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names,
+				strain_names = strain_names,
+				xlab = xlab,
+				xlim = xlim
 			)
 		) +
 		scale_y_fitness(var_names, ylab = ylab) +
@@ -126,7 +131,7 @@ plot_strain_fitness <- function(
 		ggplot2::ggtitle("")  # Space for legend, align height
 
 	# Expand limits to include log-intercepts
-	if (show_xintercept)
+	if (is.null(xlim) & mix_scale == "ratio")
 		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
 	if (show_yintercept)
 		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
@@ -142,9 +147,8 @@ plot_total_group_fitness <- function(
 	mix_scale = "fraction",
 	xlab = NULL,
 	ylab = NULL,
-	show_xintercept = TRUE,
-	show_yintercept = TRUE
-	# xlim = c(NA, NA),
+	show_yintercept = TRUE,
+	xlim = NULL
 	# ylim = c(NA, NA)
 ) {
 	# Use default variable names if not supplied
@@ -166,10 +170,16 @@ plot_total_group_fitness <- function(
 		switch(
 			mix_scale,
 			fraction = scale_x_initial_fraction(
-				var_names = var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names,
+				strain_names = strain_names,
+				xlab = xlab,
+				xlim = xlim
 			),
 			ratio = scale_x_initial_ratio(
-				var_names = var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names,
+				strain_names = strain_names,
+				xlab = xlab,
+				xlim = xlim
 			)
 		) +
 		ggplot2::aes(y = .data[[var_names$fitness_total]]) +
@@ -179,7 +189,7 @@ plot_total_group_fitness <- function(
 		ggplot2::ggtitle("")  # Space for legend, align height
 
 	# Expand limits to include log-intercepts
-	if (show_xintercept)
+	if (is.null(xlim) & mix_scale == "ratio")
 		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
 	if (show_yintercept)
 		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
@@ -195,9 +205,8 @@ plot_within_group_fitness <- function(
 	mix_scale = "fraction",
 	xlab = NULL,
 	ylab = NULL,
-	show_xintercept = TRUE,
-	show_yintercept = TRUE
-	# xlim = c(NA, NA),
+	show_yintercept = TRUE,
+	xlim = NULL
 	# ylim = c(NA, NA),
 ) {
 	# Use default variable names if not supplied
@@ -215,10 +224,16 @@ plot_within_group_fitness <- function(
 		switch(
 			mix_scale,
 			fraction = scale_x_initial_fraction(
-				var_names = var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names,
+				strain_names = strain_names,
+				xlab = xlab,
+				xlim = xlim
 			),
 			ratio = scale_x_initial_ratio(
-				var_names = var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names,
+				strain_names = strain_names,
+				xlab = xlab,
+				xlim = xlim
 			)
 		) +
 		scale_y_fitness_ratio(
@@ -229,7 +244,7 @@ plot_within_group_fitness <- function(
 		ggplot2::ggtitle("")  # Space for legend, align height
 
 	# Expand limits to include log-intercepts
-	if (show_xintercept)
+	if (is.null(xlim) & mix_scale == "ratio")
 		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
 	if (show_yintercept)
 		fig_output <- fig_output + ggplot2::expand_limits(y = 1)

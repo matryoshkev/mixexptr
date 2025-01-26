@@ -147,8 +147,7 @@ fitness_names_Yurtsev <- c(
 fitness_Fig3AB %>%
 	filter(ampicillin == 100 ) %>%
 	plot_strain_fitness(
-		var_names = fitness_names_Yurtsev,
-		xlab = "Initial AmpR frequency"
+		var_names = fitness_names_Yurtsev
 	) +
 	facet_wrap(~ dilution, labeller = "label_both")
 
