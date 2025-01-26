@@ -34,8 +34,8 @@ scale_x_initial_fraction <- function(
 	...,
 	xlab = NULL,
 	xlim = NULL,
-	breaks = waiver(),
-	minor_breaks = waiver()
+	breaks = ggplot2::waiver(),
+	minor_breaks = ggplot2::waiver()
 ) {
 	if (is.null(xlab)) {
 		xlab <- paste("Initial fraction", strain_names$A)
@@ -63,8 +63,8 @@ scale_x_initial_ratio <- function(
 	...,
 	xlab = NULL,
 	xlim = NULL,
-	breaks = waiver(),
-	minor_breaks = waiver()
+	breaks = ggplot2::waiver(),
+	minor_breaks = ggplot2::waiver()
 ) {
 	if (is.null(xlab)) {
 		xlab <- paste("Initial ratio", strain_names$A, "/", strain_names$B)
