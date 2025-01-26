@@ -78,15 +78,15 @@ scale_x_initial_ratio <- function(
 scale_y_fitness <- function(
 	var_names,
 	...,
-	name = "Wrightian fitness\n (final no. / initial no.)"
+	ylab = NULL
 ) {
 	var_names <- as.list(var_names)
+	if (is.null(ylab)) {
+		ylab <- "Wrightian fitness\n (final no. / initial no.)"
+	}
 	scale <- list(
 		ggplot2::aes(y = .data[[var_names$fitness]]),
-		ggplot2::scale_y_log10(
-			name = name,
-			labels = scales::label_log()
-		)
+		ggplot2::scale_y_log10(name = ylab, labels = scales::label_log())
 	)
 	scale
 }
@@ -95,17 +95,16 @@ scale_y_fitness <- function(
 scale_y_fitness_ratio <- function(
 	var_names,
 	strain_names,
-	...
+	...,
+	ylab = NULL
 ) {
 	var_names <- as.list(var_names)
+	if (is.null(ylab)) {
+		ylab <- paste("Fitness ratio\n", strain_names$A, "/", strain_names$B)
+	}
 	scale <- list(
 		ggplot2::aes(y = .data[[var_names$fitness_ratio_A_B]]),
-		ggplot2::scale_y_log10(
-			name = paste(
-				"Fitness ratio\n", strain_names$A, "/", strain_names$B
-			),
-			labels = scales::label_log()
-		)
+		ggplot2::scale_y_log10(name = ylab, labels = scales::label_log())
 	)
 	scale
 }

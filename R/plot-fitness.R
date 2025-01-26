@@ -82,7 +82,7 @@ plot_strain_fitness <- function(
 	var_names = NULL,
 	mix_scale = "fraction",
 	xlab = NULL,
-	# ylab = NULL,
+	ylab = NULL,
 	show_xintercept = TRUE,
 	show_yintercept = TRUE
 	# xlim = c(NA, NA),
@@ -119,7 +119,7 @@ plot_strain_fitness <- function(
 				var_names = var_names, strain_names = strain_names, xlab = xlab
 			)
 		) +
-		scale_y_fitness(var_names) +
+		scale_y_fitness(var_names, ylab = ylab) +
 		geom_point_mixexptr() +
 		scale_fill_strain() +
 		scale_color_strain() +
@@ -141,7 +141,7 @@ plot_total_group_fitness <- function(
 	var_names = NULL,
 	mix_scale = "fraction",
 	xlab = NULL,
-	ylab = "Total group fitness\n(final no. / initial no.)",
+	ylab = NULL,
 	show_xintercept = TRUE,
 	show_yintercept = TRUE
 	# xlim = c(NA, NA),
@@ -155,6 +155,10 @@ plot_total_group_fitness <- function(
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
 
+	if (is.null(ylab)) {
+		ylab <- "Total group fitness\n(final no. / initial no.)"
+	}
+
 	# Construct plot
 	fig_output <-
 		ggplot2::ggplot(data) +
@@ -162,15 +166,14 @@ plot_total_group_fitness <- function(
 		switch(
 			mix_scale,
 			fraction = scale_x_initial_fraction(
-				var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names, strain_names = strain_names, xlab = xlab
 			),
 			ratio = scale_x_initial_ratio(
-				var_names, strain_names = strain_names, xlab = xlab
+				var_names = var_names, strain_names = strain_names, xlab = xlab
 			)
 		) +
 		ggplot2::aes(y = .data[[var_names$fitness_total]]) +
-		ggplot2::scale_y_log10(labels = scales::label_log()) +
-		ggplot2::ylab(ylab) +
+		ggplot2::scale_y_log10(name = ylab, labels = scales::label_log()) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
@@ -191,7 +194,7 @@ plot_within_group_fitness <- function(
 	var_names = NULL,
 	mix_scale = "fraction",
 	xlab = NULL,
-	# ylab = NULL,
+	ylab = NULL,
 	show_xintercept = TRUE,
 	show_yintercept = TRUE
 	# xlim = c(NA, NA),
@@ -218,7 +221,9 @@ plot_within_group_fitness <- function(
 				var_names = var_names, strain_names = strain_names, xlab = xlab
 			)
 		) +
-		scale_y_fitness_ratio(var_names = var_names, strain_names = strain_names) +
+		scale_y_fitness_ratio(
+			var_names = var_names, strain_names = strain_names, ylab = ylab
+		) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
