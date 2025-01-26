@@ -127,7 +127,6 @@ fitness_Fig3AB %>%
 fitness_Fig3AB %>%
 	plot_total_group_fitness(
 		var_names = fitness_names_Yurtsev
-		# xlab = "test"
 	) +
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +

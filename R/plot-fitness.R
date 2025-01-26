@@ -83,9 +83,8 @@ plot_strain_fitness <- function(
 	mix_scale = "fraction",
 	xlab = NULL,
 	ylab = NULL,
-	show_yintercept = TRUE,
-	xlim = c(NA, NA)
-	# ylim = c(NA, NA),
+	xlim = c(NA, NA),
+	ylim = c(NA, NA)
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
@@ -96,6 +95,7 @@ plot_strain_fitness <- function(
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
 	if (missing(xlim)) { xlim <- NULL }
+	if (missing(ylim)) { ylim <- NULL }
 
 	data_to_plot <- stats::reshape(
 		as.data.frame(data),  # reshape() chokes on tibbles
@@ -125,7 +125,7 @@ plot_strain_fitness <- function(
 				xlim = xlim
 			)
 		) +
-		scale_y_fitness(var_names, ylab = ylab) +
+		scale_y_fitness(var_names, ylab = ylab, ylim = ylim) +
 		geom_point_mixexptr() +
 		scale_fill_strain() +
 		scale_color_strain() +
@@ -134,7 +134,7 @@ plot_strain_fitness <- function(
 	# Expand limits to include log-intercepts
 	if (is.null(xlim) & mix_scale == "ratio")
 		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
-	if (show_yintercept)
+	if (is.null(ylim))
 		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
 
 	# Return ggplot object
@@ -148,9 +148,8 @@ plot_total_group_fitness <- function(
 	mix_scale = "fraction",
 	xlab = NULL,
 	ylab = NULL,
-	show_yintercept = TRUE,
-	xlim = c(NA, NA)
-	# ylim = c(NA, NA)
+	xlim = c(NA, NA),
+	ylim = c(NA, NA)
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
@@ -160,7 +159,7 @@ plot_total_group_fitness <- function(
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
 	if (missing(xlim)) { xlim <- NULL }
-
+	if (missing(ylim)) { ylim <- NULL }
 	if (is.null(ylab)) {
 		ylab <- "Total group fitness\n(final no. / initial no.)"
 	}
@@ -185,7 +184,11 @@ plot_total_group_fitness <- function(
 			)
 		) +
 		ggplot2::aes(y = .data[[var_names$fitness_total]]) +
-		ggplot2::scale_y_log10(name = ylab, labels = scales::label_log()) +
+		ggplot2::scale_y_log10(
+			name = ylab,
+			limits = ylim,
+			labels = scales::label_log()
+		) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height
@@ -193,7 +196,7 @@ plot_total_group_fitness <- function(
 	# Expand limits to include log-intercepts
 	if (is.null(xlim) & mix_scale == "ratio")
 		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
-	if (show_yintercept)
+	if (is.null(ylim))
 		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
 
 	# Return ggplot object
@@ -207,9 +210,8 @@ plot_within_group_fitness <- function(
 	mix_scale = "fraction",
 	xlab = NULL,
 	ylab = NULL,
-	show_yintercept = TRUE,
-	xlim = c(NA, NA)
-	# ylim = c(NA, NA),
+	xlim = c(NA, NA),
+	ylim = c(NA, NA)
 ) {
 	# Use default variable names if not supplied
 	if (is.null(var_names)) {var_names <- fitness_vars_default()}
@@ -219,6 +221,7 @@ plot_within_group_fitness <- function(
 	# Choose mix scale
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
 	if (missing(xlim)) { xlim <- NULL }
+	if (missing(ylim)) { ylim <- NULL }
 
 	# Construct plot
 	fig_output <-
@@ -240,7 +243,10 @@ plot_within_group_fitness <- function(
 			)
 		) +
 		scale_y_fitness_ratio(
-			var_names = var_names, strain_names = strain_names, ylab = ylab
+			var_names = var_names,
+			strain_names = strain_names,
+			ylab = ylab,
+			ylim = ylim
 		) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
@@ -249,7 +255,7 @@ plot_within_group_fitness <- function(
 	# Expand limits to include log-intercepts
 	if (is.null(xlim) & mix_scale == "ratio")
 		fig_output <- fig_output + ggplot2::expand_limits(x = 1)
-	if (show_yintercept)
+	if (is.null(ylim))
 		fig_output <- fig_output + ggplot2::expand_limits(y = 1)
 
 	# Return ggplot object
@@ -274,7 +280,7 @@ fitness_vars_default <- function() {
 	)
 }
 
-# Plot strain and total-group fitness
+# Plot strain and total-group fitness (part of plot_mix_fitness())
 plot_fitness_strain_total <- function(
 	data,
 	var_names = fitness_vars_default(),
