@@ -81,7 +81,7 @@ plot_strain_fitness <- function(
 	data,
 	var_names = NULL,
 	mix_scale = "fraction",
-	# xlab = NULL,
+	xlab = NULL,
 	# ylab = NULL,
 	show_xintercept = TRUE,
 	show_yintercept = TRUE
@@ -113,10 +113,10 @@ plot_strain_fitness <- function(
 		switch(
 			mix_scale,
 			fraction = scale_x_initial_fraction(
-				var_names = var_names, strain_names = strain_names
+				var_names = var_names, strain_names = strain_names, xlab = xlab
 			),
 			ratio = scale_x_initial_ratio(
-				var_names = var_names, strain_names = strain_names
+				var_names = var_names, strain_names = strain_names, xlab = xlab
 			)
 		) +
 		scale_y_fitness(var_names) +
@@ -140,7 +140,7 @@ plot_total_group_fitness <- function(
 	data,
 	var_names = NULL,
 	mix_scale = "fraction",
-	# xlab = NULL,
+	xlab = NULL,
 	ylab = "Total group fitness\n(final no. / initial no.)",
 	show_xintercept = TRUE,
 	show_yintercept = TRUE
@@ -162,10 +162,10 @@ plot_total_group_fitness <- function(
 		switch(
 			mix_scale,
 			fraction = scale_x_initial_fraction(
-				var_names, strain_names = strain_names
+				var_names, strain_names = strain_names, xlab = xlab
 			),
 			ratio = scale_x_initial_ratio(
-				var_names, strain_names = strain_names
+				var_names, strain_names = strain_names, xlab = xlab
 			)
 		) +
 		ggplot2::aes(y = .data[[var_names$fitness_total]]) +
@@ -190,7 +190,7 @@ plot_within_group_fitness <- function(
 	data,
 	var_names = NULL,
 	mix_scale = "fraction",
-	# xlab = NULL,
+	xlab = NULL,
 	# ylab = NULL,
 	show_xintercept = TRUE,
 	show_yintercept = TRUE
@@ -212,10 +212,10 @@ plot_within_group_fitness <- function(
 		switch(
 			mix_scale,
 			fraction = scale_x_initial_fraction(
-				var_names = var_names, strain_names = strain_names
+				var_names = var_names, strain_names = strain_names, xlab = xlab
 			),
 			ratio = scale_x_initial_ratio(
-				var_names = var_names, strain_names = strain_names
+				var_names = var_names, strain_names = strain_names, xlab = xlab
 			)
 		) +
 		scale_y_fitness_ratio(var_names = var_names, strain_names = strain_names) +

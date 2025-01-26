@@ -32,13 +32,17 @@ scale_x_initial_fraction <- function(
 	var_names,
 	strain_names,
 	...,
+	xlab = NULL,
 	breaks = seq(0, 1, by = 0.2),
 	minor_breaks = NULL
 ) {
+	if (is.null(xlab)) {
+		xlab <- paste("Initial fraction", strain_names$A)
+	}
 	list(
 		ggplot2::aes(x = .data[[var_names$initial_fraction_A]]),
 		ggplot2::scale_x_continuous(
-			name = paste("Initial fraction", strain_names$A),
+			name = xlab,
 			limits = c(0, 1),
 			breaks = breaks,
 			minor_breaks = minor_breaks
@@ -51,15 +55,17 @@ scale_x_initial_ratio <- function(
 	var_names,
 	strain_names,
 	...,
+	xlab = NULL,
 	breaks = 10^c(-10:10),
 	minor_breaks = NULL
 ) {
+	if (is.null(xlab)) {
+		xlab <- paste("Initial ratio", strain_names$A, "/", strain_names$B)
+	}
 	scale <- list(
 		ggplot2::aes(x = .data[[var_names$initial_ratio_A_B]]),
 		ggplot2::scale_x_log10(
-			name = paste(
-				"Initial ratio\n", strain_names$A, "/", strain_names$B
-			),
+			name = xlab,
 			breaks = breaks,
 			minor_breaks = minor_breaks,
 			labels = scales::label_log()

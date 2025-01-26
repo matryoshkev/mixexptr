@@ -125,7 +125,10 @@ fitness_Fig3AB %>%
 # NOTE: This section mainly for dev
 
 fitness_Fig3AB %>%
-	plot_total_group_fitness(var_names = fitness_names_Yurtsev) +
+	plot_total_group_fitness(
+		var_names = fitness_names_Yurtsev
+		# xlab = "test"
+	) +
 	facet_wrap(~ dilution, labeller = "label_both") +
 	aes(fill = factor(ampicillin)) +
 	scale_fill_brewer(name = "Ampicillin\n(\u03BCg/mL)", palette = "YlOrRd")
@@ -143,7 +146,10 @@ fitness_names_Yurtsev <- c(
 
 fitness_Fig3AB %>%
 	filter(ampicillin == 100 ) %>%
-	plot_strain_fitness(var_names = fitness_names_Yurtsev) +
+	plot_strain_fitness(
+		var_names = fitness_names_Yurtsev,
+		xlab = "Initial AmpR frequency"
+	) +
 	facet_wrap(~ dilution, labeller = "label_both")
 
 fitness_Fig3AB %>%
