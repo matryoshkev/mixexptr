@@ -84,7 +84,7 @@ plot_strain_fitness <- function(
 	xlab = NULL,
 	ylab = NULL,
 	show_yintercept = TRUE,
-	xlim = NULL
+	xlim = c(NA, NA)
 	# ylim = c(NA, NA),
 ) {
 	# Use default variable names if not supplied
@@ -95,6 +95,7 @@ plot_strain_fitness <- function(
 
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
+	if (missing(xlim)) { xlim <- NULL }
 
 	data_to_plot <- stats::reshape(
 		as.data.frame(data),  # reshape() chokes on tibbles
@@ -148,7 +149,7 @@ plot_total_group_fitness <- function(
 	xlab = NULL,
 	ylab = NULL,
 	show_yintercept = TRUE,
-	xlim = NULL
+	xlim = c(NA, NA)
 	# ylim = c(NA, NA)
 ) {
 	# Use default variable names if not supplied
@@ -158,6 +159,7 @@ plot_total_group_fitness <- function(
 
 	# Choose mix scale(s)
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
+	if (missing(xlim)) { xlim <- NULL }
 
 	if (is.null(ylab)) {
 		ylab <- "Total group fitness\n(final no. / initial no.)"
@@ -206,7 +208,7 @@ plot_within_group_fitness <- function(
 	xlab = NULL,
 	ylab = NULL,
 	show_yintercept = TRUE,
-	xlim = NULL
+	xlim = c(NA, NA)
 	# ylim = c(NA, NA),
 ) {
 	# Use default variable names if not supplied
@@ -216,6 +218,7 @@ plot_within_group_fitness <- function(
 
 	# Choose mix scale
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
+	if (missing(xlim)) { xlim <- NULL }
 
 	# Construct plot
 	fig_output <-
