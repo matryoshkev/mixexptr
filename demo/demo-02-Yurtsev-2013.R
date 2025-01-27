@@ -158,4 +158,3 @@ dev.new()
 fitness_Fig3AB %>%
 	filter(ampicillin == 100 & dilution == 100) %>%
 	plot_mix_fitness(var_names = fitness_names_Yurtsev)
-

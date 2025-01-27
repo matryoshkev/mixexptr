@@ -46,19 +46,32 @@ plot_mix_fitness <- function(
 	mix_scale <- rlang::arg_match(
 		mix_scale, c("fraction", "ratio"), multiple = TRUE
 	)
+	ylim <- get_ylim_mix_fitness(data, var_names)
 
 	# Make subplots
 	if (("fraction" %in% mix_scale) & ("ratio" %in% mix_scale)) {
 		# Show both mix scales
-		figA <- plot_fitness_strain_total(data, var_names, mix_scale = "fraction")
-		figB <- plot_within_group_fitness(data, var_names, mix_scale = "fraction")
-		figC <- plot_fitness_strain_total(data, var_names, mix_scale = "ratio")
-		figD <- plot_within_group_fitness(data, var_names, mix_scale = "ratio")
+		figA <- plot_fitness_strain_total(
+			data, var_names, mix_scale = "fraction", ylim = ylim$fitness
+		)
+		figB <- plot_within_group_fitness(
+			data, var_names, mix_scale = "fraction", ylim = ylim$fitness_ratio
+		)
+		figC <- plot_fitness_strain_total(
+			data, var_names, mix_scale = "ratio", ylim = ylim$fitness
+		)
+		figD <- plot_within_group_fitness(
+			data, var_names, mix_scale = "ratio", ylim = ylim$fitness_ratio
+		)
 		fig_output <- figA + figB + figC + figD
 	} else {
 		# Show one mix scale
-		figA <- plot_fitness_strain_total(data, var_names, mix_scale)
-		figB <- plot_within_group_fitness(data, var_names, mix_scale)
+		figA <- plot_fitness_strain_total(
+			data, var_names, mix_scale, ylim = ylim$fitness
+		)
+		figB <- plot_within_group_fitness(
+			data, var_names, mix_scale, ylim = ylim$fitness_ratio
+		)
 		fig_output <- figA + figB
 	}
 
@@ -252,7 +265,10 @@ fitness_vars_default <- function() {
 
 # Plot strain and total-group fitness (for plot_mix_fitness())
 plot_fitness_strain_total <- function(
-	data, var_names = fitness_vars_default(), mix_scale = "fraction"
+	data,
+	var_names = fitness_vars_default(),
+	mix_scale = "fraction",
+	ylim = NULL
 ) {
 	# Variable names
 	var_names <- as.list(var_names)
@@ -291,7 +307,7 @@ plot_fitness_strain_total <- function(
 			fraction = scale_x_initial_fraction(var_names, strain_names),
 			ratio = scale_x_initial_ratio(var_names, strain_names)
 		) +
-		scale_y_fitness(var_names) +
+		scale_y_fitness(var_names, ylim = ylim) +
 		geom_point_mixexptr() +
 		scale_color_strain() +
 		scale_fill_strain() +
@@ -307,20 +323,52 @@ plot_fitness_strain_total <- function(
 	fig_output
 }
 
-# Get strain names from fitness_vars or data
+# Get strain names from fitness vars or data
 get_strain_names <- function(data, var_names) {
 	name_A <- var_names[["name_A"]]
 	name_B <- var_names[["name_B"]]
-
-	# Try from data
-	if (utils::hasName(data, name_A)) {
-		name_A <- data[[name_A]][[1]]
-	}
-	if (utils::hasName(data, name_B)) {
-		name_B <- data[[name_B]][[1]]
-	}
-
+	if (utils::hasName(data, name_A)) { name_A <- data[[name_A]][[1]] }
+	if (utils::hasName(data, name_B)) { name_B <- data[[name_B]][[1]] }
 	list(A = name_A, B = name_B)
+}
+
+# Get y-axis limits for fitness & fitness_ratio
+#   so log10(fitness) and log10(fitness_ratio) are visually comparable
+get_ylim_mix_fitness <- function(data, var_names) {
+	var_names <- as.list(var_names)
+
+	# Range: strain & total-group fitness
+	fitness <- c(
+		data[[var_names$fitness_A]],
+		data[[var_names$fitness_B]],
+		data[[var_names$fitness_total]],
+		1
+	)
+	fitness <- fitness[is.finite(fitness) & fitness > 0]
+	span_fitness <- log10(range(fitness)[2] / range(fitness)[1])
+
+	# Range: Within-group fitness ratio
+	fitness_ratio <- c(data[[var_names$fitness_ratio_A_B]], 1)
+	fitness_ratio <- fitness_ratio[is.finite(fitness_ratio) & fitness_ratio > 0]
+	span_fitness_ratio <- log10(range(fitness_ratio)[2] / range(fitness_ratio)[1])
+
+	# Shared range (10-fold minimum)
+	span_shared <- max(span_fitness, span_fitness_ratio, 1)
+	span_shared <- span_shared + span_shared * 0.1
+
+	# Limits
+	midpoint_fitness <- mean(log10(range(fitness)))
+	midpoint_fitness_ratio <- mean(log10(range(fitness_ratio)))
+	ylim_fitness <- c(
+		10^(midpoint_fitness - span_shared/2),
+		10^(midpoint_fitness + span_shared/2)
+	)
+	ylim_fitness_ratio <- c(
+		10^(midpoint_fitness_ratio - span_shared/2),
+		10^(midpoint_fitness_ratio + span_shared/2)
+	)
+
+	list(fitness = ylim_fitness, fitness_ratio = ylim_fitness_ratio)
 }
 
 # Format data to plot strain and/or total-group fitness
