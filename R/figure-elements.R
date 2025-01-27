@@ -1,9 +1,8 @@
 # Figure elements
 
+# Theme ========================================================================
 
-# Theme ------------------------------------------------------------------------
-
-# Package default theme (suited to figures in papers)
+# Default package theme (suited to figures in papers)
 theme_mixexptr <- function() {
 	ggplot2::theme_grey() +
 	ggplot2::theme(
@@ -11,7 +10,7 @@ theme_mixexptr <- function() {
 	)
 }
 
-# Additional theme options for plot_mix_fitness() (less clutter)
+# Additional options for plot_mix_fitness() (less clutter)
 theme_plot_mix_fitness <- function() {
 	ggplot2::theme(
 		legend.title         = ggplot2::element_blank(),
@@ -25,7 +24,7 @@ theme_plot_mix_fitness <- function() {
 }
 
 
-# Axes -------------------------------------------------------------------------
+# Axes =========================================================================
 
 # Add x-axis scale: initial fraction strain A
 scale_x_initial_fraction <- function(
@@ -87,12 +86,7 @@ scale_x_initial_ratio <- function(
 }
 
 # Add y-axis scale: fitness (strain A, strain B, total group)
-scale_y_fitness <- function(
-	var_names,
-	...,
-	ylab = NULL,
-	ylim = NULL
-) {
+scale_y_fitness <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 	var_names <- as.list(var_names)
 	if (is.null(ylab)) {
 		ylab <- "Wrightian fitness\n (final no. / initial no.)"
@@ -110,11 +104,7 @@ scale_y_fitness <- function(
 
 # Add y-axis scale: within-group fitness ratio A/B
 scale_y_fitness_ratio <- function(
-	var_names,
-	strain_names,
-	...,
-	ylab = NULL,
-	ylim = NULL
+	var_names, strain_names, ..., ylab = NULL, ylim = NULL
 ) {
 	var_names <- as.list(var_names)
 	if (is.null(ylab)) {
@@ -131,7 +121,7 @@ scale_y_fitness_ratio <- function(
 }
 
 
-# Other aesthetics -------------------------------------------------------------
+# Other aesthetics =============================================================
 
 # Color points by strain/total-group
 scale_color_strain <- function(
@@ -178,7 +168,7 @@ scale_fill_group <- function() {
 # }
 
 
-# Geom -------------------------------------------------------------------------
+# Geom =========================================================================
 
 # Default points that are more readable when overlapped
 geom_point_mixexptr <- function(shape = 21, ..., na.rm = TRUE) {
