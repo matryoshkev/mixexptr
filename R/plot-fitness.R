@@ -151,9 +151,6 @@ plot_total_group_fitness <- function(
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
 	if (missing(xlim)) { xlim <- NULL }
 	if (missing(ylim)) { ylim <- NULL }
-	if (is.null(ylab)) {
-		ylab <- "Total group fitness\n(final no. / initial no.)"
-	}
 
 	# Construct plot
 	fig_output <-
@@ -168,12 +165,7 @@ plot_total_group_fitness <- function(
 				var_names, strain_names, xlab = xlab, xlim = xlim
 			)
 		) +
-		ggplot2::aes(y = .data[[var_names$fitness_total]]) +
-		ggplot2::scale_y_log10(
-			name = ylab,
-			limits = ylim,
-			labels = scales::label_log()
-		) +
+		scale_y_fitness_total(var_names, ylab = ylab, ylim = ylim) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height

@@ -102,6 +102,23 @@ scale_y_fitness <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 	scale
 }
 
+# Add y-axis scale: total-group fitness
+scale_y_fitness_total <- function(var_names, ..., ylab = NULL, ylim = NULL) {
+	var_names <- as.list(var_names)
+	if (is.null(ylab)) {
+		ylab <- "Total group fitness\n(final no. / initial no.)"
+	}
+	scale <- list(
+		ggplot2::aes(y = .data[[var_names$fitness_total]]),
+		ggplot2::scale_y_log10(
+			name = ylab,
+			limits = ylim,
+			labels = scales::label_log()
+		)
+	)
+	scale
+}
+
 # Add y-axis scale: within-group fitness ratio A/B
 scale_y_fitness_ratio <- function(
 	var_names, strain_names, ..., ylab = NULL, ylim = NULL
