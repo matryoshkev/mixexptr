@@ -2,4 +2,7 @@
 
 export(calculate_mix_fitness)
 export(plot_mix_fitness)
+export(plot_strain_fitness)
+export(plot_total_group_fitness)
+export(plot_within_group_fitness)
 importFrom(rlang,.data)

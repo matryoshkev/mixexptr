@@ -2,25 +2,26 @@
 
 #' Plot strain and multilevel fitness
 #'
-#' Show diagnostic overview of fitness effects in data. Draws a combined plot
-#' of strain, total group, and relative within-group fitness against mix
-#' frequency.
+#' `plot_mix_fitness()` shows a diagnostic overview of various fitness effects in
+#' a dataset. Draws a combined plot of strain, total group, and relative
+#' within-group fitness against mix frequency.
 #'
-#' @param data Wide-format data frame of fitness values. Each row must contain
+#' @param data Data frame of fitness values. Wide format: each row must contain
 #'   data for two microbes in the same population. Accepts data frame
 #'   extensions like `tibble`.
 #' @param var_names Named character vector identifying fitness and mixing
-#'   variables in `data`. See Details. If `NULL`, defaults to column names
-#'   returned by `calculate_mix_fitness()`.
-#' @param mix_scale Character string or vector choosing mixing scale(s) to show
-#'   on x axis. If `"fraction"`, uses `initial_fraction_A`. If `"ratio"`, uses
-#'   `initial_ratio_A_B` (on \eqn{\log_{10}} scale). Defaults to show both
-#'   scales.
+#'   variables in `data`. If `NULL`, defaults to column names returned by
+#'   [calculate_mix_fitness()]. See Details.
+#' @param mix_scale Determines mixing scale to show on x axis. When
+#'   `"fraction"`, uses initial frequency of strain A (proportion of total) from
+#'   the `initial_fraction_A` variable. When `"ratio"`, uses ratio of strain A
+#'   to strain B (on \eqn{\log_{10}} scale) from the `initial_ratio_A_B`
+#'   variable. Defaults to show both.
 #'
 #' @details
 #' Expects Wrightian fitness measures like those returned by
-#' `calculate_mix_fitness()`. `var_names` must be a named vector with the
-#' following elements (shown here with default values):
+#' [calculate_mix_fitness()]. `var_names` must be a named vector that includes
+#' the following elements (shown here with default values):
 #' ```
 #' var_names = c(
 #'   name_A = "name_A",
@@ -33,6 +34,8 @@
 #'   fitness_ratio_A_B = "fitness_ratio_A_B"
 #' )
 #' ```
+#'
+#' @seealso [calculate_mix_fitness()]
 #'
 #' @export
 #'
@@ -85,7 +88,45 @@ plot_mix_fitness <- function(
 	fig_output
 }
 
-# Plot strain fitness
+#' Plot strain fitness
+#'
+#' `plot_strain_fitness()` draws a plot of absolute fitness for each of two
+#' microbes as a function of their initial frequency.
+#'
+#' @inheritParams plot_mix_fitness
+#' @param data Data frame of fitness values. Wide format: each row must contain
+#'   data for two microbes in the same population. Accepts data frame extensions
+#'   like `tibble`.
+#' @param mix_scale Determines mixing scale to show on x axis. When `"fraction"`
+#'   (default), uses initial frequency of strain A (proportion of total) from
+#'   the `initial_fraction_A` variable. When `"ratio"`, uses ratio of strain A
+#'   to strain B (on \eqn{\log_{10}} scale) from the `initial_ratio_A_B`
+#'   variable.
+#' @param xlab,ylab Optional strings giving labels for x and y axes to replace
+#'  default
+#' @param xlim,ylim Optional x and y axis limits to replace default
+#'
+#' @details
+#' Expects Wrightian fitness measures like those returned by
+#' [calculate_mix_fitness()]. `var_names` must be a named vector that includes
+#' the following elements (shown here with default values):
+#' ```
+#' var_names = c(
+#'   name_A = "name_A",
+#'   name_B = "name_B",
+#'   initial_fraction_A = "initial_fraction_A",
+#'   initial_ratio_A_B = "initial_ratio_A_B",
+#'   fitness_A = "fitness_A",
+#'   fitness_B = "fitness_B"
+#' )
+#' ```
+#'
+#' @return [ggplot()] object that can be modified further
+#'
+#' @seealso [plot_total_group_fitness()], [plot_within_group_fitness()]
+#'
+#' @export
+#'
 plot_strain_fitness <- function(
 	data,
 	var_names = NULL,
@@ -145,7 +186,43 @@ plot_strain_fitness <- function(
 	fig_output
 }
 
-# Plot total group fitness
+#' Plot total group fitness
+#'
+#' `plot_total_group_fitness()` draws a plot of absolute fitness for a group
+#' containing two microbe types as a function of their initial frequency.
+#'
+#' @inheritParams plot_mix_fitness
+#' @param data Data frame of fitness values. Accepts data frame extensions like
+#'   `tibble`.
+#' @param mix_scale Determines mixing scale to show on x axis. When `"fraction"`
+#'   (default), uses initial frequency of strain A (proportion of total) from
+#'   the `initial_fraction_A` variable. When `"ratio"`, uses ratio of strain A
+#'   to strain B (on \eqn{\log_{10}} scale) from the `initial_ratio_A_B`
+#'   variable.
+#' @param xlab,ylab Optional strings giving labels for x and y axes to replace
+#'  default
+#' @param xlim,ylim Optional x and y axis limits to replace default
+#'
+#' @details
+#' Expects Wrightian fitness measures like those returned by
+#' [calculate_mix_fitness()]. `var_names` must be a named vector that includes
+#' the following elements (shown here with default values):
+#' ```
+#' var_names = c(
+#'   name_A = "name_A",
+#'   name_B = "name_B",
+#'   initial_fraction_A = "initial_fraction_A",
+#'   initial_ratio_A_B = "initial_ratio_A_B",
+#'   fitness_total = "fitness_total"
+#' )
+#' ```
+#'
+#' @return [ggplot()] object that can be modified further
+#'
+#' @seealso [plot_within_group_fitness()], [plot_strain_fitness()]
+#'
+#' @export
+#'
 plot_total_group_fitness <- function(
 	data,
 	var_names = NULL,
@@ -195,7 +272,45 @@ plot_total_group_fitness <- function(
 	fig_output
 }
 
-# Plot relative within-group fitness (fitness_A/fitness_B)
+#' Plot within-group fitness ratio
+#'
+#' `plot_within_group_fitness()` draws a plot of the relative
+#' fitness of strains A and B as a function of mix frequency.
+#'
+#' @inheritParams plot_mix_fitness
+#' @param data Data frame of fitness values. Accepts data frame extensions like
+#'   tibble.
+#' @param mix_scale Determines mixing scale to show on x axis. When `"fraction"`
+#'   (default), uses initial frequency of strain A (proportion of total) from
+#'   the `initial_fraction_A` variable. When `"ratio"`, uses ratio of strain A
+#'   to strain B (on \eqn{\log_{10}} scale) from the `initial_ratio_A_B`
+#'   variable.
+#' @param xlab,ylab Optional strings giving labels for x and y axes to replace
+#'  default
+#' @param xlim,ylim Optional x and y axis limits to replace default
+#'
+#' @details
+#' Expects Wrightian fitness measures like those returned by
+#' [calculate_mix_fitness()], where relative within-group fitness is measured as
+#' the ratio of strain A fitness to strain B fitness. `var_names` must be a
+#' named vector that includes the following elements (shown here with default
+#' values):
+#' ```
+#' var_names = c(
+#'   name_A = "name_A",
+#'   name_B = "name_B",
+#'   initial_fraction_A = "initial_fraction_A",
+#'   initial_ratio_A_B = "initial_ratio_A_B",
+#'   fitness_ratio_A_B = "fitness_ratio_A_B"
+#' )
+#' ```
+#'
+#' @return [ggplot()] object that can be modified further
+#'
+#' @seealso [plot_total_group_fitness()], [plot_strain_fitness()]
+#'
+#' @export
+#'
 plot_within_group_fitness <- function(
 	data,
 	var_names = NULL,
