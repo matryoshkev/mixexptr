@@ -15,9 +15,9 @@ extensions like \code{tibble}.}
 variables in \code{data}. If \code{NULL}, defaults to column names returned by
 \code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}. See Details.}
 
-\item{mix_scale}{Determines mixing scale to show on x axis. When
-\code{"fraction"}, uses initial frequency of strain A (proportion of total) from
-the \code{initial_fraction_A} variable. When \code{"ratio"}, uses ratio of strain A
+\item{mix_scale}{Determines mixing scale for x axis. When \code{"fraction"}, uses
+initial frequency of strain A (proportion of total) from the
+\code{initial_fraction_A} variable. When \code{"ratio"}, uses ratio of strain A
 to strain B (on \eqn{\log_{10}} scale) from the \code{initial_ratio_A_B}
 variable. Defaults to show both.}
 }
@@ -28,8 +28,10 @@ within-group fitness against mix frequency.
 }
 \details{
 Expects Wrightian fitness measures like those returned by
-\code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}. \code{var_names} must be a named vector that includes
-the following elements (shown here with default values):
+\code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}.
+
+\code{var_names} must be a named vector or list that includes the following
+elements (shown here with default values):
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{var_names = c(
   name_A = "name_A",

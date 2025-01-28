@@ -15,37 +15,36 @@ plot_within_group_fitness(
 )
 }
 \arguments{
-\item{data}{Data frame of fitness values. Accepts data frame extensions like
-tibble.}
+\item{data}{Data frame of fitness values and mix frequencies.
+Accepts data frame extensions like \code{tibble}.}
 
 \item{var_names}{Named character vector identifying fitness and mixing
 variables in \code{data}. If \code{NULL}, defaults to column names returned by
 \code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}. See Details.}
 
-\item{mix_scale}{Determines mixing scale to show on x axis. When \code{"fraction"}
-(default), uses initial frequency of strain A (proportion of total) from
-the \code{initial_fraction_A} variable. When \code{"ratio"}, uses ratio of strain A
-to strain B (on \eqn{\log_{10}} scale) from the \code{initial_ratio_A_B}
-variable.}
+\item{mix_scale}{Determines mixing scale for x axis. When \code{"fraction"}
+(the default), uses initial frequency of strain A (proportion of total)
+from \code{initial_fraction_A} variable. When \code{"ratio"}, uses ratio of strain A
+to strain B (on \eqn{\log_{10}} scale) from \code{initial_ratio_A_B} variable.}
 
-\item{xlab, ylab}{Optional strings giving labels for x and y axes to replace
-default}
+\item{xlab, ylab}{Optional string to replace default axis label}
 
-\item{xlim, ylim}{Optional x and y axis limits to replace default}
+\item{xlim, ylim}{Optional axis limits to replace default}
 }
 \value{
-\code{\link[=ggplot]{ggplot()}} object that can be modified further
+\code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object that can be modified further
 }
 \description{
-\code{plot_within_group_fitness()} draws a plot of the relative
-fitness of strains A and B as a function of mix frequency.
+\code{plot_within_group_fitness()} draws a plot of the relative within-group
+fitness of strains A and B as a function of their initial frequency
 }
 \details{
 Expects Wrightian fitness measures like those returned by
-\code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}, where relative within-group fitness is measured as
-the ratio of strain A fitness to strain B fitness. \code{var_names} must be a
-named vector that includes the following elements (shown here with default
-values):
+\code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}. Relative within-group fitness is measured as
+the ratio of strain A fitness to strain B fitness.
+
+\code{var_names} must be a named vector or list that includes the following
+elements (shown here with default values):
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{var_names = c(
   name_A = "name_A",

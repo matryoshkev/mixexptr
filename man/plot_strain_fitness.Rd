@@ -15,36 +15,36 @@ plot_strain_fitness(
 )
 }
 \arguments{
-\item{data}{Data frame of fitness values. Wide format: each row must contain
-data for two microbes in the same population. Accepts data frame extensions
-like \code{tibble}.}
+\item{data}{Data frame of fitness values and mix frequencies. Wide format:
+each row must contain data for two microbes in the same population.
+Accepts data frame extensions like \code{tibble}.}
 
 \item{var_names}{Named character vector identifying fitness and mixing
 variables in \code{data}. If \code{NULL}, defaults to column names returned by
 \code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}. See Details.}
 
-\item{mix_scale}{Determines mixing scale to show on x axis. When \code{"fraction"}
-(default), uses initial frequency of strain A (proportion of total) from
-the \code{initial_fraction_A} variable. When \code{"ratio"}, uses ratio of strain A
-to strain B (on \eqn{\log_{10}} scale) from the \code{initial_ratio_A_B}
-variable.}
+\item{mix_scale}{Determines mixing scale for x axis. When \code{"fraction"}
+(the default), uses initial frequency of strain A (proportion of total)
+from \code{initial_fraction_A} variable. When \code{"ratio"}, uses ratio of strain A
+to strain B (on \eqn{\log_{10}} scale) from \code{initial_ratio_A_B} variable.}
 
-\item{xlab, ylab}{Optional strings giving labels for x and y axes to replace
-default}
+\item{xlab, ylab}{Optional string to replace default axis label}
 
-\item{xlim, ylim}{Optional x and y axis limits to replace default}
+\item{xlim, ylim}{Optional axis limits to replace default}
 }
 \value{
-\code{\link[=ggplot]{ggplot()}} object that can be modified further
+\code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object that can be modified further
 }
 \description{
 \code{plot_strain_fitness()} draws a plot of absolute fitness for each of two
-microbes as a function of their initial frequency.
+microbe strains as a function of their initial frequency
 }
 \details{
 Expects Wrightian fitness measures like those returned by
-\code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}. \code{var_names} must be a named vector that includes
-the following elements (shown here with default values):
+\code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}.
+
+\code{var_names} must be a named vector or list that includes the following
+elements (shown here with default values):
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{var_names = c(
   name_A = "name_A",
