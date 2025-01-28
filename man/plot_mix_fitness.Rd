@@ -45,6 +45,24 @@ elements (shown here with default values):
 )
 }\if{html}{\out{</div>}}
 }
+\examples{
+library(patchwork)
+
+# Using data from smith et al (2010)
+fitness_smith_2010 <- calculate_mix_fitness(
+  data_smith_2010,
+  var_names = c(
+    initial_number_A = "initial_cells_evolved",
+    initial_number_B = "initial_cells_ancestral",
+    final_number_A = "final_spores_evolved",
+    final_number_B = "final_spores_ancestral",
+    name_A = "GVB206.3",
+    name_B = "GJV10"
+  )
+)
+plot_mix_fitness(fitness_smith_2010)
+
+}
 \seealso{
 \code{\link[=calculate_mix_fitness]{calculate_mix_fitness()}}
 }

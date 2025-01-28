@@ -39,6 +39,23 @@
 #'
 #' @seealso [calculate_mix_fitness()]
 #'
+#' @examples
+#' library(patchwork)
+#'
+#' # Using data from smith et al (2010)
+#' fitness_smith_2010 <- calculate_mix_fitness(
+#'   data_smith_2010,
+#'   var_names = c(
+#'     initial_number_A = "initial_cells_evolved",
+#'     initial_number_B = "initial_cells_ancestral",
+#'     final_number_A = "final_spores_evolved",
+#'     final_number_B = "final_spores_ancestral",
+#'     name_A = "GVB206.3",
+#'     name_B = "GJV10"
+#'   )
+#' )
+#' plot_mix_fitness(fitness_smith_2010)
+#'
 #' @export
 #'
 plot_mix_fitness <- function(
@@ -125,9 +142,24 @@ plot_mix_fitness <- function(
 #' )
 #' ```
 #'
-#' @return [ggplot2::ggplot()] object that can be modified further
+#' @return `ggplot` object that can be modified further
 #'
 #' @seealso [plot_total_group_fitness()], [plot_within_group_fitness()]
+#'
+#' @examples
+#' # Using data from smith et al (2010)
+#' fitness_smith_2010 <- calculate_mix_fitness(
+#'   data_smith_2010,
+#'   var_names = c(
+#'     initial_number_A = "initial_cells_evolved",
+#'     initial_number_B = "initial_cells_ancestral",
+#'     final_number_A = "final_spores_evolved",
+#'     final_number_B = "final_spores_ancestral",
+#'     name_A = "GVB206.3",
+#'     name_B = "GJV10"
+#'   )
+#' )
+#' plot_strain_fitness(fitness_smith_2010)
 #'
 #' @export
 #'
@@ -215,9 +247,24 @@ plot_strain_fitness <- function(
 #' )
 #' ```
 #'
-#' @return [ggplot2::ggplot()] object that can be modified further
+#' @return `ggplot` object that can be modified further
 #'
 #' @seealso [plot_within_group_fitness()], [plot_strain_fitness()]
+#'
+#' @examples
+#' # Using data from smith et al (2010)
+#' fitness_smith_2010 <- calculate_mix_fitness(
+#'   data_smith_2010,
+#'   var_names = c(
+#'     initial_number_A = "initial_cells_evolved",
+#'     initial_number_B = "initial_cells_ancestral",
+#'     final_number_A = "final_spores_evolved",
+#'     final_number_B = "final_spores_ancestral",
+#'     name_A = "GVB206.3",
+#'     name_B = "GJV10"
+#'   )
+#' )
+#' plot_total_group_fitness(fitness_smith_2010)
 #'
 #' @export
 #'
@@ -296,9 +343,24 @@ plot_total_group_fitness <- function(
 #' )
 #' ```
 #'
-#' @return [ggplot2::ggplot()] object that can be modified further
+#' @return `ggplot` object that can be modified further
 #'
 #' @seealso [plot_total_group_fitness()], [plot_strain_fitness()]
+#'
+#' @examples
+#' # Using data from smith et al (2010)
+#' fitness_smith_2010 <- calculate_mix_fitness(
+#'   data_smith_2010,
+#'   var_names = c(
+#'     initial_number_A = "initial_cells_evolved",
+#'     initial_number_B = "initial_cells_ancestral",
+#'     final_number_A = "final_spores_evolved",
+#'     final_number_B = "final_spores_ancestral",
+#'     name_A = "GVB206.3",
+#'     name_B = "GJV10"
+#'   )
+#' )
+#' plot_within_group_fitness(fitness_smith_2010, mix_scale = "ratio")
 #'
 #' @export
 #'

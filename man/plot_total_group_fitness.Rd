@@ -32,7 +32,7 @@ to strain B (on \eqn{\log_{10}} scale) from \code{initial_ratio_A_B} variable.}
 \item{xlim, ylim}{Optional axis limits to replace default}
 }
 \value{
-\code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object that can be modified further
+\code{ggplot} object that can be modified further
 }
 \description{
 \code{plot_total_group_fitness()} draws a plot of total-group fitness as a
@@ -53,6 +53,22 @@ elements (shown here with default values):
   fitness_total = "fitness_total"
 )
 }\if{html}{\out{</div>}}
+}
+\examples{
+# Using data from smith et al (2010)
+fitness_smith_2010 <- calculate_mix_fitness(
+  data_smith_2010,
+  var_names = c(
+    initial_number_A = "initial_cells_evolved",
+    initial_number_B = "initial_cells_ancestral",
+    final_number_A = "final_spores_evolved",
+    final_number_B = "final_spores_ancestral",
+    name_A = "GVB206.3",
+    name_B = "GJV10"
+  )
+)
+plot_total_group_fitness(fitness_smith_2010)
+
 }
 \seealso{
 \code{\link[=plot_within_group_fitness]{plot_within_group_fitness()}}, \code{\link[=plot_strain_fitness]{plot_strain_fitness()}}
