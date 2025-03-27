@@ -7,7 +7,7 @@ library(dplyr)
 library(usethis)
 
 data_Madgwick_2018 <-
-	read_csv("data-raw/Supplementary Table 1_Investment data.csv", na = ".") %>%
+	read_csv("data-raw/Supplementary_Table_1_Investment_data.csv", na = ".") %>%
 	rename(
 		strain_i = "Strain i",
 		strain_j = "Strain j",
