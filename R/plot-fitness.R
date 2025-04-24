@@ -396,7 +396,9 @@ plot_within_group_fitness <- function(
 				var_names, strain_names, xlab = xlab, xlim = xlim
 			)
 		) +
-		scale_y_fitness_ratio(var_names, strain_names, ylab = ylab, ylim = ylim) +
+		scale_y_fitness_ratio(
+			var_names, strain_names, ylab = ylab, ylim = ylim
+		) +
 		geom_point_mixexptr() +
 		scale_fill_group() +
 		ggplot2::ggtitle("")  # Space for legend, align height

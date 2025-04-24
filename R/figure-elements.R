@@ -96,6 +96,7 @@ scale_y_fitness <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 		ggplot2::scale_y_log10(
 			name = ylab,
 			limits = ylim,
+			breaks = breaks_log10(),
 			labels = scales::label_log()
 		)
 	)
@@ -113,6 +114,7 @@ scale_y_fitness_total <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 		ggplot2::scale_y_log10(
 			name = ylab,
 			limits = ylim,
+			breaks = breaks_log10(),
 			labels = scales::label_log()
 		)
 	)
@@ -132,10 +134,37 @@ scale_y_fitness_ratio <- function(
 		ggplot2::scale_y_log10(
 			name = ylab,
 			limits = ylim,
+			breaks = breaks_log10(),
 			labels = scales::label_log())
 		)
 	scale
 }
+
+# Breaks for log10 axes
+#   Limits assumed to always include 1, minimum 10-fold range
+#   TODO: Limits always include 1, minimum 10-fold range
+#   TODO: Include default ggplot2 expansion around data range
+breaks_log10 <- function() {
+	function(x) {  # x is axis limits c(min, max)
+		limits_range <- suppressWarnings(log10(range(x, na.rm = TRUE)))
+		span <- limits_range[2] - limits_range[1]
+		breaks <- case_when(
+			span < 1.47 ~ c(0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50),
+			span < 3 ~ c(0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300),
+			span < 6 ~ 10^seq(-5, 5, by = 1),
+			span < 9 ~ 10^seq(-10, 10, by = 2),
+			span < 12 ~ 10^seq(-15, 15, by = 3),
+			TRUE ~ 10^seq(-20, 20, by = 4)
+		)
+		return(breaks)
+	}
+}
+
+# Labels for log10 axes
+# labels_log10 <- function() {}
+
+# Minor breaks for log10 axes
+# minor_breaks_log10 <- function() {}
 
 
 # Other aesthetics =============================================================
