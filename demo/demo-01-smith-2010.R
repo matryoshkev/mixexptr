@@ -40,7 +40,7 @@ plot_mix_fitness(fitness_smith_2010)
 # Within-group fitness ---------------------------------------------------------
 
 # Plot within-group fitness
-# dev.new(width = 2.5, height = 2.25, units = "in")
+dev.new(width = 2.5, height = 2.25, units = "in")
 fig_within_group <-
 	fitness_smith_2010 %>% plot_within_group_fitness(mix_scale = "ratio")
 fig_within_group

@@ -62,23 +62,3 @@ fitness_NC105_NC63 %>% plot_within_group_fitness()
 
 # Tmp for dev -------------------------------------------
 
-range(
-	c(fitness_NC105_NC63$fitness_A, fitness_NC105_NC63$fitness_B),
-	na.rm = TRUE
-)
-# [1] 0.3404842 1.7554500
-
-range(fitness_NC105_NC63$fitness_ratio_A_B, na.rm = TRUE)
-#  0.4070329 3.2352253
-
-log10_range <-
-	log10(range(fitness_NC105_NC63$fitness_ratio_A_B, na.rm = TRUE))
-
-log10_range[2] - log10_range[1]
-# 0.900275
-
-breaks_log(fitness_NC105_NC63$fitness_ratio_A_B)
-breaks_log(c(1.2, 4e3))
-300 / 0.01
-
-breaks_log(c(0, 0.1, 3))

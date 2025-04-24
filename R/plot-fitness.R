@@ -193,6 +193,8 @@ plot_strain_fitness <- function(
 		times = c(strain_names$A, strain_names$B)
 	)
 
+	if (is.null(ylim)) { ylim <- limits_log10(data_to_plot$fitness) }
+
 	# Construct plot
 	fig_output <-
 		ggplot2::ggplot(data_to_plot) +
@@ -286,6 +288,7 @@ plot_total_group_fitness <- function(
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
 	if (missing(xlim)) { xlim <- NULL }
 	if (missing(ylim)) { ylim <- NULL }
+	if (is.null(ylim)) { ylim <- limits_log10(data[[var_names$fitness_total]]) }
 
 	# Construct plot
 	fig_output <-
@@ -382,6 +385,9 @@ plot_within_group_fitness <- function(
 	mix_scale <- rlang::arg_match(mix_scale, c("fraction", "ratio"))
 	if (missing(xlim)) { xlim <- NULL }
 	if (missing(ylim)) { ylim <- NULL }
+	if (is.null(ylim)) {
+		ylim <- limits_log10(data[[var_names$fitness_ratio_A_B]])
+	}
 
 	# Construct plot
 	fig_output <-

@@ -142,8 +142,6 @@ scale_y_fitness_ratio <- function(
 
 # Breaks for log10 axes
 #   Limits assumed to always include 1, minimum 10-fold range
-#   TODO: Limits always include 1, minimum 10-fold range
-#   TODO: Include default ggplot2 expansion around data range
 breaks_log10 <- function() {
 	function(x) {  # x is axis limits c(min, max)
 		limits_range <- suppressWarnings(log10(range(x, na.rm = TRUE)))
@@ -161,10 +159,25 @@ breaks_log10 <- function() {
 }
 
 # Labels for log10 axes
+#   Should take vector x and return character vector of length(x)
 # labels_log10 <- function() {}
 
 # Minor breaks for log10 axes
 # minor_breaks_log10 <- function() {}
+
+# Calculate limits for log10 axes from data
+limits_log10 <- function(values) {
+  values <- values[is.finite(values) & values > 0]
+  values <- c(values, 1)  # Always include 1
+	log10_range <- log10(range(values))
+ 	midpoint <- mean(log10_range)
+	span <- log10_range[2] - log10_range[1]
+	span <- max(span, 1)  # Minimum 10-fold range
+	span <- span * 1.1  # 5% expansion to either side
+	min <- 10^(midpoint - span/2)
+	max <- 10^(midpoint + span/2)
+	c(min, max)
+}
 
 
 # Other aesthetics =============================================================
