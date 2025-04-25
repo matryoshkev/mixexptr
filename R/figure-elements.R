@@ -77,9 +77,9 @@ scale_x_initial_ratio <- function(
 		ggplot2::scale_x_log10(
 			name = xlab,
 			limits = xlim,
-			breaks = breaks,
+			breaks = breaks_log10,
 			minor_breaks = minor_breaks,
-			labels = scales::label_log()
+			labels = labels_log10
 		)
 	)
 	scale
@@ -96,8 +96,8 @@ scale_y_fitness <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 		ggplot2::scale_y_log10(
 			name = ylab,
 			limits = ylim,
-			breaks = breaks_log10(),
-			labels = scales::label_log()
+			breaks = breaks_log10,
+			labels = labels_log10
 		)
 	)
 	scale
@@ -114,8 +114,8 @@ scale_y_fitness_total <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 		ggplot2::scale_y_log10(
 			name = ylab,
 			limits = ylim,
-			breaks = breaks_log10(),
-			labels = scales::label_log()
+			breaks = breaks_log10,
+			labels = labels_log10
 		)
 	)
 	scale
@@ -134,33 +134,42 @@ scale_y_fitness_ratio <- function(
 		ggplot2::scale_y_log10(
 			name = ylab,
 			limits = ylim,
-			breaks = breaks_log10(),
-			labels = scales::label_log())
+			breaks = breaks_log10,
+			labels = labels_log10
 		)
+	)
 	scale
 }
 
 # Breaks for log10 axes
 #   Limits assumed to always include 1, minimum 10-fold range
-breaks_log10 <- function() {
-	function(x) {  # x is axis limits c(min, max)
-		limits_range <- suppressWarnings(log10(range(x, na.rm = TRUE)))
-		span <- limits_range[2] - limits_range[1]
-		breaks <- case_when(
-			span < 1.47 ~ c(0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50),
-			span < 3 ~ c(0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300),
-			span < 6 ~ 10^seq(-5, 5, by = 1),
-			span < 9 ~ 10^seq(-10, 10, by = 2),
-			span < 12 ~ 10^seq(-15, 15, by = 3),
-			TRUE ~ 10^seq(-20, 20, by = 4)
-		)
-		return(breaks)
-	}
+breaks_log10 <- function(limits) {
+	limits_range <- suppressWarnings(log10(range(limits, na.rm = TRUE)))
+	span <- limits_range[2] - limits_range[1]
+	breaks <- case_when(
+		span < 1.47 ~ c(0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50),
+		span < 3 ~ c(0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300),
+		span < 6 ~ 10^seq(-5, 5, by = 1),
+		span < 9 ~ 10^seq(-10, 10, by = 2),
+		span < 12 ~ 10^seq(-15, 15, by = 3),
+		TRUE ~ 10^seq(-20, 20, by = 4)
+	)
+	breaks
 }
 
 # Labels for log10 axes
-#   Should take vector x and return character vector of length(x)
-# labels_log10 <- function() {}
+labels_log10 <- function(breaks) {
+		if (max(abs(log10(breaks)), na.rm = TRUE) >= 3) {
+			# 10^n notation
+			labels <- paste0(10, "^", log10(breaks))
+			labels[labels == "10^0"] <- "1"
+			labels <- ggplot2:::parse_safe(labels)
+		} else {
+			# Clean decimal/integer
+			labels <- scales::number(breaks, drop0trailing = TRUE)
+		}
+		labels
+}
 
 # Minor breaks for log10 axes
 # minor_breaks_log10 <- function() {}
