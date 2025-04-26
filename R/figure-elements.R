@@ -78,8 +78,8 @@ scale_x_initial_ratio <- function(
 			name = xlab,
 			limits = xlim,
 			breaks = breaks_log10,
-			minor_breaks = minor_breaks,
-			labels = labels_log10
+			labels = labels_log10,
+			minor_breaks = minor_breaks_log10
 		)
 	)
 	scale
@@ -97,7 +97,8 @@ scale_y_fitness <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 			name = ylab,
 			limits = ylim,
 			breaks = breaks_log10,
-			labels = labels_log10
+			labels = labels_log10,
+			minor_breaks = minor_breaks_log10
 		)
 	)
 	scale
@@ -115,7 +116,8 @@ scale_y_fitness_total <- function(var_names, ..., ylab = NULL, ylim = NULL) {
 			name = ylab,
 			limits = ylim,
 			breaks = breaks_log10,
-			labels = labels_log10
+			labels = labels_log10,
+			minor_breaks = minor_breaks_log10
 		)
 	)
 	scale
@@ -135,7 +137,8 @@ scale_y_fitness_ratio <- function(
 			name = ylab,
 			limits = ylim,
 			breaks = breaks_log10,
-			labels = labels_log10
+			labels = labels_log10,
+			minor_breaks = minor_breaks_log10
 		)
 	)
 	scale
@@ -146,33 +149,51 @@ scale_y_fitness_ratio <- function(
 breaks_log10 <- function(limits) {
 	limits_range <- suppressWarnings(log10(range(limits, na.rm = TRUE)))
 	span <- limits_range[2] - limits_range[1]
-	breaks <- case_when(
-		span < 1.47 ~ c(0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50),
-		span < 3 ~ c(0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300),
-		span < 6 ~ 10^seq(-5, 5, by = 1),
-		span < 9 ~ 10^seq(-10, 10, by = 2),
-		span < 12 ~ 10^seq(-15, 15, by = 3),
-		TRUE ~ 10^seq(-20, 20, by = 4)
-	)
+	if (span < 1.47) {
+		breaks <- c(0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50)
+	} else if (span < 3) {
+		breaks <- c(0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300)
+	} else if (span < 6) {
+		breaks <- 10^seq(-6, 6, by = 1)
+	} else if (span < 9) {
+		breaks <- 10^seq(-10, 10, by = 2)
+	} else if (span < 12) {
+		breaks <- 10^seq(-12, 12, by = 3)
+	} else {
+		breaks <- 10^seq(-20, 20, by = 4)
+	}
 	breaks
 }
 
 # Labels for log10 axes
 labels_log10 <- function(breaks) {
-		if (max(abs(log10(breaks)), na.rm = TRUE) >= 3) {
-			# 10^n notation
-			labels <- paste0(10, "^", log10(breaks))
-			labels[labels == "10^0"] <- "1"
-			labels <- ggplot2:::parse_safe(labels)
-		} else {
-			# Clean decimal/integer
-			labels <- scales::number(breaks, drop0trailing = TRUE)
-		}
-		labels
+	if (max(abs(log10(breaks)), na.rm = TRUE) >= 3) {
+		# 10^n notation
+		labels <- paste0(10, "^", log10(breaks))
+		labels[labels == "10^0"] <- "1"
+		labels <- ggplot2:::parse_safe(labels)
+	} else {
+		# Clean decimal/integer
+		labels <- scales::number(breaks, drop0trailing = TRUE)
+	}
+	labels
 }
 
 # Minor breaks for log10 axes
-# minor_breaks_log10 <- function() {}
+minor_breaks_log10 <- function(limits) {
+	limits_range <- suppressWarnings(log10(range(limits, na.rm = TRUE)))
+	span <- limits_range[2] - limits_range[1]
+	if (span < 3) {
+		breaks <- rep(1:9, 6) * 10^sort(rep(-3:2, 9))
+	} else if (span < 6) {
+		breaks <- 3 * 10^c(-6:6)
+	} else if (span < 12) {
+		breaks <- 10^c(-12:12)
+	} else {
+		breaks <- 10^seq(-20, 20, by = 2)
+	}
+	breaks
+}
 
 # Calculate limits for log10 axes from data
 limits_log10 <- function(values) {

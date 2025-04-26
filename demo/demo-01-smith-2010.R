@@ -105,8 +105,6 @@ fig_smith_2010
 
 # Dev code ---------------------------------------------------------------------
 
-fitness_smith_2010 %>%
-	# filter(initial_fraction_A < 0.5) %>%
-	plot_strain_fitness(mix_scale = "ratio")
+fitness_smith_2010 %>% plot_strain_fitness(mix_scale = "ratio")
 
 fitness_smith_2010 %>% plot_fitness_strain_total()
