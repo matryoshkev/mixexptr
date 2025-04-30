@@ -145,10 +145,10 @@ scale_y_fitness_ratio <- function(
 }
 
 # Breaks for log10 axes
-#   Limits assumed to always include 1, minimum 10-fold range
 breaks_log10 <- function(limits) {
 	limits_range <- suppressWarnings(log10(range(limits, na.rm = TRUE)))
 	span <- limits_range[2] - limits_range[1]
+	# Limits assumed to include 1, minimum 10-fold range
 	if (span < 1.47) {
 		breaks <- c(0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50)
 	} else if (span < 3) {
@@ -169,11 +169,14 @@ breaks_log10 <- function(limits) {
 labels_log10 <- function(breaks) {
 	if (max(abs(log10(breaks)), na.rm = TRUE) >= 3) {
 		# 10^n notation
-		labels <- paste0(10, "^", log10(breaks))
-		labels[labels == "10^0"] <- "1"
-		labels <- ggplot2:::parse_safe(labels)
+		text <- paste0(10, "^", log10(breaks))
+		text[text == "10^0"] <- "1"
+		labels <- vector("expression", length(text))
+    for (i in seq_along(text)) {
+        labels[[i]] <- parse(text = text[[i]])
+    }
 	} else {
-		# Clean decimal/integer
+		# Clean integer/decimal
 		labels <- scales::number(breaks, drop0trailing = TRUE)
 	}
 	labels

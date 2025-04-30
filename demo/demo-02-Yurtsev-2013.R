@@ -18,8 +18,8 @@ var_names_Yurtsev <- c(
   name_B = "AmpS"
 )
 
-# Data includes experimental treatments: ampicillin concentration and
-# dilution factor
+# Data includes experimental treatments:
+#   ampicillin concentration and dilution factor
 data_Yurtsev_2013 %>% select(ampicillin, dilution) %>% distinct()
 
 # Focus on data used in Fig. 3AB of the paper
@@ -104,7 +104,7 @@ fitness_names_Yurtsev <- c(
 
 # Plot within-group fitness ratio, including treatment effects
 # dev.new(width = 2.5, height = 2.25, units = "in")
-# dev.new(width = 5, height = 2.5, units = "in")
+dev.new(width = 5, height = 2.5, units = "in")
 fitness_Fig3AB %>%
 	plot_within_group_fitness(var_names = fitness_names_Yurtsev) +
 	facet_wrap(~ dilution, labeller = "label_both") +

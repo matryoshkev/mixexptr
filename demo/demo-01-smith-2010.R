@@ -1,7 +1,7 @@
 # Example usage of mixexptr: smith et al (2010) data
 
-library(dplyr)
-# library(ggplot2)
+library(dplyr)    # Data handling that makes code more readable
+library(ggplot2)  # To customize mixexptr plots
 
 
 # Calculate fitness ------------------------------------------------------------
@@ -29,7 +29,7 @@ fitness_smith_2010
 
 # Diagnostic plot of fitness effects -------------------------------------------
 
-# dev.new(width = 6.25, height = 4.5, units = "in")
+dev.new(width = 6.25, height = 4.5, units = "in")
 plot_mix_fitness(fitness_smith_2010)
 
 # Multilevel fitness appears most informative/convenient
@@ -63,14 +63,15 @@ predicted_within_group <- predicted_within_group %>%
 			predict(fitted_within_group, newdata = predicted_within_group),
 		fitness_ratio_A_B = 10^fitness_ratio_A_B
 	)
-fig_within_group <- fig_within_group + geom_line(data = predicted_within_group)
+fig_within_group <-
+	fig_within_group + ggplot2::geom_line(data = predicted_within_group)
 fig_within_group
 
 
 # Total-group fitness ----------------------------------------------------------
 
 # Plot total-group fitness
-# dev.new(width = 2.5, height = 2.25)
+dev.new(width = 2.5, height = 2.25)
 fig_total_group <-
 	fitness_smith_2010 %>% plot_total_group_fitness()
 fig_total_group
@@ -93,7 +94,9 @@ predicted_total_group <- predicted_total_group %>%
 			predict(fitted_total_group, newdata = predicted_total_group),
 		fitness_total = 10^fitness_total
 	)
-fig_total_group <- fig_total_group + geom_line(data = predicted_total_group)
+fig_total_group <-
+	fig_total_group + ggplot2::geom_line(data = predicted_total_group)
+fig_total_group
 
 
 # Make combined figure using `patchwork` package -------------------------------

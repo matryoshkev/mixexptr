@@ -33,12 +33,12 @@ fitness_NC105_NC63 <-
 	filter(name_A == "NC105.1" & name_B == "NC63.2")
 
 fitness_NC105_NC63 %>% plot_mix_fitness()
-# Within-group relative fitness more linear over log-ratio scale
+# Within-group relative fitness is more linear over log-ratio mix scale
 
 
 # Plot specific fitness measures -------------------------------------------
 
-dev.new(width = 5, height = 3)
+dev.new(width = 5, height = 2.5)
 fitness_Madgwick %>%
 	filter(name_A == "NC105.1" & name_B == "NC63.2") %>%
 	plot_strain_fitness() +
@@ -48,17 +48,15 @@ dev.new(width = 3, height = 2.5)
 fitness_Madgwick %>%
 	filter(name_A == "NC105.1" & name_B == "NC63.2") %>%
 	plot_total_group_fitness()
-	# ggplot2::geom_smooth(method = "loess")
 
 dev.new(width = 3, height = 2.5)
 fitness_NC105_NC63 %>% plot_within_group_fitness()
+
+
+# Tmp for dev -------------------------------------------
 
 # mgcv::gam(
 # 	fitness_total ~ s(initial_fraction_A, k = 3),
 # 	data = fitness_NC105_NC63,
 # 	method = "REML"
 # )
-
-
-# Tmp for dev -------------------------------------------
-
