@@ -1,0 +1,64 @@
+---
+title: "Introduction to mixexptr"
+output: rmarkdown::html_vignette
+description: |
+  Analyze microbial interactions in mix experiments
+vignette: >
+  %\VignetteIndexEntry{Introduction to mixexptr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`mixexptr` is an R package for analyzing interactions among microbes. 
+A common experimental design is to mix together two different microbes 
+(different bacterial genotypes, for example) then measure how their fitness and 
+behavior depends on mix frequency. How do they behave differently together 
+compared to on their own? 
+`mixexptr` provides tools to calculate and plot the fitness effects in these mix 
+experiments so that researchers can get the most out of their data. 
+
+## Calculate fitness effects
+
+```{r setup}
+library(mixexptr)
+```
+
+`mixexptr` provides a convenient way to calculate best-practice fitness measures that are:
+
+* Robust and quantitatively comparable across different species and types of interaction
+* Well-suited to statistical analysis of effect sizes and confidence intervals
+* Meaningful for both kin and multilevel selection theories of social evolution
+
+```{r}
+fitness_results <- calculate_mix_fitness(
+	data_smith_2010, 
+	var_names = c(
+		initial_number_A = "initial_cells_evolved",
+		initial_number_B = "initial_cells_ancestral",
+		final_number_A = "final_spores_evolved",
+		final_number_B = "final_spores_ancestral", 
+		name_A = "GVB206.3", 
+		name_B = "GJV10"
+	)
+)
+head(fitness_results)
+```
+
+## Plot fitness effects
+
+`mixexptr` provides convenient ways to plot calculated fitness effects. Here's a quick diagnostic plot of the different fitness measures for this dataset: 
+```r
+plot_mix_fitness(fitness_results, mix_scale = "fraction")
+```
+
+## Further reading
+
+* smith j and Inglis RF (2021) Evaluating kin and group selection as tools for quantitative analysis of microbial data. Proceedings B 288:20201657. [https://doi.org/10.1098/rspb.2020.1657](https://doi.org/10.1098/rspb.2020.1657)
+
