@@ -1,0 +1,148 @@
+---
+title: "Analyzing microbial interactions with mixexptr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Analyzing microbial interactions with mixexptr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+A common experimental design in microbiology is to mix together two different 
+microbes (different genotypes of bacteria, for example) then measure how their 
+behavior depends on mix frequency. 
+How do they act differently together than when they're on their own? 
+How does mixing affect their survival and reproductive success (their fitness)?
+
+mixexptr is an R package for analyzing these mix experiments. 
+It helps researchers get the most out of their data by providing tools to 
+calculate and plot fitness measures that are: 
+
+* Robust and quantitatively comparable across different species and types of 
+  interaction
+* Meaningful for both kin and multilevel selection theories of social evolution
+* Well-suited to statistical analysis of effect sizes and confidence intervals
+
+
+<!-- TEACH PEOPLE HOW TO USE THE PACKAGE -->
+
+The basic workflow for analyzing mix experiments with mixexptr is: 
+
+1. Make a data frame containing the experimental observations used to calculate 
+   fitness
+2. Calculate fitness measures with `calculate_mix_fitness()`
+3. Inspect a diagnostic plot of fitness measures with `plot_mix_fitness()`
+4. Plot the measures of interest with `plot_strain_fitness()`, 
+  `plot_total_group_fitness()`, and/or `plot_within_group_fitness()`
+5. Fit statistical models of your choosing and plot them with the data 
+
+
+## Input data
+
+* Input data frame of observed quantities: strain abundance, total group abundance, 
+  and/or strain frequency
+* Initial and final population state
+* Wide-format
+* One row per strain combination, mix freq, exptl block, etc
+* "Tidy" data 
+
+Let's look at some example datasets included with mixexptr. This dataset from smith *et al.* (2010) is an experiment mixing a wild-type strain of *Myxococcus* bacteria with an experimentally-evolved cheater strain. The observed quantities are the number of cells from each strain before and after they form multicellular fruiting bodies. 
+
+```{r data-smith-2010}
+library(mixexptr)
+head(data_smith_2010)
+```
+
+This dataset from Yurtsev *et al.* (2013) describes the results of mix experiments with an antibiotic-sensitive strain of *Escherichia coli* and an antibiotic-resistant strain that detoxifies its local environment. The observed quantities here are total cell density (from OD~600~) and the fraction of cells belonging to each strain (from flow cytometry). The dataset also includes several experimental treatments with different antibiotic concentrations and different amounts of culture growth. 
+
+```{r data-Yurtsev-2013}
+head(data_Yurtsev_2013)
+```
+
+
+## Calculating fitness
+
+`calculate_mix_fitness()` is the mixexptr function to calculate fitness 
+measures. 
+
+* How to use `calculate_mix_fitness()`
+* var_names argument tells function what columns are what
+* Returns data frame containing calculated fitness measures
+* Actual calculations are rather simple (see "Fitness measures" below)
+
+```{r fitness-smith-2010}
+fitness_smith_2010 <- calculate_mix_fitness(
+	data = data_smith_2010, 
+	var_names = c(
+		initial_number_A = "initial_cells_evolved",
+		initial_number_B = "initial_cells_ancestral",
+		final_number_A = "final_spores_evolved",
+		final_number_B = "final_spores_ancestral", 
+		name_A = "GVB206.3", 
+		name_B = "GJV10"
+	)
+)
+head(fitness_smith_2010)
+```
+
+**Experimental treatments**
+
+* `keep` argument for experimental treatments and other variables related to 
+  specific study
+* Example with Yurtsev data
+
+
+## Fitness measures
+
+* Both strain and group-focused fitness outcomes
+* Wrightian fitness
+* Robust across systems and types of interaction
+* Strong, nonadditive fitness
+
+**Wrightian fitness: specific meaning, equations**
+
+* ... fold change in abundance 
+* ... fitness of strain i $w_i = n'_i/n_i$
+* ... total group fitness
+* ... within-group relative fitness in terms of ratio $w_A/w_b$
+
+
+
+## Plotting fitness
+
+mixexptr provides convenient ways to plot fitness using the ggplot2 
+package.  
+
+* Convenience functions to plot fitness measures with reasonable default settings
+
+**Plot functions**
+
+* `plot_mix_fitness()` diagnostic plot
+* `plot_strain_fitness()`
+* `plot_total_group_fitness()`
+* `plot_within_group_fitness()`
+
+**Explain functions**
+
+* Wrightian fitness best visualized and analyzed over log scales
+* Issue: zeroes
+
+**Building on mixexptr plots**
+
+* Extend and modify with ggplot2: add/replace scale, theme, etc
+* Combine subplots with ??? package
+* Including fitted statistical models
+
+
+## References
+
+* smith j and Inglis RF (2021) Evaluating kin and group selection as tools for 
+quantitative analysis of microbial data. Proceedings B 288:20201657.
+[https://doi.org/10.1098/rspb.2020.1657](https://doi.org/10.1098/rspb.2020.1657)
+
