@@ -45,14 +45,9 @@ The basic workflow for analyzing mix experiments with mixexptr is:
 
 ## Input data
 
-* Input data frame of observed quantities: strain abundance, total group abundance, 
-  and/or strain frequency
-* Initial and final population state
-* Wide-format
-* One row per strain combination, mix freq, exptl block, etc
-* "Tidy" data 
+The input format for mixexptr is a data frame where each row describes microbial abundance at the beginning and end of a mix experiment. The experimentally observed quantities could be any combination of strain abundance (number or density), strain frequency (fraction of total), or total group abundance---anything sufficient to define the absolute abundance of both strains in the experiment. Each row should contain data for a single observational unit: a single experimental replicate with one strain combination, one mix frequency, one combination of experimental treatments, etc.  
 
-Let's look at some example datasets included with mixexptr. This dataset from smith *et al.* (2010) is an experiment mixing a wild-type strain of *Myxococcus* bacteria with an experimentally-evolved cheater strain. The observed quantities are the number of cells from each strain before and after they form multicellular fruiting bodies. 
+For example, let's look at some datasets included with mixexptr. This dataset from smith *et al.* (2010) is an experiment mixing a wild-type strain of *Myxococcus* bacteria with an experimentally-evolved cheater strain. The observed quantities are the number of cells from each strain before and after they form multicellular fruiting bodies. 
 
 ```{r data-smith-2010}
 library(mixexptr)
@@ -68,15 +63,9 @@ head(data_Yurtsev_2013)
 
 ## Calculating fitness
 
-`calculate_mix_fitness()` is the mixexptr function to calculate fitness 
-measures. 
+`calculate_mix_fitness()` is the function to calculate fitness. It accepts an input data frame of microbial abundances and a character vector describing what the data columns are. It returns a data frame with several calculated measures of fitness and two measures of mix frequency. For example: 
 
-* How to use `calculate_mix_fitness()`
-* var_names argument tells function what columns are what
-* Returns data frame containing calculated fitness measures
-* Actual calculations are rather simple (see "Fitness measures" below)
-
-```{r fitness-smith-2010}
+```{r fitness_smith_2010}
 fitness_smith_2010 <- calculate_mix_fitness(
 	data = data_smith_2010, 
 	var_names = c(
@@ -91,58 +80,95 @@ fitness_smith_2010 <- calculate_mix_fitness(
 head(fitness_smith_2010)
 ```
 
-**Experimental treatments**
+Use the `keep` argument to include data columns for experimental treatment, experimental block, and so on in the output frame. For the Yurtsev data, for example, we want to keep antibiotic concentration and culture dilution: 
 
-* `keep` argument for experimental treatments and other variables related to 
-  specific study
-* Example with Yurtsev data
+```{r fitness_Yurtsev_2013}
+fitness_Yurtsev_2013 <- calculate_mix_fitness(
+	data_Yurtsev_2013, 
+	var_names = c(
+		initial_number_total = "OD_initial",
+		initial_fraction_A = "fraction_resistant_initial",
+		final_number_total = "OD_final",
+		final_fraction_A = "fraction_resistant_final",
+		name_A = "AmpR",
+		name_B = "AmpS"
+	), 
+	keep = c("ampicillin", "dilution")
+)
+head(fitness_Yurtsev_2013)
+```
+
+Note the warning messages here. `calculate_mix_fitness()` will warn you if any of the data are not biologically meaningful. There cannot be a negative number of cells, for example, and fractions are bounded at zero and one. Some of the Yurtsev data includes negative fractions---likely an artifact of correcting for background fluorescence in flow cytometry. 
+
+* Explain `name_A` and `name_B` arguments
+* Make explicit which is which in the output itself
+* Column or label
+* Column example: Madgwick data
+
 
 
 ## Fitness measures
 
-* Both strain and group-focused fitness outcomes
-* Wrightian fitness
+The fitness measures calculated by `calculate_mix_fitness()` are:
+
+* `fitness_A` : Fitness of strain A
+* `fitness_B` : Fitness of strain B
+* `fitness_total` : Total-group fitness (strains A and B combined)
+* `fitness_ratio_A_B` : Within-group ratio of strain A fitness to strain B fitness
+
+These fitness measures have been chosen because ...
+
 * Robust across systems and types of interaction
-* Strong, nonadditive fitness
+* Strong, nonadditive effects
+* Both strain and group-focused fitness outcomes
+* Wrightian fitness ... easy intepretation as fold change in abundance ... for example, ...
 
-**Wrightian fitness: specific meaning, equations**
+The fitness calculations are very simple. If the initial abundance of strain A (measured as the number or density of cells or virions) is $n_A$ and its final abundance is $n'_A$, then its fitness is $w_A = n'_A/n_A$. Similarly, the fitness of strain B is $w_B = n'_B/n_B$. Total group fitness is $W = (n'_A + n'_B)/(n_A + n_B)$ and the within-group fitness ratio is $w_A/w_B$. 
 
-* ... fold change in abundance 
-* ... fitness of strain i $w_i = n'_i/n_i$
-* ... total group fitness
-* ... within-group relative fitness in terms of ratio $w_A/w_b$
+The two measures of mix frequency calculated by `calculate_mix_fitness()` are:
 
+* `initial_fraction_A` : $n_A / (n_A + n_B)$  
+* `initial_ratio_A_B` : $n_A / n_B$ 
 
 
 ## Plotting fitness
 
-mixexptr provides convenient ways to plot fitness using the ggplot2 
-package.  
-
-* Convenience functions to plot fitness measures with reasonable default settings
-
-**Plot functions**
+mixexptr offers several functions for plotting fitness measures: 
 
 * `plot_mix_fitness()` diagnostic plot
 * `plot_strain_fitness()`
 * `plot_total_group_fitness()`
 * `plot_within_group_fitness()`
 
-**Explain functions**
+**Explain plot functions**
 
 * Wrightian fitness best visualized and analyzed over log scales
 * Issue: zeroes
+* x-axis quantitative ... fitness effects of microbial interactions usually depend on mix frequency
+* `initial_fraction_A` ... linear scale from zero to one
+* `initial_ratio_A_B` ... log scales ... better for visualizing effects at ... can't show single-strain experiments
 
-**Building on mixexptr plots**
+**Extending plots**
 
-* Extend and modify with ggplot2: add/replace scale, theme, etc
-* Combine subplots with ??? package
+These are convenience functions that make plots with the ggplot2 package using with reasonable default settings. They return ggplot2 objects that you are free to extend and modify, adding or replacing scales, themes, and so on. 
+
 * Including fitted statistical models
+* Combine subplots with ??? package
+
+
+## Other stuff (maybe include above)
+
+* mixexptr functions work with magrittr pipe `%>%` and base R pipe `|>`
 
 
 ## References
 
+* smith j, Van Dyken JD, and Zee PC (2010) A generalization of Hamilton's rule for the evolution of microbial cooperation. *Science* **328:** 1700-1703. 
+[https://doi.org/10.1126/science.1189675](https://doi.org/10.1126/science.1189675)
+
 * smith j and Inglis RF (2021) Evaluating kin and group selection as tools for 
-quantitative analysis of microbial data. Proceedings B 288:20201657.
+quantitative analysis of microbial data. *Proceedings B* **288:** 20201657.
 [https://doi.org/10.1098/rspb.2020.1657](https://doi.org/10.1098/rspb.2020.1657)
 
+* Yurtsev EA, Chao HX, Datta MS, Artemova T, and Gore J (2013) Bacterial cheating drives the population dynamics of cooperative antibiotic resistance plasmids. *Molecular Systems Biology* **9:** 683. 
+[https://doi.org/10.1038/msb.2013.39](https://doi.org/10.1038/msb.2013.39)
